@@ -1,0 +1,6 @@
+Device STM32C562RE
+SelectInterface SWD
+speed auto
+h
+r
+erase

@@ -1,0 +1,4 @@
+Device STM32C542CC
+SelectInterface SWD
+Speed 8000
+Connect

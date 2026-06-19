@@ -1,0 +1,4 @@
+Device STM32C562RE
+SelectInterface SWD
+Speed auto
+Connect
