@@ -74,7 +74,7 @@ static void vAppTaskFunction(void *pvParameters) {
   while (1) {
     HAL_GPIO_TogglePin(LD1_PORT, LD1_PIN);
 
-    vTaskDelay(100);
+    vTaskDelay(pdMS_TO_TICKS(100));
   }
 }
 
