@@ -152,7 +152,7 @@ static void PrintFreeRTOSMemoryStats() {
  */
 int main(void) {
   SWD_Init();
-#if SWD_DEBUG == RTT_DEBUG
+#if SWD_PRINTF == RTT_PRINTF
   // SWO is configured at 144MHz and at this point the clock is set to 48MHz.
   // RTT does not require the MCU clock and therefore prints correctly
   // the message below.
