@@ -13,7 +13,7 @@
 #define I2C_ADDR_7BIT_SHIFTED 0x52
 
 // VL53L1X definitions
-const uint8_t VL51L1X_DEFAULT_CONFIGURATION[] = {
+const uint8_t VL53L1X_DEFAULT_CONFIGURATION[] = {
   0x00, /* 0x2d : set bit 2 and 5 to 1 for fast plus mode (1MHz I2C), else don't touch */
   0x01, /* 0x2e : bit 0 if I2C pulled up at 1.8V, else set bit 0 to 1 (pull up at AVDD) */
   0x01, /* 0x2f : bit 0 if GPIO pulled up at 1.8V, else set bit 0 to 1 (pull up at AVDD) */
@@ -194,7 +194,7 @@ hal_status_t VL53L1X_StateMachine(uint8_t *pRxBuffer, uint32_t ulRxBytes,
 
       VL53L1X_State = SM_INIT_START_RANGING_CLEAR_INT;
     } else {
-      ucData = VL51L1X_DEFAULT_CONFIGURATION[uwInitRegisterAddr - 0x2D];
+      ucData = VL53L1X_DEFAULT_CONFIGURATION[uwInitRegisterAddr - 0x2D];
       status = I2C1_Send(uwInitRegisterAddr, &ucData, 1);
       if (status != HAL_OK) {
         return status;

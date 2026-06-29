@@ -227,7 +227,7 @@ static void I2C1_MasterRxTransferCpltCallback(hal_i2c_handle_t *hI2C) {
  * @brief  I2C1 RxComplete
  *
  * @param puwDistance Return value for the distance when the return value
- *      is HAL_DISTANCE_VAIAL
+ *      is HAL_DISTANCE_AVAIL
  *
  * @retval HAL_OK if the function succeeds
  */
