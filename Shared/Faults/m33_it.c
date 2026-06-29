@@ -7,36 +7,12 @@
 #include "../Debug/swd_printf.h"
 
 /*
- * @brief This function enable specific faults for MemManage, BusFault and
- * UsageFault.
+ * @brief This function enable specific faults.
  */
 void Fault_Config() {
-  /* Enable specific faults for the MemManage_Handler */
-  SCB->CCR |=
-      SCB_CFSR_MMARVALID_Msk |
-      SCB_CFSR_MSTKERR_Msk |
-      SCB_CFSR_MUNSTKERR_Msk |
-      SCB_CFSR_DACCVIOL_Msk |
-      SCB_CFSR_IACCVIOL_Msk;
-
-  /* Enable specific faults for the UsageFault_Handler */
   SCB->CCR |=
       SCB_CCR_DIV_0_TRP_Msk |
-      SCB_CFSR_UNALIGNED_Msk |
-      SCB_CFSR_NOCP_Msk |
-      SCB_CFSR_INVPC_Msk |
-      SCB_CFSR_INVSTATE_Msk |
-      SCB_CFSR_UNDEFINSTR_Msk |
-      SCB_CFSR_STKOF_Msk;
-
-  /* Enable specific faults for the BusFault_Handler */
-  SCB->CCR |=
-      SCB_CFSR_BFARVALID_Msk |
-      SCB_CFSR_STKERR_Msk |
-      SCB_CFSR_UNSTKERR_Msk |
-      SCB_CFSR_IMPRECISERR_Msk |
-      SCB_CFSR_PRECISERR_Msk |
-      SCB_CFSR_IBUSERR_Msk;
+      SCB_CCR_UNALIGN_TRP_Msk;
 }
 
 /*
