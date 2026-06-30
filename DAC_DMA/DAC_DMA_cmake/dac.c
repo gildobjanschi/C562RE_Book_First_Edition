@@ -219,7 +219,7 @@ static void DACTransfCallback(hal_dac_handle_t *hDAC,
 }
 
 /*
- * @brief: Error complete
+ * @brief: Error callback
  *
  * @param hDAC The handle to the DAC peripheral
  */

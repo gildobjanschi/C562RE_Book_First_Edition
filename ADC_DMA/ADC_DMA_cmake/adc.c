@@ -158,7 +158,7 @@ static void ADCTransfCallback(hal_adc_handle_t *hADC) {
 }
 
 /*
- * @brief: Error complete
+ * @brief: Error callback
  *
  * @param hADC The handle to the ADC peripheral
  */
