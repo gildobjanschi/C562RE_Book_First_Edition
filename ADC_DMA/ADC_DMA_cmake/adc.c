@@ -16,7 +16,7 @@ static void ADCTransfHalfCallback(hal_adc_handle_t *hADC);
 static void ADCTransfCallback(hal_adc_handle_t *hADC);
 static void ADCErrorCallback(hal_adc_handle_t *hADC);
 
-// The ADC buffer holds 16 bit samples
+// The ADC buffer holds 16 bit values
 #define ADC_DMA_BUFFER_SIZE     16
 uint16_t ADC_DMA_Buffer[ADC_DMA_BUFFER_SIZE];
 

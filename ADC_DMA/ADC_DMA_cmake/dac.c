@@ -17,7 +17,7 @@ static void DACErrorCallback(hal_dac_handle_t *hDAC);
 // The DMA buffer size
 #define DAC_DMA_BUFFER_SIZE     120
 
-// The DAC buffer holds 16 bit samples
+// The DAC buffer holds 16 bit values
 uint16_t DAC_DMA_Buffer[DAC_DMA_BUFFER_SIZE];
 
 static const uint16_t SineWave[DAC_DMA_BUFFER_SIZE] = {
