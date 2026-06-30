@@ -12,7 +12,7 @@
 #include "app_task.h"
 
 /*
- * brief:  The application entry point.
+ * @brief:  The application entry point.
  *
  * @retval: none but we specify int to comply with C99 standard
  */

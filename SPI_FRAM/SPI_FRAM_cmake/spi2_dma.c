@@ -251,7 +251,7 @@ uint32_t SPI2_GetBufferSize() {
 }
 
 /*
- * brief: Master transmission end of transfer callback
+ * @brief: Master transmission end of transfer callback
  *
  * @param hSPI The handle to the SPI peripheral
  */
@@ -268,7 +268,7 @@ static void SPI2_TxRxTransferCpltCallback(hal_spi_handle_t *hSPI) {
 }
 
 /*
- * brief: Error callback
+ * @brief: Error callback
  *
  * @param hSPI The handle to the hSPI peripheral
  */

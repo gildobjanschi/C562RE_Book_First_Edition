@@ -124,7 +124,7 @@ hal_status_t ADC_Stop() {
 }
 
 /*
- * brief: Half transfer complete
+ * @brief: Half transfer complete
  *
  * @param hADC The handle to the ADC peripheral
  */
@@ -141,7 +141,7 @@ static void ADCTransfHalfCallback(hal_adc_handle_t *hADC) {
 }
 
 /*
- * brief: Transfer complete
+ * @brief: Transfer complete
  *
  * @param hADC The handle to the ADC peripheral
  */
@@ -158,7 +158,7 @@ static void ADCTransfCallback(hal_adc_handle_t *hADC) {
 }
 
 /*
- * brief: Error complete
+ * @brief: Error complete
  *
  * @param hADC The handle to the ADC peripheral
  */
@@ -174,7 +174,7 @@ static void ADCErrorCallback(hal_adc_handle_t *hADC) {
 }
 
 /*
- * brief: This function is called by the task when a complete event occurs
+ * @brief: This function is called by the task when a complete event occurs
  *
  * @param ucEvent The event received by the task
  * @param pBuffer Pointer to the application buffer.

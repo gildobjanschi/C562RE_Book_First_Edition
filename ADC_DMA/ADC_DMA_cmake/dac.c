@@ -130,7 +130,7 @@ hal_status_t DAC_Stop() {
 }
 
 /*
- * brief: Error complete
+ * @brief: Error complete
  *
  * @param hDAC The handle to the DAC peripheral
  */

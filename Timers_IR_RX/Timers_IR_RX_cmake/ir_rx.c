@@ -57,7 +57,7 @@ static void Tim2UpdateCallback(hal_tim_handle_t *htim,
 static volatile QueueHandle_t sIrRxQueue;
 
 /*
- * brief:  Initialize the IR receiver
+ * @brief:  Initialize the IR receiver
  *
  * @param rxQueue The pointer to the IR Rx queue
  *
@@ -91,7 +91,7 @@ hal_status_t IrRx_Init(QueueHandle_t rxQueue) {
 }
 
 /*
- * brief:  Decode time intervals from IR receiver
+ * @brief:  Decode time intervals from IR receiver
  *
  * @param ucEvent The time measurement
  * @param pucAddress The pointer to the decoded address

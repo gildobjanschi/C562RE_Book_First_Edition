@@ -159,7 +159,7 @@ hal_status_t I2C1_Write(uint16_t uwAddress, uint8_t *pDataBuffer,
 }
 
 /*
- * brief: Master transmission end of transfer callback
+ * @brief: Master transmission end of transfer callback
  *
  * @param hI2C The handle to the I2C peripheral
  */
@@ -245,7 +245,7 @@ hal_status_t I2C1_Read(uint16_t uwAddress, uint32_t ulDataLength) {
 }
 
 /*
- * brief: Master reception end of transfer callback
+ * @brief: Master reception end of transfer callback
  *
  * @param hI2C The handle to the I2C peripheral
  */
@@ -278,7 +278,7 @@ hal_status_t I2C1_RxComplete(uint8_t **pRxBuffer, uint32_t* pulRxBytes) {
 }
 
 /*
- * brief: Error callback
+ * @brief: Error callback
  *
  * @param hI2C The handle to the I2C peripheral
  */

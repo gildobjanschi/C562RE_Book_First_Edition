@@ -176,7 +176,7 @@ hal_status_t DAC_Stop() {
 }
 
 /*
- * brief: Half transfer complete
+ * @brief: Half transfer complete
  *
  * @param hDAC The handle to the DAC peripheral
  * @param channel The DMA channel
@@ -196,7 +196,7 @@ static void DACHalfTransfCallback(hal_dac_handle_t *hDAC,
 }
 
 /*
- * brief: Transfer complete
+ * @brief: Transfer complete
  *
  * @param hDAC The handle to the DAC peripheral
  * @param channel The DMA channel
@@ -219,7 +219,7 @@ static void DACTransfCallback(hal_dac_handle_t *hDAC,
 }
 
 /*
- * brief: Error complete
+ * @brief: Error complete
  *
  * @param hDAC The handle to the DAC peripheral
  */
@@ -235,7 +235,7 @@ static void DACErrorCallback(hal_dac_handle_t *hDAC) {
 }
 
 /*
- * brief: This function is called by the task when a complete event occurs
+ * @brief: This function is called by the task when a complete event occurs
  *
  * @param ucEvent The event that occurred
  */
