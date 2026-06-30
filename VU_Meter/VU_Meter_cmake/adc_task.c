@@ -41,7 +41,7 @@ static void processADCEvent(uint8_t ucEvent, QueueHandle_t xFromADCQueue) {
     // The output is updated 20 times per second (every 1500 samples)
     if (ulSamplesCount >= 1500) {
       // We need to multiply by a factor to ensure full scale deflection
-      // when a sinewave with an amplitude of 3.3V is present at the ADC input.
+      // when a sine wave with an amplitude of 3.3V is present at the ADC input.
       uint16_t uwVoltage = (3.2 * ulSamplesSum) / ulSamplesCount;
       xQueueSend(xFromADCQueue, &uwVoltage, 0);
 
