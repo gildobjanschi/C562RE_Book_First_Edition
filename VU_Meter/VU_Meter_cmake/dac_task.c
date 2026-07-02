@@ -35,7 +35,7 @@ static void exitAppTask(char *error, QueueHandle_t xDACQueue) {
  * @param pvParameters Task parameters
  */
 static void vDACTaskFunction(void *pvParameters) {
-  QueueHandle_t xFromADCQueue = (QueueHandle_t)pvParameters;
+  QueueHandle_t xRMSToDACQueue = (QueueHandle_t)pvParameters;
 
   // Create the DAC queue
   QueueHandle_t xDACQueue = xQueueCreate(DAC_QUEUE_SIZE, sizeof(uint8_t));
@@ -57,12 +57,12 @@ static void vDACTaskFunction(void *pvParameters) {
   QueueSetHandle_t xQueueSet = xQueueCreateSet(
       DAC_QUEUE_SIZE + FROM_ADC_QUEUE_SIZE);
   xQueueAddToSet(xDACQueue, xQueueSet);
-  xQueueAddToSet(xFromADCQueue, xQueueSet);
+  xQueueAddToSet(xRMSToDACQueue, xQueueSet);
   if (xQueueSet == NULL) {
     return exitAppTask("xQueueCreateSet failed.\n", xDACQueue);
   }
 
-  // Process input and ADC events
+  // Process ADC and DAC queue values
   QueueSetMemberHandle_t xActivatedMember;
   while (1) {
     xActivatedMember = xQueueSelectFromSet(xQueueSet, portMAX_DELAY);
@@ -72,7 +72,7 @@ static void vDACTaskFunction(void *pvParameters) {
       if (ucEvent == EVENT_DAC_ERROR) {
         DAC_Error();
       }
-    } else if (xActivatedMember == xFromADCQueue) {
+    } else if (xActivatedMember == xRMSToDACQueue) {
       uint16_t uwVoltage = 0;
       xQueueReceive(xActivatedMember, &uwVoltage, 0);
       DAC_Output(uwVoltage);
@@ -84,16 +84,16 @@ static void vDACTaskFunction(void *pvParameters) {
  * @brief  Initialize the application main task.
  *    When this function is called, buttons must not be pressed.
  *
- * @param xFromADCQueue The parameter to pass to the task function
+ * @param xRMSToDACQueue The parameter to pass to the task function
  *
  * @retval HAL_OK if the method succeeds.
  */
-hal_status_t DAC_Task_Init(QueueHandle_t xFromADCQueue) {
+hal_status_t DAC_Task_Init(QueueHandle_t xRMSToDACQueue) {
   if (xTaskCreate(
       vDACTaskFunction,   // Function that implements the task
       "DAC_Task",         // Text name for the task
       256,                // Stack size in words
-      xFromADCQueue,      // Parameter passed into the task
+      xRMSToDACQueue,     // Parameter passed into the task
       10,                 // Priority
       NULL                // Used to pass out the task's handle
       ) == pdPASS) {

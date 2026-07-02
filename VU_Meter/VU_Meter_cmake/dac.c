@@ -13,18 +13,43 @@
 // Interrupt callbacks
 static void DACErrorCallback(hal_dac_handle_t *hDAC);
 
-// The correction table
-#define CORRECTION_TABLE_SIZE 7
-static const uint16_t CorrectionMatrix[CORRECTION_TABLE_SIZE][2] = {
-  {0, 0},
-  {206, 100},
-  {412, 200},
-  {825, 400},
-  {1625, 800},
-  {2450, 1600},
-  {3300, 3300}
-};
+/*
+Calibration values
+--------------------------------------------------------
+Indicated value     RMS voltage     Peak-to-peak voltage
+--------------------------------------------------------
++5 dB               0.562V           1.59V
++3 dB               0.446V           1.27V
++2 dB               0.398V           1.13V
++1 dB               0.354V           0.99V
+ 0 dB               0.316V           0.90V
+-1 dB               0.281V           0.79V
+-2 dB               0.251V           0.71V
+-3 dB               0.224V           0.62V
+-5 dB               0.178V           0.51V
+-7 dB               0.141V           0.40V
+-10dB               0.100V           0.28V
+-20dB               0.031V           0.08V
+--------------------------------------------------------
+*/
 
+// The correction table
+#define RMS_TO_DB_SIZE 13
+static const uint16_t RMS_to_dB[RMS_TO_DB_SIZE][2] = {
+  {  0,   0},   //-25dB
+  { 31, 200},   //-20dB
+  {100, 540},   //-10dB
+  {141, 780},   // -7dB
+  {178, 980},   // -5dB
+  {224, 1220},  // -3dB
+  {251, 1360},  // -2dB
+  {281, 1500},  // -1dB
+  {316, 1720},  //  0dB
+  {354, 1910},  // +1dB
+  {398, 2080},  // +2dB
+  {446, 2300},  // +3dB
+  {562, 2910},  // +5dB
+};
 
 // The interrupt notification queue
 static volatile QueueHandle_t sDACQueue;
@@ -88,16 +113,14 @@ hal_status_t DAC_Start() {
 hal_status_t DAC_Output(uint16_t uwVoltage) {
   uint16_t uwCorrectedVoltage = VDD_VALUE;
   uint16_t uwOldScaleDiff, uwNewScaleDiff;
-
-  for (uint8_t i = 0; i < CORRECTION_TABLE_SIZE - 1; i++) {
-    if (uwVoltage >= CorrectionMatrix[i][0] &&
-        uwVoltage < CorrectionMatrix[i+1][0]) {
-      uwOldScaleDiff = CorrectionMatrix[i+1][0] - CorrectionMatrix[i][0];
-      uwNewScaleDiff = CorrectionMatrix[i+1][1] - CorrectionMatrix[i][1];
-      uwCorrectedVoltage = uwVoltage - CorrectionMatrix[i][0];
+  for (uint8_t i = 0; i < RMS_TO_DB_SIZE - 1; i++) {
+    if (uwVoltage >= RMS_to_dB[i][0] && uwVoltage < RMS_to_dB[i+1][0]) {
+      uwOldScaleDiff = RMS_to_dB[i+1][0] - RMS_to_dB[i][0];
+      uwNewScaleDiff = RMS_to_dB[i+1][1] - RMS_to_dB[i][1];
+      uwCorrectedVoltage = uwVoltage - RMS_to_dB[i][0];
       uwCorrectedVoltage =
           (uwCorrectedVoltage * uwNewScaleDiff) / uwOldScaleDiff;
-      uwCorrectedVoltage += CorrectionMatrix[i][1];
+      uwCorrectedVoltage += RMS_to_dB[i][1];
       SWD_printf("Set output: %d -> %d.\n", uwVoltage, uwCorrectedVoltage);
       break;
     }

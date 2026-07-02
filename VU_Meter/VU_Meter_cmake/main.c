@@ -46,21 +46,21 @@ int main(void) {
   SWD_printf("---- MCU configured at %lu[Hz] ----\n", HAL_RCC_GetHCLKFreq());
 
   // Create the queue used to pass data from the ADC task to the DAC task.
-  QueueHandle_t xFromADCQueue = xQueueCreate(FROM_ADC_QUEUE_SIZE,
+  QueueHandle_t xRMSToDACQueue = xQueueCreate(FROM_ADC_QUEUE_SIZE,
       sizeof(uint16_t));
-  if (xFromADCQueue == NULL) {
+  if (xRMSToDACQueue == NULL) {
     ErrorHandler("xQueueCreate failed.");
     return (-1);
   }
 
   // Initialize the DAC task
-  if (DAC_Task_Init(xFromADCQueue) != HAL_OK) {
+  if (DAC_Task_Init(xRMSToDACQueue) != HAL_OK) {
     ErrorHandler("DAC_Task_Init failed.");
     return (-1);
   }
 
   // Initialize the ADC task
-  if (ADC_Task_Init(xFromADCQueue) != HAL_OK) {
+  if (ADC_Task_Init(xRMSToDACQueue) != HAL_OK) {
     ErrorHandler("ADC_Task_Init failed.");
     return (-1);
   }

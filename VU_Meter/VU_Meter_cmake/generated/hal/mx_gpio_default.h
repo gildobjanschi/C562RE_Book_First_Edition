@@ -47,6 +47,20 @@ extern "C" {
 #define LD1_ACTIVE_STATE                                HAL_GPIO_PIN_SET
 #define LD1_INACTIVE_STATE                              HAL_GPIO_PIN_RESET
 
+/* Primary aliases for GPIO PA6 pin */
+#define PA6_PORT                                        HAL_GPIOA
+#define PA6_PIN                                         HAL_GPIO_PIN_6
+#define PA6_INIT_STATE                                  HAL_GPIO_PIN_RESET
+#define PA6_ACTIVE_STATE                                HAL_GPIO_PIN_SET
+#define PA6_INACTIVE_STATE                              HAL_GPIO_PIN_RESET
+
+/* Secondary aliases for GPIO PA6 pin */
+#define LD_PEAK_PORT                                    HAL_GPIOA
+#define LD_PEAK_PIN                                     HAL_GPIO_PIN_6
+#define LD_PEAK_INIT_STATE                              HAL_GPIO_PIN_RESET
+#define LD_PEAK_ACTIVE_STATE                            HAL_GPIO_PIN_SET
+#define LD_PEAK_INACTIVE_STATE                          HAL_GPIO_PIN_RESET
+
 /* Primary aliases for GPIO PC8 pin */
 #define PC8_PORT                                        HAL_GPIOC
 #define PC8_PIN                                         HAL_GPIO_PIN_8

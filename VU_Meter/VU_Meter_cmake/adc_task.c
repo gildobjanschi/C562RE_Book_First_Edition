@@ -11,42 +11,57 @@
 #include "adc_task.h"
 #include "adc.h"
 
-static uint16_t ADC_Data[ADC_DMA_BUFFER_SIZE];
-static uint32_t ulSamplesSum, ulSamplesCount;
+// The maximum number of bytes received is half of the size of the DMA buffer.
+static uint16_t ADC_Data[ADC_DMA_BUFFER_SIZE/2];
+static uint32_t ulSquareSum, ulSamplesCount, ulMinSample, ulMaxSample;
 
+// Peak voltage is the 0dB Vpp input voltage devided by 2
+#define PEAK_VOLTAGE (900/2)
 /*
  * @brief:  Process an ADC event
  *
  * @param ucEvent The event that occurred
- * @param xFromADCQueue Queue to send messages to the DAC task
+ * @param xRMSToDACQueue Queue to send messages to the DAC task
  */
-static void processADCEvent(uint8_t ucEvent, QueueHandle_t xFromADCQueue) {
+static void processADCEvent(uint8_t ucEvent, QueueHandle_t xRMSToDACQueue) {
   uint32_t ulDataLength;
   switch (ucEvent) {
   case EVENT_ADC_HALF_DATA: {
   case EVENT_ADC_CPLT_DATA:
-    ADC_Complete(ucEvent, ADC_Data, ADC_DMA_BUFFER_SIZE, &ulDataLength);
+    ADC_Complete(ucEvent, ADC_Data, ADC_DMA_BUFFER_SIZE/2, &ulDataLength);
 
-    // Compute the sum of the acquired samples
+    // Compute the sum of the squares of the acquired samples
+    int32_t lDiff;
     for (uint32_t i = 0; i < ulDataLength; i++) {
-      if (ADC_Data[i] >= 1650) {
-        ulSamplesSum += (ADC_Data[i] - 1650);
-      } else {
-        ulSamplesSum += (1650 - ADC_Data[i]);
+      if (ADC_Data[i] < ulMinSample) {
+        ulMinSample = ADC_Data[i];
       }
+      if (ADC_Data[i] > ulMaxSample) {
+        ulMaxSample = ADC_Data[i];
+      }
+
+      lDiff = ADC_Data[i] - (VDD_VALUE/2);
+      ulSquareSum += lDiff * lDiff;
     }
 
     ulSamplesCount += ulDataLength;
-    // The device acquires samples 30,000 times per second.
-    // The output is updated 20 times per second (every 1500 samples)
-    if (ulSamplesCount >= 1500) {
-      // We need to multiply by a factor to ensure full scale deflection
-      // when a sinewave with an amplitude of 3.3V is present at the ADC input.
-      uint16_t uwVoltage = (3.2 * ulSamplesSum) / ulSamplesCount;
-      xQueueSend(xFromADCQueue, &uwVoltage, 0);
+    // The device acquires samples 60,000 times per second.
+    // The output is updated 30 times per second (every 2000 samples)
+    if (ulSamplesCount >= 2000) {
+      // Turn the Peak LED on/off
+      if (ulMinSample < (VDD_VALUE/2) - PEAK_VOLTAGE ||
+          ulMaxSample > (VDD_VALUE/2) + PEAK_VOLTAGE) {
+        HAL_GPIO_WritePin(LD_PEAK_PORT, LD_PEAK_PIN, HAL_GPIO_PIN_SET);
+      } else {
+        HAL_GPIO_WritePin(LD_PEAK_PORT, LD_PEAK_PIN, HAL_GPIO_PIN_RESET);
+      }
+      uint16_t uwVoltage = sqrtf(ulSquareSum/ulSamplesCount);
+      xQueueSend(xRMSToDACQueue, &uwVoltage, 0);
 
       ulSamplesCount = 0;
-      ulSamplesSum = 0;
+      ulSquareSum = 0;
+      ulMinSample = 1650;
+      ulMaxSample = 1650;
     }
     break;
   }
@@ -88,7 +103,7 @@ static void exitAppTask(char *error, QueueHandle_t xADCQueue) {
  * @param pvParameters Task parameters
  */
 static void vADCTaskFunction(void *pvParameters) {
-  QueueHandle_t xFromADCQueue = (QueueHandle_t)pvParameters;
+  QueueHandle_t xRMSToDACQueue = (QueueHandle_t)pvParameters;
 
   // Create the ADC queue
   QueueHandle_t xADCQueue = xQueueCreate(ADC_QUEUE_SIZE, sizeof(uint8_t));
@@ -102,8 +117,11 @@ static void vADCTaskFunction(void *pvParameters) {
   }
 
   // Start the ADC
-  ulSamplesSum = 0;
+  ulSquareSum = 0;
   ulSamplesCount = 0;
+  ulMinSample = 1650;
+  ulMaxSample = 1650;
+
   if (ADC_Start(HAL_ADC_CHANNEL_9) != HAL_OK) {
     return exitAppTask("xQueueCreateSet failed.\n", xADCQueue);
   }
@@ -112,7 +130,7 @@ static void vADCTaskFunction(void *pvParameters) {
   uint8_t ucEvent = 0;
   while (1) {
     xQueueReceive(xADCQueue, &ucEvent, portMAX_DELAY);
-    processADCEvent(ucEvent, xFromADCQueue);
+    processADCEvent(ucEvent, xRMSToDACQueue);
   }
 }
 
@@ -120,16 +138,16 @@ static void vADCTaskFunction(void *pvParameters) {
  * @brief  Initialize the application main task.
  *    When this function is called, buttons must not be pressed.
  *
- * @param xFromADCQueue The parameter to pass to the task function
+ * @param xRMSToDACQueue The parameter to pass to the task function
  *
  * @retval HAL_OK if the method succeeds.
  */
-hal_status_t ADC_Task_Init(QueueHandle_t xFromADCQueue) {
+hal_status_t ADC_Task_Init(QueueHandle_t xRMSToDACQueue) {
   if (xTaskCreate(
       vADCTaskFunction,   // Function that implements the task
       "ADC_Task",         // Text name for the task
       256,                // Stack size in words
-      xFromADCQueue,      // Parameter passed into the task
+      xRMSToDACQueue,     // Parameter passed into the task
       10,                 // Priority
       NULL                // Used to pass out the task's handle
       ) == pdPASS) {

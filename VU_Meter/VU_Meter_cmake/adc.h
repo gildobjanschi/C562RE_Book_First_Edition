@@ -13,7 +13,7 @@ extern "C" {
 #define EVENT_ADC_CPLT_DATA   2
 #define EVENT_ADC_ERROR       3
 
-#define ADC_DMA_BUFFER_SIZE     16
+#define ADC_DMA_BUFFER_SIZE     32
 
 hal_status_t ADC_Init(QueueHandle_t ADCQueue);
 hal_status_t ADC_Start(uint32_t ulChannel);

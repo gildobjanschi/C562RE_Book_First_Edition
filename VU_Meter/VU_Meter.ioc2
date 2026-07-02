@@ -337,15 +337,15 @@
     },
     {
       "id": "ADC_Input_Clock",
-      "value": 9000000,
+      "value": 18000000,
       "isLocked": false,
-      "outFrequency": 9000000
+      "outFrequency": 18000000
     },
     {
       "id": "DAC1_Input_Clock",
-      "value": 9000000,
+      "value": 18000000,
       "isLocked": false,
-      "outFrequency": 9000000
+      "outFrequency": 18000000
     },
     {
       "id": "I2C1_Clock_Source",
@@ -475,9 +475,9 @@
     },
     {
       "id": "ADCDACPRE_DIV",
-      "value": "16",
+      "value": "8",
       "isLocked": false,
-      "outFrequency": 9000000
+      "outFrequency": 18000000
     },
     {
       "id": "USB_RNG_Clock_Source",
@@ -2192,6 +2192,27 @@
           "type": "user_gpio"
         },
         "pinned": true
+      },
+      {
+        "pin": {
+          "name": "PA6",
+          "position": "22",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "a"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 6,
+          "port": "A"
+        },
+        "signal": {
+          "instance": "GPIOA",
+          "name": "GPIO",
+          "type": "user_gpio"
+        },
+        "pinned": true
       }
     ],
     "needConfigurations": [
@@ -2543,12 +2564,6 @@
       ]
     },
     {
-      "position": "22",
-      "labels": [
-        "PA6"
-      ]
-    },
-    {
       "position": "20",
       "labels": [
         "PA4"
@@ -2702,6 +2717,13 @@
         "PA7",
         "RE_BTN"
       ]
+    },
+    {
+      "position": "22",
+      "labels": [
+        "PA6",
+        "LD_PEAK"
+      ]
     }
   ],
   "pinout-gpio-assignations": [
@@ -2753,6 +2775,19 @@
           "ioStructure": "FT",
           "index": 8,
           "port": "C"
+        },
+        {
+          "name": "PA6",
+          "position": "22",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "a"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 6,
+          "port": "A"
         }
       ]
     }
@@ -5178,6 +5213,19 @@ solution:
                   "label_name": []
                 },
                 {
+                  "_foreignKey": "PA6",
+                  "basic": {
+                    "mode": "OUTPUT",
+                    "pull": "NO",
+                    "enable_exti": false,
+                    "output_active_state": "SET",
+                    "output_init_state": "RESET",
+                    "output_type": "PUSHPULL",
+                    "speed": "LOW"
+                  },
+                  "label_name": []
+                },
+                {
                   "_foreignKey": "PC8",
                   "basic": {
                     "mode": "EVENTOUT",
@@ -5612,7 +5660,7 @@ solution:
                     }
                   }
                 },
-                "kernel_clock_frequency": "9 MHz",
+                "kernel_clock_frequency": "18 MHz",
                 "kernel_clock_source": "PSI"
               },
               "additional": {
@@ -5724,7 +5772,7 @@ solution:
               "basic": {
                 "high_frequency_mode": {
                   "auto_freq_mode": true,
-                  "clock_frequency": 9000000,
+                  "clock_frequency": 18000000,
                   "high_freq_mode": "DISABLED"
                 }
               },

@@ -109,11 +109,11 @@ system_status_t mx_rcc_peripherals_clock_config(void)
   */
   /* PSIS already enabled inside mx_rcc_init() */
 
-  /* Peripherals using ADC_DAC_DIV (9 MHz):
+  /* Peripherals using ADC_DAC_DIV (18 MHz):
     ADC1
     DAC1
   */
-  if (HAL_RCC_ADCDAC_SetKernelClkPrescaler(HAL_RCC_ADCDAC_PRESCALER16) != HAL_OK)
+  if (HAL_RCC_ADCDAC_SetKernelClkPrescaler(HAL_RCC_ADCDAC_PRESCALER8) != HAL_OK)
   {
     return SYSTEM_CLOCK_ERROR;
   }
