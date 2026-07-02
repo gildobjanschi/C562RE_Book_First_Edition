@@ -123,7 +123,6 @@ hal_status_t ADC_Stop() {
  */
 static void ADCTransfHalfCallback(hal_adc_handle_t *hADC) {
   if (hADC == mx_adc1_gethandle()) {
-    //__asm__ volatile ("sev": : :"memory");
     uint8_t ucEvent = EVENT_ADC_HALF_DATA;
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     if (xQueueSendFromISR(sADCQueue, &ucEvent,
@@ -140,7 +139,6 @@ static void ADCTransfHalfCallback(hal_adc_handle_t *hADC) {
  */
 static void ADCTransfCallback(hal_adc_handle_t *hADC) {
   if (hADC == mx_adc1_gethandle()) {
-    //__asm__ volatile ("sev": : :"memory");
     uint8_t ucEvent = EVENT_ADC_CPLT_DATA;
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     if (xQueueSendFromISR(sADCQueue, &ucEvent,
@@ -207,4 +205,5 @@ void ADC_Complete(uint8_t ucEvent, uint16_t *pBuffer, uint32_t ulBufferLength,
  */
 void ADC_Error() {
   SWD_printf("ADC error!\n");
+  ADC_Stop();
 }

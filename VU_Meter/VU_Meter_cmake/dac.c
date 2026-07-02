@@ -7,7 +7,6 @@
 #include "middleware/freertos/include/queue.h"
 #include "middleware/freertos/include/timers.h"
 #include "../../Shared/Debug/swd_printf.h"
-#include "../../Shared/Input/input_soft_timers.h"
 #include "dac.h"
 
 // Interrupt callbacks

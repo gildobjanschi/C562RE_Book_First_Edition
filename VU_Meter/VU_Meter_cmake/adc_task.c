@@ -15,7 +15,7 @@
 static uint16_t ADC_Data[ADC_DMA_BUFFER_SIZE/2];
 static uint32_t ulSquareSum, ulSamplesCount, ulMinSample, ulMaxSample;
 
-// Peak voltage is the 0dB Vpp input voltage devided by 2
+// Peak voltage is the 0dB Vpp input voltage divided by 2
 #define PEAK_VOLTAGE (900/2)
 /*
  * @brief:  Process an ADC event
