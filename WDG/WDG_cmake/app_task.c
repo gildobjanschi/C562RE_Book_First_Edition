@@ -264,8 +264,8 @@ static void vWWDGTaskFunction(void *pvParameters) {
         xWDG_Semaphore);
   }
 
-  SWD_printf("--> WWDG app running. If all goes well nothing happens. "
-      "If you press the user button the system may reset "
+  SWD_printf("--> WWDG app running. If all goes well, nothing happens. "
+      "If you press the user button, the system *may* reset "
       "(WWDG refresh outside the window).\n");
 
   uint8_t ucEvent;
