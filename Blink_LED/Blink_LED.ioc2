@@ -509,7 +509,7 @@
     },
     "HAL_CORTEX_PROJECT_USE_HAL": {
       "name": "HAL_CORTEX_PROJECT_USE_HAL",
-      "value": 3,
+      "value": 5,
       "originator": "sw-config-semaphore"
     },
     "HAL_ICACHE_CORE_ENABLED": {
@@ -2124,10 +2124,20 @@ solution:
   "$type": "https://st.com/schema/middleware-utilities#//",
   "id": "69d9a15a-2171-44ac-aba5-0d623afd87a7",
   "middleware": [
-    "FreeRTOS"
+    "USBX",
+    "STFCF",
+    "STCryptoLib",
+    "Open_Bootloader",
+    "LevelX",
+    "FreeRTOS",
+    "FileX"
   ],
   "utilities": [
-    "Syscalls"
+    "Thread_Safe_LibC",
+    "Syscalls",
+    "Sequencer",
+    "EEPROM_Emulation",
+    "Basic_STDIO"
   ]
 }"""
 "File: project/.settings/part-resource-manager.store.json" = """
@@ -3364,7 +3374,8 @@ solution:
               "basic": {
                 "mpu_enabled": true,
                 "default_map_enabled": true,
-                "during_hardfault": false
+                "during_hardfault": false,
+                "enable_mem_management_fault": true
               },
               "additional": {
                 "regions": [
@@ -4531,4 +4542,4 @@ project:
 ["Project Description"]
 workingAreaId = "4fd495bc-4f46-4b65-b3d6-bd9615f9eb92"
 version = "1"
-mx2Version = "1.0.1"
+mx2Version = "1.1.1"
