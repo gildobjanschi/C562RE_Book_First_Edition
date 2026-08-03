@@ -115,15 +115,15 @@
     },
     {
       "id": "DAC1SH_Clock_Source",
-      "value": "LSE_inputid",
+      "value": "LSI_inputid",
       "isLocked": false,
-      "outFrequency": 32768
+      "outFrequency": 32000
     },
     {
       "id": "DAC1SH_Input_Clock",
-      "value": "32768",
+      "value": 32000,
       "isLocked": false,
-      "outFrequency": 32768
+      "outFrequency": 32000
     },
     {
       "id": "SPI1_Clock_Source",
@@ -1220,27 +1220,6 @@
           "index": 5,
           "port": "A"
         }
-      },
-      {
-        "signal": {
-          "instance": "GPIOC",
-          "name": "GPIO",
-          "type": "user_gpio"
-        },
-        "pinned": true,
-        "pin": {
-          "name": "PC13",
-          "position": "2",
-          "type": "gpio",
-          "powerSource": "VDD",
-          "ioStructureOptions": [
-            "t"
-          ],
-          "ioType": "I/O",
-          "ioStructure": "FT",
-          "index": 13,
-          "port": "C"
-        }
       }
     ],
     "needConfigurations": [
@@ -2209,10 +2188,20 @@ solution:
   "$type": "https://st.com/schema/middleware-utilities#//",
   "id": "69d9a15a-2171-44ac-aba5-0d623afd87a7",
   "middleware": [
-    "FreeRTOS"
+    "USBX",
+    "STFCF",
+    "STCryptoLib",
+    "Open_Bootloader",
+    "LevelX",
+    "FreeRTOS",
+    "FileX"
   ],
   "utilities": [
-    "Syscalls"
+    "Thread_Safe_LibC",
+    "Syscalls",
+    "Sequencer",
+    "EEPROM_Emulation",
+    "Basic_STDIO"
   ]
 }"""
 "File: project/.settings/part-resource-manager.store.json" = """
@@ -4414,7 +4403,7 @@ solution:
                     "kernel_clock_source": "TIMx_Input_Clock"
                   },
                   "counter": {
-                    "one_pulse_mode": true,
+                    "one_pulse_mode": false,
                     "counter_mode": "UP",
                     "dithering": false,
                     "period_dithering_pattern": 0,
@@ -4990,4 +4979,4 @@ project:
 ["Project Description"]
 workingAreaId = "d98c7e3f-e4d2-44d9-9b5d-854f4c5e42a9"
 version = "1"
-mx2Version = "1.0.1"
+mx2Version = "1.1.1"

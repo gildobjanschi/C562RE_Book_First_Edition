@@ -51,11 +51,6 @@ hal_tim_handle_t *mx_tim6_init(void)
     return NULL;
   }
 
-  if (HAL_TIM_EnableOnePulseMode(&hTIM6) != HAL_OK)
-  {
-    return NULL;
-  }
-
   /* Update Event Management */
   if (HAL_TIM_SetUpdateSource(&hTIM6, HAL_TIM_UPDATE_REGULAR) != HAL_OK)
   {

@@ -49,6 +49,7 @@ static hal_status_t Example_1() {
   // Run the timer for about 11 milliseconds
   vTaskDelay(pdMS_TO_TICKS(11));
 
+  // Stop the timer
   status = HAL_TIM_Stop_IT(htim6);
   if (status != HAL_OK) {
     SWD_printf("HAL_TIM_Stop_IT TIM6 failed.\n");
@@ -73,18 +74,21 @@ static hal_status_t Example_2() {
   hal_tim_handle_t *htim5 = mx_tim5_gethandle();
   hal_status_t status;
 
+  // Start CH 1
   status = HAL_TIM_OC_StartChannel(htim5, HAL_TIM_CHANNEL_1);
   if (status != HAL_OK) {
     SWD_printf("HAL_TIM_OC_StartChannel CH 1 failed.\n");
     return status;
   }
 
+  // Start CH 2
   status = HAL_TIM_OC_StartChannel(htim5, HAL_TIM_CHANNEL_2);
   if (status != HAL_OK) {
     SWD_printf("HAL_TIM_OC_StartChannel CH 2 failed.\n");
     return status;
   }
 
+  // Start the timer
   status = HAL_TIM_Start(htim5);
   if (status != HAL_OK) {
     SWD_printf("HAL_TIM_Start failed.\n");
