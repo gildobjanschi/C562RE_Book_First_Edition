@@ -115,15 +115,15 @@
     },
     {
       "id": "DAC1SH_Clock_Source",
-      "value": "LSE_inputid",
+      "value": "LSI_inputid",
       "isLocked": false,
-      "outFrequency": 32768
+      "outFrequency": 32000
     },
     {
       "id": "DAC1SH_Input_Clock",
-      "value": "32768",
+      "value": 32000,
       "isLocked": false,
-      "outFrequency": 32768
+      "outFrequency": 32000
     },
     {
       "id": "SPI1_Clock_Source",
@@ -2042,51 +2042,6 @@
     "userConfigurations": [
       {
         "signal": {
-          "instance": "USART2",
-          "name": "USART2_TX",
-          "type": "alternate",
-          "alternateFunctionId": "AF7"
-        },
-        "pinned": true,
-        "pin": {
-          "name": "PA2",
-          "position": "16",
-          "type": "gpio",
-          "powerSource": "VDD",
-          "ioStructureOptions": [
-            "t",
-            "a"
-          ],
-          "ioType": "I/O",
-          "ioStructure": "FT",
-          "index": 2,
-          "port": "A"
-        }
-      },
-      {
-        "signal": {
-          "instance": "USART2",
-          "name": "USART2_RX",
-          "type": "alternate",
-          "alternateFunctionId": "AF7"
-        },
-        "pinned": true,
-        "pin": {
-          "name": "PA3",
-          "position": "17",
-          "type": "gpio",
-          "powerSource": "VDD",
-          "ioStructureOptions": [
-            "a"
-          ],
-          "ioType": "I/O",
-          "ioStructure": "FT",
-          "index": 3,
-          "port": "A"
-        }
-      },
-      {
-        "signal": {
           "instance": "GPIOA",
           "name": "GPIO",
           "type": "user_gpio"
@@ -3080,10 +3035,20 @@ solution:
   "$type": "https://st.com/schema/middleware-utilities#//",
   "id": "69d9a15a-2171-44ac-aba5-0d623afd87a7",
   "middleware": [
-    "FreeRTOS"
+    "USBX",
+    "STFCF",
+    "STCryptoLib",
+    "Open_Bootloader",
+    "LevelX",
+    "FreeRTOS",
+    "FileX"
   ],
   "utilities": [
-    "Syscalls"
+    "Thread_Safe_LibC",
+    "Syscalls",
+    "Sequencer",
+    "EEPROM_Emulation",
+    "Basic_STDIO"
   ]
 }"""
 "File: project/.settings/part-resource-manager.store.json" = """
@@ -6223,4 +6188,4 @@ project:
 ["Project Description"]
 workingAreaId = "23355772-e4c5-41b3-98de-4c0c6f5bedc8"
 version = "1"
-mx2Version = "1.0.1"
+mx2Version = "1.1.1"
