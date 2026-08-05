@@ -3119,10 +3119,20 @@ solution:
   "$type": "https://st.com/schema/middleware-utilities#//",
   "id": "69d9a15a-2171-44ac-aba5-0d623afd87a7",
   "middleware": [
-    "FreeRTOS"
+    "USBX",
+    "STFCF",
+    "STCryptoLib",
+    "Open_Bootloader",
+    "LevelX",
+    "FreeRTOS",
+    "FileX"
   ],
   "utilities": [
-    "Syscalls"
+    "Thread_Safe_LibC",
+    "Syscalls",
+    "Sequencer",
+    "EEPROM_Emulation",
+    "Basic_STDIO"
   ]
 }"""
 "File: project/.settings/part-resource-manager.store.json" = """
@@ -5985,4 +5995,4 @@ project:
 ["Project Description"]
 workingAreaId = "2e73599c-6eee-452f-92a4-bd94cca1c396"
 version = "1"
-mx2Version = "1.0.1"
+mx2Version = "1.1.1"
