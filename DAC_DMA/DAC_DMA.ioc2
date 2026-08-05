@@ -115,15 +115,15 @@
     },
     {
       "id": "DAC1SH_Clock_Source",
-      "value": "LSE_inputid",
+      "value": "LSI_inputid",
       "isLocked": false,
-      "outFrequency": 32768
+      "outFrequency": 32000
     },
     {
       "id": "DAC1SH_Input_Clock",
-      "value": "32768",
+      "value": 32000,
       "isLocked": false,
-      "outFrequency": 32768
+      "outFrequency": 32000
     },
     {
       "id": "SPI1_Clock_Source",
@@ -554,7 +554,7 @@
     },
     "HAL_CORTEX_PROJECT_USE_HAL": {
       "name": "HAL_CORTEX_PROJECT_USE_HAL",
-      "value": 9,
+      "value": 8,
       "originator": "sw-config-semaphore"
     },
     "HAL_ICACHE_CORE_ENABLED": {
@@ -576,11 +576,6 @@
       "name": "SYSTEM_PROJECT_CODEGEN_STRATEGY",
       "value": "HW",
       "originator": "7a35b146-6c2f-4e0f-b91a-6a908374b9a1"
-    },
-    "HAL_GPIO_PROJECT_USE_HAL": {
-      "name": "HAL_GPIO_PROJECT_USE_HAL",
-      "value": 5,
-      "originator": "sw-config-semaphore"
     },
     "HAL_CORTEX_DEBUG_CORE_ENABLED": {
       "name": "HAL_CORTEX_DEBUG_CORE_ENABLED",
@@ -655,6 +650,11 @@
     "HAL_DMA_PROJECT_USE_HAL": {
       "name": "HAL_DMA_PROJECT_USE_HAL",
       "value": 1,
+      "originator": "sw-config-semaphore"
+    },
+    "HAL_GPIO_PROJECT_USE_HAL": {
+      "name": "HAL_GPIO_PROJECT_USE_HAL",
+      "value": 5,
       "originator": "sw-config-semaphore"
     }
   }
@@ -1623,7 +1623,7 @@
           "name": "SysTick",
           "priority": 15,
           "subpriority": 0,
-          "used": true
+          "used": false
         },
         {
           "id": 3,
@@ -1715,11 +1715,6 @@
           "needId": "48e43f88-bd3c-4e25-8101-7bed6c7e6a01",
           "destination": "LPDMA1_CH0",
           "owner": "LPDMA1_CH0"
-        },
-        {
-          "needId": "ed2eb72d-9ea5-4d47-98ac-ef1042977b9b",
-          "destination": "SysTick",
-          "owner": "CM33"
         }
       ]
     }
@@ -1803,16 +1798,6 @@
       "selector": "*",
       "id": "48e43f88-bd3c-4e25-8101-7bed6c7e6a01",
       "owner": "LPDMA1_CH0",
-      "propertyPath": ""
-    },
-    {
-      "needType": "need.interrupt.lines",
-      "projectUri": "cube:ac3db731-4911-43c2-a55a-5ac6d481133e/b9b4b340-2033-41d1-84c6-52cf63948801",
-      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:CORTEX SYSTICK@2.1.0#HAL CORE Init and CORTEX",
-      "componentInstanceId": "95552daf-dca8-48d2-b515-7e6059503290",
-      "selector": "system:SysTick",
-      "id": "ed2eb72d-9ea5-4d47-98ac-ef1042977b9b",
-      "owner": "CM33",
       "propertyPath": ""
     }
   ],
@@ -3138,10 +3123,20 @@ solution:
   "$type": "https://st.com/schema/middleware-utilities#//",
   "id": "69d9a15a-2171-44ac-aba5-0d623afd87a7",
   "middleware": [
-    "FreeRTOS"
+    "USBX",
+    "STFCF",
+    "STCryptoLib",
+    "Open_Bootloader",
+    "LevelX",
+    "FreeRTOS",
+    "FileX"
   ],
   "utilities": [
-    "Syscalls"
+    "Thread_Safe_LibC",
+    "Syscalls",
+    "Sequencer",
+    "EEPROM_Emulation",
+    "Basic_STDIO"
   ]
 }"""
 "File: project/.settings/part-resource-manager.store.json" = """
@@ -4678,8 +4673,8 @@ solution:
               "system": {
                 "nvic": {
                   "enable_exception_debugmon": false,
-                  "enable_management_pendsv": false,
-                  "enable_management_svc": false
+                  "note_pendsv": "PendSV priority not configurable",
+                  "note_svc": "SVC priority not configurable"
                 }
               }
             }
@@ -4771,9 +4766,9 @@ solution:
                   "callable": false,
                   "generated": false,
                   "hw_instance": "Cortex_Systick",
-                  "layer": "HAL",
+                  "layer": "",
                   "mode": "",
-                  "name": "mx_cortex_systick_init",
+                  "name": "_init",
                   "peripheral": "CORTEX SYSTICK"
                 },
                 {
@@ -5017,31 +5012,7 @@ solution:
             "parameters": {
               "info": {
                 "init_type": "disabled",
-                "labels": [],
-                "layer": "HAL"
-              },
-              "basic": {
-                "clock_source": "INTERNAL",
-                "tick_frequency": "10HZ"
-              },
-              "system": {
-                "nvic": {
-                  "enable_interruption": true,
-                  "irq_config1": {
-                    "needs": [
-                      {
-                        "needType": "need.interrupt.lines",
-                        "projectUri": "cube:ac3db731-4911-43c2-a55a-5ac6d481133e/b9b4b340-2033-41d1-84c6-52cf63948801",
-                        "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:CORTEX SYSTICK@2.1.0#HAL CORE Init and CORTEX",
-                        "componentInstanceId": "95552daf-dca8-48d2-b515-7e6059503290",
-                        "selector": "system:SysTick",
-                        "id": "ed2eb72d-9ea5-4d47-98ac-ef1042977b9b",
-                        "owner": "CM33"
-                      }
-                    ]
-                  },
-                  "irq_handler_generation": true
-                }
+                "systick_not_configurable": "Is not configurable"
               }
             }
           }
@@ -5446,9 +5417,9 @@ solution:
                       "sample_cycles": 0,
                       "hold_cycles": 1,
                       "refresh_cycles": 1,
-                      "clock_frequency": 32768,
-                      "hold_time": 30.517578125,
-                      "refresh_time": 30.517578125,
+                      "clock_frequency": 32000,
+                      "hold_time": 31.25,
+                      "refresh_time": 31.25,
                       "sample_time": 0
                     }
                   }
@@ -6020,4 +5991,4 @@ project:
 ["Project Description"]
 workingAreaId = "f9c0ed52-fc71-4e7c-ac81-3f3821d63d0d"
 version = "1"
-mx2Version = "1.0.1"
+mx2Version = "1.1.1"

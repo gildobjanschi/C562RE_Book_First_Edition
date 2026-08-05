@@ -1,7 +1,7 @@
 # origin-pack: STMicroelectronics::freertos@2.1.0
 # file-format: 1.0.0
 project(STMicroelectronics_freertos_2_1_0)
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.30)
 add_library(STMicroelectronics_freertos_2_1_0 INTERFACE)
 
 # List of all CMSIS properties that influence conditions for this package
