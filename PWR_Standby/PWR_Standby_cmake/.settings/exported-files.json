@@ -1,13 +1,13 @@
 {
   "disclaimer": "Do not modify this file as it is used by STM32CubeMX2 to determine what and how to update your project with new configuration",
   "version": "1.0.0",
-  "timestamp": "2026-06-16T18:10:56.258Z",
+  "timestamp": "2026-08-05T06:57:08.152Z",
   "files": [
     {
       "fileGroup": "project_file",
       "checksum": {
         "algo": "sha256",
-        "digest": "277643e23930eee495c4e84b53a6e6aa343cec4cac703db88edb96f511b4aaa1"
+        "digest": "e420d83ed25109d506901773c9606f4ef4fe71627954347027cc208c26ce22a8"
       },
       "file": "CMakeLists.txt"
     },
@@ -63,7 +63,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "ca91d5e0cfe41fb29a4ee8463aaa3c937e4c9a5c5d9edfcb88420be9c200362f"
+        "digest": "2e14421e5202ea884d2972b06e802507f71df21279cb2e54a2f3f8f1f027397b"
       },
       "file": "cmake/flags.cmake"
     },
@@ -79,7 +79,7 @@
       "fileGroup": "project_file",
       "checksum": {
         "algo": "sha256",
-        "digest": "33778c4f91db3968cce171fcc5acd943c5d3d2738c1184c022fd797357e5a1bc"
+        "digest": "8edd503c731e0b2b457699d746ac15e516122a465625296e60702b394d2071b7"
       },
       "file": "stm32c5xx_dfp/CMakeLists.txt"
     },
@@ -119,7 +119,7 @@
       "fileGroup": "project_file",
       "checksum": {
         "algo": "sha256",
-        "digest": "83b59586095b88129e47a60361bd255286319102fd4ec19befd923f20bf25adf"
+        "digest": "8bb294a6d29536acdf21fff5d72df61e269f1ea5deb1a206227129a5f9d17c5c"
       },
       "file": "stm32c5xx_drivers/CMakeLists.txt"
     },
@@ -159,7 +159,7 @@
       "fileGroup": "project_file",
       "checksum": {
         "algo": "sha256",
-        "digest": "faedf0edf576e9db19adb5bdc1b16b80001f2d11ead7c6b81415cdd84dfc8930"
+        "digest": "b0848669bdf180baa1e9c08179445a0da1f051ac83c771de25f19c76564fc46e"
       },
       "file": "arch/cmsis/CMakeLists.txt"
     },
@@ -199,7 +199,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "71a51e1994c873af0b575fd23a5bd11e10da2e9a8eace713d07cd4963b6334fc"
+        "digest": "07e1f0cd12cbeaf169b29e39c79b239d61f3f5be82f4920306d6f3a739363711"
       },
       "file": "generated/hal/STM32_HAL_Driver_codegen.cmake"
     },
@@ -487,7 +487,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "a539ada7524fb895c10e611361a1dcf56a3169c02f1b0ac9e6d639accebf764d"
+        "digest": "ad7635e591b171bc49d458a5978b87c082bd3104f145e19279a0f7cf21bc35d5"
       },
       "file": "generated/middleware/STMicroelectronics.freertos.cmake"
     },
@@ -535,7 +535,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "c0b1fded9459913da06fdda1166f941ab887660da1dbf29ab3c846204ece5818"
+        "digest": "14d0a664fb7120086aa988f3697e8af0e2128f191410e690154ce39e1088dd29"
       },
       "file": "generated/utilities/STMicroelectronics.syscalls.cmake"
     },
@@ -559,7 +559,7 @@
       "fileGroup": "project_file",
       "checksum": {
         "algo": "sha256",
-        "digest": "6e64367d43840f79966ead57730c32ac3cca1e5e8ceff10045f935dbfdd8e8a8"
+        "digest": "c83f4f8f71eb1d673557af1c1e6c15d8e2b3b3310e7399b43891931b79784298"
       },
       "file": "middleware/freertos/CMakeLists.txt"
     },
@@ -1911,7 +1911,7 @@
       "fileGroup": "project_file",
       "checksum": {
         "algo": "sha256",
-        "digest": "159ffc94c668f71612b090b5904e5c9e1ab13a1ee8cb741e1fc7cdeb9efce4d7"
+        "digest": "19c0b9bafe82d6bdee83f0f135c191fb23fcd66b457b885d63cae505fc8ed60f"
       },
       "file": "utilities/syscalls/CMakeLists.txt"
     },
