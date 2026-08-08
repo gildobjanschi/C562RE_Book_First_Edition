@@ -1,0 +1,3 @@
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/generated/hal/mx_system.c:32:17:mx_system_init	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/generated/hal/mx_system.c:142:24:pre_system_init_hook	4	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/generated/hal/mx_system.c:154:24:post_system_init_hook	4	static

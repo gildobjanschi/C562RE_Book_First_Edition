@@ -1,0 +1,11 @@
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:1586:22:LL_APB1_GRP1_EnableClock	48	static,ignoring_inline_asm
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:1745:22:LL_APB1_GRP1_DisableClock	40	static,ignoring_inline_asm
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:1814:22:LL_APB1_GRP1_ForceReset	16	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:1883:22:LL_APB1_GRP1_ReleaseReset	16	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:1744:22:HAL_RCC_TIM7_EnableClock	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:1950:22:HAL_RCC_TIM7_DisableClock	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:3415:22:HAL_RCC_TIM7_Reset	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/generated/hal/mx_tim7.c:33:19:mx_tim7_init	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/generated/hal/mx_tim7.c:50:6:mx_tim7_deinit	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/generated/hal/mx_tim7.c:63:19:mx_tim7_gethandle	4	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/generated/hal/mx_tim7.c:71:6:TIM7_IRQHandler	8	static

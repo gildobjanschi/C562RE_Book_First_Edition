@@ -1,0 +1,7 @@
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/Faults/m33_it.c:12:6:Fault_Config	4	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/Faults/m33_it.c:24:6:Flash_Fault_LED	32	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/Faults/m33_it.c:45:6:HardFault_Handler	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/Faults/m33_it.c:76:6:MemManage_Handler	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/Faults/m33_it.c:105:6:BusFault_Handler	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/Faults/m33_it.c:136:6:UsageFault_Handler	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/Faults/m33_it.c:167:13:NMI_Handler	8	static

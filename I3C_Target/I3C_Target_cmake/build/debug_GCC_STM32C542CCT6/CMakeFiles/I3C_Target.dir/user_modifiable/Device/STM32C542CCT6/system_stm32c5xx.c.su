@@ -1,0 +1,4 @@
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_dfp/Include/stm32c5xx.h:244:22:SCB_SetVTOR	16	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_dfp/Include/stm32c5xx.h:383:22:SCB_EnableFPU	4	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/user_modifiable/Device/STM32C542CCT6/system_stm32c5xx.c:148:6:SystemInit	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/user_modifiable/Device/STM32C542CCT6/system_stm32c5xx.c:196:6:SystemCoreClockUpdate	16	static

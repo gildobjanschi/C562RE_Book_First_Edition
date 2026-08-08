@@ -1,0 +1,5 @@
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/middleware/freertos/list.c:49:6:vListInitialise	16	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/middleware/freertos/list.c:89:6:vListInitialiseItem	16	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/middleware/freertos/list.c:105:6:vListInsertEnd	24	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/middleware/freertos/list.c:139:6:vListInsert	24	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/middleware/freertos/list.c:217:13:uxListRemove	24	static

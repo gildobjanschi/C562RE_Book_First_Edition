@@ -1,0 +1,2 @@
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/arch/cmsis/CMSIS/Core/Include/core_cm33.h:3193:26:ITM_SendChar	16	static,ignoring_inline_asm
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/Debug/swd_printf.c:12:5:_write	32	static

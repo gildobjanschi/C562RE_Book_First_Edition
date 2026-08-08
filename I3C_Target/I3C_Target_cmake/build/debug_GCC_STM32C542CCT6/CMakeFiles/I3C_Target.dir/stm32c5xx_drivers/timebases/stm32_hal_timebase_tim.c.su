@@ -1,0 +1,6 @@
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/timebases/stm32_hal_timebase_tim.c:115:21:tim_timebase_config_tick	48	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/timebases/stm32_hal_timebase_tim.c:136:14:find_psc_arr	40	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/timebases/stm32_hal_timebase_tim.c:189:14:HAL_InitTick	24	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/timebases/stm32_hal_timebase_tim.c:231:6:HAL_SuspendTick	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/timebases/stm32_hal_timebase_tim.c:240:6:HAL_ResumeTick	8	static
+/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/stm32c5xx_drivers/timebases/stm32_hal_timebase_tim.c:252:6:HAL_TIM_UpdateCallback	16	static
