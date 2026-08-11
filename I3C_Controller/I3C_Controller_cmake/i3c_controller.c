@@ -74,28 +74,6 @@ DirectWriteCCC = {
 // Sum up all the read bytes from the DirectWriteRead_CCC_Descriptor.
 #define DIRECT_READ_DATA_SIZE       13U
 
-// Target descriptor structure for ENTDAA multi-target management
-typedef struct {
-  // Human-readable name or reference for the target device
-  char         *target_name;
-  // Unique identifier for the target on the I3C bus
-  // (can link to index in device table)
-  uint32_t      target_id;
-  // Concatenated value of PID, BCR, and DCR for device identification
-  //                                       and ENTDAA verification
-  uint64_t      target_bcr_dcr_pid;
-  // Static address from device datasheet (used before dynamic assignment)
-  uint8_t       static_addr;
-  // Dynamic address assigned by controller during ENTDAA
-  uint8_t       dynamic_addr;
-} target_desc_t;
-
-static target_desc_t Targets_Descriptor[1] =
-{
-  {"", 0U, 0, 0, DEVICE_TARGET_ADDR},
-};
-
-
 static hal_i3c_transfer_ctx_t ContextBuffers;
 
 // Flags for I3C_State
@@ -103,6 +81,7 @@ static hal_i3c_transfer_ctx_t ContextBuffers;
 #define DAA_COMPLETE          0x00000002
 #define TRANSACT_CCC_PENDING  0x00000004
 
+static volatile uint64_t ulTarget_bcr_dcr_pid;
 static uint32_t I3C_State;
 
 static volatile QueueHandle_t sI3CIntQueue;
@@ -227,8 +206,8 @@ hal_status_t I3C_StartDAA() {
 static void I3C_DynAddrRequestCallback(hal_i3c_handle_t *hi3c,
     uint64_t targetPayload) {
   SWD_printf("-- Target requested DA; payload: %x\n", targetPayload);
-  Targets_Descriptor[0].target_bcr_dcr_pid = targetPayload;
-  HAL_I3C_CTRL_SetDynAddr(hi3c, Targets_Descriptor[0].dynamic_addr);
+  ulTarget_bcr_dcr_pid = targetPayload;
+  HAL_I3C_CTRL_SetDynAddr(hi3c, DEVICE_TARGET_ADDR);
 }
 
 /*
@@ -258,14 +237,14 @@ hal_status_t I3C_DAAComplete() {
   // - identify the target (device index + dynamic address)
   // - determine whether to accept (ACK) its IBI requests
   // - indicate whether an IBI payload is supported/expected
-  uint32_t bcr = HAL_I3C_GET_BCR(Targets_Descriptor[0].target_bcr_dcr_pid);
+  uint32_t bcr = HAL_I3C_GET_BCR(ulTarget_bcr_dcr_pid);
   hal_i3c_ctrl_device_config_t DeviceConf;
 
   // Application target identifier.
-  DeviceConf.device_index = Targets_Descriptor[0].target_id;
+  DeviceConf.device_index = 0;
 
   // Target dynamic address (assigned during ENTDAA).
-  DeviceConf.tgt_dynamic_addr = Targets_Descriptor[0].dynamic_addr;
+  DeviceConf.tgt_dynamic_addr = DEVICE_TARGET_ADDR;
 
   // IBI capability (from BCR).
   DeviceConf.ibi_ack =
