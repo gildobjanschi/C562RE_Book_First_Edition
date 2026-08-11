@@ -640,7 +640,7 @@
     },
     "HAL_CORTEX_PROJECT_USE_HAL": {
       "name": "HAL_CORTEX_PROJECT_USE_HAL",
-      "value": 13,
+      "value": 8,
       "originator": "sw-config-semaphore"
     },
     "HAL_ICACHE_CORE_ENABLED": {
@@ -736,11 +736,6 @@
     "HAL_DMA_PROJECT_USE_HAL": {
       "name": "HAL_DMA_PROJECT_USE_HAL",
       "value": 3,
-      "originator": "sw-config-semaphore"
-    },
-    "HAL_EXTI_SYSTEM_GPIO_STANDARD_EXTI": {
-      "name": "HAL_EXTI_SYSTEM_GPIO_STANDARD_EXTI",
-      "value": 2,
       "originator": "sw-config-semaphore"
     }
   }
@@ -5828,14 +5823,15 @@ solution:
               },
               "basic": {
                 "mode": "CTRL",
-                "bus_usage": "UTILS_I3C_PURE_I3C_BUS",
+                "bus_usage": "UTILS_I3C_I2C_MIXED_BUS",
                 "clock_frequency": 144000000,
                 "clock_source": "APB1_Peripheral_Clock",
                 "ctrl_adv_timing": false,
-                "ctrl_timing_reg0": 3343621,
+                "ctrl_timing_reg0": 2897872133,
                 "freq_i3c": 12500,
-                "ctrl_timing_reg1": 1900686,
-                "duty_cycle_i3c": 50
+                "ctrl_timing_reg1": 7798926,
+                "duty_cycle_i2c": 50,
+                "freq_i2c": 400
               },
               "additional": {
                 "ctrl_enable_own_dyn_addr": false,

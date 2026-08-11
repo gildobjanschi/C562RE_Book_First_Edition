@@ -50,15 +50,16 @@ hal_i3c_handle_t *mx_i3c1_init(void)
     * I3C1 timing_reg0 calculated by CubeMX2 with:
     * - SDA rise time = 350 ns
     * - Input frequency = 144 MHz
-    * - Bus usage = UTILS_I3C_PURE_I3C_BUS
+    * - Bus usage = UTILS_I3C_I2C_MIXED_BUS
     * - I3C bus frequency = 12.5 MHz
-    * - I3C duty cycle = 50 %
+    * - I2C bus frequency = 400 KHz
+    * - I2C and I3C duty cycle = 50 %
     * I3C1 timing_reg1 calculated by CubeMX2 with:
     * - Wait time = LL_I3C_OWN_ACTIVITY_STATE_0
     */
   hal_i3c_ctrl_config_t i3c_ctrl_config;
-  i3c_ctrl_config.timing_reg0 = 0x330505UL;
-  i3c_ctrl_config.timing_reg1 = 0x1D008EUL;
+  i3c_ctrl_config.timing_reg0 = 0xACBA0505UL;
+  i3c_ctrl_config.timing_reg1 = 0x77008EUL;
   if (HAL_I3C_CTRL_SetConfig(&hI3C1, &i3c_ctrl_config) != HAL_OK)
   {
     return NULL;

@@ -207,14 +207,14 @@ hal_status_t I3C_StartDAA() {
   /* Initiate Dynamic Address Assignment (DAA) process for the controller */
   hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
   hal_status_t status;
-  status = HAL_I3C_CTRL_DynAddrAssign_IT(hI3C, HAL_I3C_DYN_ADDR_ONLY_ENTDAA);
+  status = HAL_I3C_CTRL_DynAddrAssign_IT(hI3C,
+      HAL_I3C_DYN_ADDR_RSTDAA_THEN_ENTDAA);
   if (status != HAL_OK) {
     SWD_printf("HAL_I3C_CTRL_DynAddrAssign_IT failed.\n");
     return status;
   }
 
   I3C_State |= DAA_PENDING;
-  SWD_printf("I3C_StartDAA started.\n");
   return HAL_OK;
 }
 
@@ -226,7 +226,7 @@ hal_status_t I3C_StartDAA() {
  */
 static void I3C_DynAddrRequestCallback(hal_i3c_handle_t *hi3c,
     uint64_t targetPayload) {
-  SWD_printf("Target requested device address. Payload: %x\n", targetPayload);
+  SWD_printf("-- Target requested DA; payload: %x\n", targetPayload);
   Targets_Descriptor[0].target_bcr_dcr_pid = targetPayload;
   HAL_I3C_CTRL_SetDynAddr(hi3c, Targets_Descriptor[0].dynamic_addr);
 }
@@ -321,7 +321,7 @@ hal_status_t I3C_DAAComplete() {
  * @param hi3c The I3C handle
  */
 static void I3C_TransferCompleteCallback(hal_i3c_handle_t *hi3c) {
-  SWD_printf("Transfer complete: %d bytes.\n", hi3c->data_size_byte);
+  SWD_printf("-- Transfer complete: %d bytes.\n", hi3c->data_size_byte);
   uint8_t ucEvent = EVENT_TRANSFER_COMPLETE;
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
   if (xQueueSendFromISR(sI3CIntQueue, &ucEvent,
@@ -349,7 +349,7 @@ hal_status_t I3C_TransferComplete() {
  * @param hi3c The I3C handle
  */
 static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c) {
-  SWD_printf("Error callback codes: %01x\n", hi3c->last_error_codes);
+  SWD_printf("-- Error callback codes: %01x\n", hi3c->last_error_codes);
 
   uint8_t ucEvent = EVENT_ERROR;
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
@@ -380,7 +380,6 @@ static void PrintCCCResults(uint8_t *RxBuffer) {
   uint8_t CommandCodeSize[] = {2U, 2U, 6U, 1U, 1U, 1U};
   uint8_t numCommands = (uint8_t)COUNTOF(CommandCodeSize);
 
-  SWD_printf("Transfer complete.\n");
   uint8_t offset = 0;
   for (uint8_t i = 0; i < numCommands; i++) {
     SWD_printf("%s = 0x", CommandCode[i]);
@@ -392,7 +391,7 @@ static void PrintCCCResults(uint8_t *RxBuffer) {
     offset += CommandCodeSize[i];
 
     if (i < (uint8_t)(numCommands - 1U)) {
-      SWD_printf(" , ");
+      SWD_printf(", ");
     }
   }
 
