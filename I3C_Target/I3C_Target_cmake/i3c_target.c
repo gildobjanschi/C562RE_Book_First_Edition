@@ -180,7 +180,7 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
   }
 
   /*
-  if (I3C_State == I3C_TGT_READY) {
+  if (I3C_NotificationsReceived == I3C_TGT_READY) {
     // Start reading data from the controller
     I3C_ReadCommand();
   }
