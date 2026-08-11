@@ -139,8 +139,8 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
     SWD_printf("Dynamic address complete: %02xh.\n", CCCInfo.dynamic_addr);
   }
 
-  // SETMWL: Dictates the maximum number of bytes an I3C Controller can send to
-  // a Target in a single write transfer.
+  // SETMRL: Dictates the maximum number of bytes a Target can return to an
+  // I3C Controller in a single read transfer.
   if ((ulNotifyId & HAL_I3C_TGT_NOTIFICATION_SETMRL) ==
       HAL_I3C_TGT_NOTIFICATION_SETMRL) {
     status = HAL_I3C_GetCCCInfo(hI3C, HAL_I3C_TGT_NOTIFICATION_SETMRL,
@@ -157,8 +157,8 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
     SWD_printf("SETMRL complete: %d.\n", CCCInfo.max_read_data_size_byte);
   }
 
-  // SETMRL: Dictates the maximum number of bytes a Target can return to an
-  // I3C Controller in a single read transfer.
+  // SETMWL: Dictates the maximum number of bytes an I3C Controller can send to
+  // a Target in a single write transfer.
   if ((ulNotifyId & HAL_I3C_TGT_NOTIFICATION_SETMWL) ==
       HAL_I3C_TGT_NOTIFICATION_SETMWL) {
     status = HAL_I3C_GetCCCInfo(hI3C, HAL_I3C_TGT_NOTIFICATION_SETMWL,
