@@ -1,9 +1,0 @@
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/i3c_target.c:67:14:I3C_Init	24	static
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/i3c_target.c:122:14:I3C_Notify	72	static
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/i3c_target.c:190:14:I3C_RxComplete	4	static
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/i3c_target.c:276:14:I3C_TxComplete	4	static
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/i3c_target.c:287:13:I3C_NotifyCallback	24	static
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/i3c_target.c:301:13:I3C_RxCompleteCallback	24	static
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/i3c_target.c:316:13:I3C_TxCompleteCallback	24	static
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/i3c_target.c:331:13:I3C_ErrorCallback	24	static
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/I3C_Target/I3C_Target_cmake/i3c_target.c:394:13:I3C_Reset	4	static

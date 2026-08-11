@@ -1,5 +1,0 @@
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/RTT/SEGGER_RTT_printf.c:91:13:_StoreChar	24	static
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/RTT/SEGGER_RTT_printf.c:116:13:_PrintUnsigned	48	static
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/RTT/SEGGER_RTT_printf.c:206:13:_PrintInt	40	static
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/RTT/SEGGER_RTT_printf.c:301:5:SEGGER_RTT_vprintf	144	static
-/home/gil/Documents/GitHub/C562RE_Book_First_Edition/Shared/RTT/SEGGER_RTT_printf.c:475:5:SEGGER_RTT_printf	28	static

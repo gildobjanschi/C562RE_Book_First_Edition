@@ -29,7 +29,7 @@ static volatile QueueHandle_t sI3CNotifyQueue;
 static volatile QueueHandle_t sI3CIntQueue;
 
 // The I3C state
-static uint32_t I3C_State;
+static uint32_t I3C_NotificationsReceived;
 static uint8_t I3C_ucLastCommand;
 static uint16_t I3C_uwLastAddress;
 
@@ -94,9 +94,9 @@ hal_status_t I3C_Init(QueueHandle_t I3cNotifyQueue, QueueHandle_t I3cIntQueue) {
 
   // Activate target notifications for DAA (Dynamic Address Assignment)
   status = HAL_I3C_TGT_ActivateNotification(hI3C, (uint8_t *)NULL, 0U,
-                         HAL_I3C_TGT_NOTIFICATION_DAU |
-                         HAL_I3C_TGT_NOTIFICATION_SETMRL |
-                         HAL_I3C_TGT_NOTIFICATION_SETMWL);
+                        HAL_I3C_TGT_NOTIFICATION_DAU |
+                        HAL_I3C_TGT_NOTIFICATION_SETMRL |
+                        HAL_I3C_TGT_NOTIFICATION_SETMWL);
 
   if (status != HAL_OK) {
     SWD_printf("HAL_I3C_TGT_ActivateNotification failed.\n");
@@ -134,9 +134,13 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
     }
 
     // DAA completed
-    I3C_State |= HAL_I3C_TGT_NOTIFICATION_DAU;
+    if (CCCInfo.dynamic_addr != 0) {
+      I3C_NotificationsReceived |= HAL_I3C_TGT_NOTIFICATION_DAU;
 
-    SWD_printf("Dynamic address complete: %02xh.\n", CCCInfo.dynamic_addr);
+      SWD_printf("Dynamic address complete: %02xh.\n", CCCInfo.dynamic_addr);
+    } else {
+      SWD_printf("Dynamic address cleared.\n");
+    }
   }
 
   // SETMRL: Dictates the maximum number of bytes a Target can return to an
@@ -152,7 +156,7 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
     }
 
     // SETMRL completed
-    I3C_State |= HAL_I3C_TGT_NOTIFICATION_SETMRL;
+    I3C_NotificationsReceived |= HAL_I3C_TGT_NOTIFICATION_SETMRL;
 
     SWD_printf("SETMRL complete: %d.\n", CCCInfo.max_read_data_size_byte);
   }
@@ -170,7 +174,7 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
     }
 
     // SETMWL completed
-    I3C_State |= HAL_I3C_TGT_NOTIFICATION_SETMWL;
+    I3C_NotificationsReceived |= HAL_I3C_TGT_NOTIFICATION_SETMWL;
 
     SWD_printf("SETMWL complete: %d.\n", CCCInfo.max_write_data_size_byte);
   }
@@ -393,7 +397,7 @@ static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
  */
 static void I3C_Reset() {
   // Reset the state
-  I3C_State = 0;
+  I3C_NotificationsReceived = 0;
   I3C_RxState = RX_IDLE;
   I3C_TxState = TX_IDLE;
   I3C_ucLastCommand = 0;
