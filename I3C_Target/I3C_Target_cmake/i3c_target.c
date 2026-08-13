@@ -10,20 +10,20 @@
 #include "i3c_target.h"
 
 /* Custom Command codes are in the range 0xC0 to 0xDF */
-/*
 #define I3C_STORE_CMD             0xC0
 #define I3C_LOAD_CMD              0xC1
-*/
+#define I3C_STALL_CMD             0xC2
+
 // Interrupt callback
 static void I3C_NotifyCallback(hal_i3c_handle_t *hi3c, uint32_t ulNotifyId);
 static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c);
 static void I3C_RxCompleteCallback(hal_i3c_handle_t *hi3c);
 static void I3C_TxCompleteCallback(hal_i3c_handle_t *hi3c);
 
-//#define RX_BUFFER_SIZE 16
-//static uint8_t I3C_RxBuffer[RX_BUFFER_SIZE];
-//#define TX_BUFFER_SIZE 16
-//static uint8_t I3C_TxBuffer[TX_BUFFER_SIZE];
+#define RX_BUFFER_SIZE 16
+static uint8_t I3C_RxBuffer[RX_BUFFER_SIZE];
+#define TX_BUFFER_SIZE 16
+static uint8_t I3C_TxBuffer[TX_BUFFER_SIZE];
 
 static volatile QueueHandle_t sI3CNotifyQueue;
 static volatile QueueHandle_t sI3CIntQueue;
@@ -53,8 +53,8 @@ static TX_STATE I3C_TxState;
                         HAL_I3C_TGT_NOTIFICATION_SETMWL)
 
 static void I3C_Reset();
-//static hal_status_t I3C_ReadCommand();
-//static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength);
+static hal_status_t I3C_ReadCommand();
+static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength);
 
 /*
  * @brief  Initialize I3C
@@ -179,12 +179,11 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
     SWD_printf("SETMWL complete: %d.\n", CCCInfo.max_write_data_size_byte);
   }
 
-  /*
   if (I3C_NotificationsReceived == I3C_TGT_READY) {
     // Start reading data from the controller
     I3C_ReadCommand();
   }
- */
+
   return HAL_OK;
 }
 
@@ -192,8 +191,6 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
  * @brief: Rx complete handler
  */
 hal_status_t I3C_RxComplete() {
-  I3C_RxState = RX_IDLE;
-/*
   if (I3C_RxState == RX_COMMAND_PENDING) {
     I3C_RxState = RX_IDLE;
     // Get the command
@@ -203,10 +200,10 @@ hal_status_t I3C_RxComplete() {
     uint16_t uwAddress = I3C_RxBuffer[1];
     uwAddress <<= 8;
     uwAddress |= I3C_RxBuffer[2];
-
+    /*
     SWD_printf("I3C_RxComplete: cmd: %02xh, address: %04xh\n",
         ucCommand, uwAddress);
-
+    */
     I3C_ucLastCommand = ucCommand;
     I3C_uwLastAddress = uwAddress;
     switch(ucCommand) {
@@ -222,20 +219,28 @@ hal_status_t I3C_RxComplete() {
       }
 
       // Send the response
-      I3C_TxBuffer[0] = 0xaa;
-      I3C_TxBuffer[1] = 0xbb;
-      I3C_TxBuffer[2] = 0xcc;
-      I3C_TxBuffer[3] = 0xdd;
+      I3C_TxBuffer[0] = 0x05;
+      I3C_TxBuffer[1] = 0x06;
+      I3C_TxBuffer[2] = 0x07;
+      I3C_TxBuffer[3] = 0x08;
 
       hal_status_t status;
       hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
+
+      HAL_GPIO_WritePin(LD1_PORT, LD1_PIN, HAL_GPIO_PIN_SET);
       status = HAL_I3C_TGT_Transmit_IT(hI3C, I3C_TxBuffer, 4);
       if (status != HAL_OK) {
         SWD_printf("I3C_RxComplete: HAL_I3C_TGT_Transmit_IT: %lx\n", status);
         return status;
       }
+      HAL_GPIO_WritePin(LD1_PORT, LD1_PIN, HAL_GPIO_PIN_RESET);
 
       I3C_TxState = TX_PENDING;
+      SWD_printf("I3C_RxComplete: Payload TX.\n");
+      break;
+    }
+
+    case I3C_STALL_CMD: {
       break;
     }
 
@@ -270,7 +275,7 @@ hal_status_t I3C_RxComplete() {
     }
     }
   }
-  */
+
   return HAL_OK;
 }
 
@@ -303,7 +308,7 @@ static void I3C_NotifyCallback(hal_i3c_handle_t *hi3c, uint32_t ulNotifyId) {
  * @param hi3c The I3C handle
  */
 static void I3C_RxCompleteCallback(hal_i3c_handle_t *hi3c) {
-  SWD_printf("-- I3C_RxCompleteCallback [%d bytes]--\n", hi3c->data_size_byte);
+  //SWD_printf("-- I3C_RxCompleteCallback [%d bytes]--\n", hi3c->data_size_byte);
   uint8_t ucEvent = EVENT_RX_COMPLETE;
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
   if (xQueueSendFromISR(sI3CIntQueue, &ucEvent,
@@ -333,6 +338,7 @@ static void I3C_TxCompleteCallback(hal_i3c_handle_t *hi3c) {
  * @param hi3c The I3C handle
  */
 static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c) {
+  SWD_printf("-- Error callback codes: %01x\n", hi3c->last_error_codes);
   uint8_t ucEvent = EVENT_ERROR;
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
   if (xQueueSendFromISR(sI3CIntQueue, &ucEvent,
@@ -344,7 +350,6 @@ static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c) {
 /*
  * brief: I3C read command
  */
-/*
 static hal_status_t I3C_ReadCommand() {
   if (I3C_RxState != RX_IDLE) {
     SWD_printf("I3C_ReadCommand: [Error] Rx is pending.\n");
@@ -362,13 +367,12 @@ static hal_status_t I3C_ReadCommand() {
   I3C_RxState = RX_COMMAND_PENDING;
   return HAL_OK;
 }
-*/
+
 /*
  * brief: I3C read payload
  *
  * @param ulPayloadLength The Rx payload length
  */
-/*
 static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
   if (I3C_RxState != RX_IDLE) {
     SWD_printf("I3C_ReadPayload: [Error] Rx is pending.\n");
@@ -391,7 +395,7 @@ static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
   I3C_RxState = RX_PAYLOAD_PENDING;
   return HAL_OK;
 }
-*/
+
 /*
  * @brief: Reset the target
  */

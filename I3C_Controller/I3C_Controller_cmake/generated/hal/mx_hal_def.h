@@ -41,24 +41,6 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
-  /* *************************************************************
-    I3C1 / LPDMA1_CH0: No software label has been defined for this peripheral instance
-      in the STM32CubeMX2 configuration panel.
-      As a result, no aliases are generated for Channel instance
-    ************************************************************* */
-
-  /* *************************************************************
-    I3C1 / LPDMA1_CH1: No software label has been defined for this peripheral instance
-      in the STM32CubeMX2 configuration panel.
-      As a result, no aliases are generated for Channel instance
-    ************************************************************* */
-
-  /* *************************************************************
-    I3C1 / LPDMA1_CH2: No software label has been defined for this peripheral instance
-      in the STM32CubeMX2 configuration panel.
-      As a result, no aliases are generated for Channel instance
-    ************************************************************* */
-
 /* Exported macros -----------------------------------------------------------*/
 
 /* ########### Aliases to initialization functions ########### */

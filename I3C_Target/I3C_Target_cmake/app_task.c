@@ -84,7 +84,6 @@ static void vAppTaskFunction(void *pvParameters) {
       case EVENT_ERROR: {
         HAL_GPIO_WritePin(LED_G_PORT, LED_G_PIN, HAL_GPIO_PIN_RESET);
         HAL_GPIO_WritePin(LED_R_PORT, LED_R_PIN, HAL_GPIO_PIN_SET);
-        SWD_printf("I3C error.\n");
         vTaskDelay(pdMS_TO_TICKS(1000));
         HAL_GPIO_WritePin(LED_R_PORT, LED_R_PIN, HAL_GPIO_PIN_RESET);
 
@@ -115,7 +114,6 @@ static void vAppTaskFunction(void *pvParameters) {
       if (I3C_Notify(ulEvent) != HAL_OK) {
         HAL_GPIO_WritePin(LED_G_PORT, LED_G_PIN, HAL_GPIO_PIN_RESET);
         HAL_GPIO_WritePin(LED_R_PORT, LED_R_PIN, HAL_GPIO_PIN_SET);
-        SWD_printf("Notify error.\n");
         vTaskDelay(pdMS_TO_TICKS(1000));
         HAL_GPIO_WritePin(LED_R_PORT, LED_R_PIN, HAL_GPIO_PIN_RESET);
 

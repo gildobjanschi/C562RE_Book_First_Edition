@@ -372,7 +372,7 @@ extern "C" {
 #define USE_HAL_I3C_REGISTER_CALLBACKS          1U
 #define USE_HAL_I3C_USER_DATA                   0U
 #define USE_HAL_I3C_GET_LAST_ERRORS             1U
-#define USE_HAL_I3C_DMA                         1U
+#define USE_HAL_I3C_DMA                         0U
 /**
   * @}
   */

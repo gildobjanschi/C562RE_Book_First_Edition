@@ -1164,27 +1164,6 @@
           "type": "user_gpio"
         },
         "pinned": true
-      },
-      {
-        "pin": {
-          "name": "PA5",
-          "position": "15",
-          "type": "gpio",
-          "powerSource": "VDD",
-          "ioStructureOptions": [
-            "a"
-          ],
-          "ioType": "I/O",
-          "ioStructure": "TT",
-          "index": 5,
-          "port": "A"
-        },
-        "signal": {
-          "instance": "GPIOA",
-          "name": "GPIO",
-          "type": "user_gpio"
-        },
-        "pinned": true
       }
     ],
     "needConfigurations": [
@@ -1328,12 +1307,7 @@
     {
       "position": "28",
       "labels": [
-        "LED_B"
-      ]
-    },
-    {
-      "position": "15",
-      "labels": [
+        "LED_B",
         "LD1"
       ]
     }
@@ -1385,19 +1359,6 @@
           "ioStructure": "FT",
           "index": 15,
           "port": "B"
-        },
-        {
-          "name": "PA5",
-          "position": "15",
-          "type": "gpio",
-          "powerSource": "VDD",
-          "ioStructureOptions": [
-            "a"
-          ],
-          "ioType": "I/O",
-          "ioStructure": "TT",
-          "index": 5,
-          "port": "A"
         }
       ]
     }
@@ -3061,19 +3022,6 @@ solution:
                 "init_type": "called"
               },
               "pins": [
-                {
-                  "_foreignKey": "PA5",
-                  "basic": {
-                    "mode": "OUTPUT",
-                    "pull": "NO",
-                    "enable_exti": false,
-                    "output_active_state": "SET",
-                    "output_init_state": "RESET",
-                    "output_type": "PUSHPULL",
-                    "speed": "LOW"
-                  },
-                  "label_name": []
-                },
                 {
                   "_foreignKey": "PB13",
                   "basic": {

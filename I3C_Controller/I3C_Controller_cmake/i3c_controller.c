@@ -16,23 +16,14 @@ static void I3C_DynAddrRequestCallback(hal_i3c_handle_t *hi3c,
 static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c);
 static void I3C_TransferCompleteCallback(hal_i3c_handle_t *hi3c);
 
-/* @user: The maximum data bus width used by DMA in STM32 devices is 64 bits.
-   Therefore, 8-byte alignment is the minimum recommended alignment
-   for DMA buffers across STM32 devices.
-*/
-#define DMA_ALIGNMENT      (8U)
-
-__attribute__((section("non_cacheable_area"), aligned(DMA_ALIGNMENT)))
 uint32_t ControlBuffer[20];
 
 /* Size of the Rx Buffer in bytes. */
 #define RX_BUFFER_SIZE             31U
-__attribute__((section("non_cacheable_area"), aligned(DMA_ALIGNMENT)))
 uint8_t RxBuffer[RX_BUFFER_SIZE];
 
 /* Target device address for I3C communication. */
 #define DEVICE_TARGET_ADDR        0x32U
-
 /* Direct Command code */
 #define I3C_DIRECT_SETMWL_CCC     0x89
 #define I3C_DIRECT_SETMRL_CCC     0x8A
@@ -54,7 +45,7 @@ static hal_i3c_ccc_desc_t DirectWriteRead_CCC_Descriptor[8] = {
   {DEVICE_TARGET_ADDR, I3C_DIRECT_GETPID_CCC,   6U, HAL_I3C_DIRECTION_READ},
   {DEVICE_TARGET_ADDR, I3C_DIRECT_GETBCR_CCC,   1U, HAL_I3C_DIRECTION_READ},
   {DEVICE_TARGET_ADDR, I3C_DIRECT_GETDCR_CCC,   1U, HAL_I3C_DIRECTION_READ},
-  {DEVICE_TARGET_ADDR, I3C_DIRECT_GETSTATUS_CCC,   1U, HAL_I3C_DIRECTION_READ}
+  {DEVICE_TARGET_ADDR, I3C_DIRECT_GETSTATUS_CCC,1U, HAL_I3C_DIRECTION_READ}
 };
 
 // Structure holding associated data for SETMRL and SETMWL CCC write command
@@ -64,8 +55,8 @@ struct {
 }
 
 DirectWriteCCC = {
-  .SETMRL_associated_data = {0x0, 0x8},
-  .SETMWL_associated_data = {0x0, 0x8}
+  .SETMRL_associated_data = {0x0, 0x10},
+  .SETMWL_associated_data = {0x0, 0x10}
 };
 
 // DirectWrite CCC payload size: 2 bytes (SETMRL data) + 2 bytes (SETMWL data)
@@ -74,12 +65,57 @@ DirectWriteCCC = {
 // Sum up all the read bytes from the DirectWriteRead_CCC_Descriptor.
 #define DIRECT_READ_DATA_SIZE       13U
 
+// Custom Command codes are in the range 0xC0 to 0xDF
+#define I3C_STORE_CMD             0xC0
+#define I3C_LOAD_CMD              0xC1
+#define I3C_STALL_CMD             0xC2
+
+// ---------------- Store command ----------------------
+static hal_i3c_private_desc_t Store_Private_Descriptor[2] = {
+    {DEVICE_TARGET_ADDR, 3U, HAL_I3C_DIRECTION_WRITE},
+    {DEVICE_TARGET_ADDR, 4U, HAL_I3C_DIRECTION_WRITE},
+};
+
+struct {
+  uint8_t STORE_CMD_associated_data[3];
+  uint8_t STORE_PAYLOAD_associated_data[4];
+}
+
+static Store_CMD = {
+  .STORE_CMD_associated_data = {I3C_STORE_CMD, 0x01, 0x02},
+  .STORE_PAYLOAD_associated_data = {0xaa, 0xbb, 0xcc, 0xdd}
+};
+
+#define STORE_CMD_TX_BYTES 7
+#define STORE_CMD_RX_BYTES 0
+
+// ---------------- Load command ----------------------
+static hal_i3c_private_desc_t Load_Private_Descriptor[3] = {
+    {DEVICE_TARGET_ADDR, 3U, HAL_I3C_DIRECTION_WRITE},
+    {DEVICE_TARGET_ADDR, 8U, HAL_I3C_DIRECTION_WRITE},
+    {DEVICE_TARGET_ADDR, 4U, HAL_I3C_DIRECTION_READ},
+};
+
+struct {
+  uint8_t LOAD_CMD_associated_data[3];
+  uint8_t STALL_CMD_associated_data[8];
+}
+
+static Load_CMD = {
+  .LOAD_CMD_associated_data = {I3C_LOAD_CMD, 0x01, 0x02},
+  .STALL_CMD_associated_data = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07},
+};
+
+#define LOAD_CMD_TX_BYTES (8+3)
+#define LOAD_CMD_RX_BYTES 4
+
 static hal_i3c_transfer_ctx_t ContextBuffers;
 
 // Flags for I3C_State
-#define DAA_PENDING           0x00000001
-#define DAA_COMPLETE          0x00000002
-#define TRANSACT_CCC_PENDING  0x00000004
+#define DAA_PENDING               0x00000001
+#define DAA_COMPLETE              0x00000002
+#define TRANSACT_CCC_PENDING      0x00000004
+#define TRANSACT_PRIVATE_PENDING  0x00000008
 
 static volatile uint64_t ulTarget_bcr_dcr_pid;
 static uint32_t I3C_State;
@@ -272,9 +308,6 @@ hal_status_t I3C_DAAComplete() {
     return status;
   }
 
-  // Transmits in DMA mode the DirectWriteCCC, which contains fixed-length
-  // data arrays, and receives another fixed-length data array buffer,
-  // both using I3C in DMA mode.
   status = HAL_I3C_CTRL_BuildTransferCtxCCC(&ContextBuffers,
       DirectWriteRead_CCC_Descriptor, COUNTOF(DirectWriteRead_CCC_Descriptor),
       HAL_I3C_CCC_DIRECT_WITHOUT_DEFBYTE_RESTART);
@@ -283,13 +316,131 @@ hal_status_t I3C_DAAComplete() {
     return status;
   }
 
-  status = HAL_I3C_CTRL_Transfer_DMA(hI3C, &ContextBuffers);
+  status = HAL_I3C_CTRL_Transfer_IT(hI3C, &ContextBuffers);
   if (status != HAL_OK) {
-    SWD_printf("HAL_I3C_CTRL_Transfer_DMA failed.\n");
+    SWD_printf("HAL_I3C_CTRL_Transfer_IT failed.\n");
     return status;
   }
 
   I3C_State |= TRANSACT_CCC_PENDING;
+
+  return HAL_OK;
+}
+
+/*
+ * @brief: Start I3C transaction
+ *
+ * @param pDesc The descriptor array
+ * @param ulDescCount Number of descriptors in the array
+ * @param pTxData Tx Data
+ * @param ulTxDataSize TxData size
+ * @param pRxData Rx Data
+ * @param ulRxDataSize RxData size
+ * @param mode The I3C mode
+ */
+static hal_status_t I3C_Private_Transact(
+    hal_i3c_private_desc_t *pDesc, uint32_t ulDescCount,
+    uint8_t *pTxData, uint32_t ulTxDataSize,
+    uint8_t *pRxData, uint32_t ulRxDataSize,
+    hal_i3c_transfer_mode_t mode) {
+  if((I3C_State & DAA_COMPLETE) != DAA_COMPLETE) {
+    SWD_printf("I3C_Private_Transact: DAA not complete.\n");
+    return HAL_ERROR;
+  } else if ((I3C_State & TRANSACT_CCC_PENDING) == TRANSACT_CCC_PENDING) {
+    SWD_printf("I3C_Private_Transact: CCC transaction pending.\n");
+    return HAL_BUSY;
+  } else if ((I3C_State & TRANSACT_PRIVATE_PENDING) ==
+      TRANSACT_PRIVATE_PENDING) {
+    SWD_printf("I3C_Private_Transact: Private transaction pending.\n");
+    return HAL_BUSY;
+  }
+
+  hal_status_t status;
+
+  // Reset a controller transfer context.
+  status = HAL_I3C_CTRL_ResetTransferCtx(&ContextBuffers);
+  if (status != HAL_OK) {
+    SWD_printf("HAL_I3C_CTRL_ResetTransferCtx failed.\n");
+    return status;
+  }
+
+  // Initialize the transfer context with pointer to
+  // Transmit Control (TC) descriptor words buffer.
+  status = HAL_I3C_CTRL_InitTransferCtxTc(&ContextBuffers, ControlBuffer,
+      HAL_I3C_GET_CTRL_BUFFER_SIZE_WORD(ulDescCount, mode));
+  if (status != HAL_OK) {
+    SWD_printf("HAL_I3C_CTRL_InitTransferCtxTc failed.\n");
+    return status;
+  }
+
+  if (ulTxDataSize > 0) {
+    // Initialize the transfer context with Tx data.
+    status = HAL_I3C_CTRL_InitTransferCtxTx(&ContextBuffers, pTxData,
+        ulTxDataSize);
+    if (status != HAL_OK) {
+      SWD_printf("HAL_I3C_CTRL_InitTransferCtxTx failed.\n");
+      return status;
+    }
+  }
+
+  if (ulRxDataSize > 0) {
+    // Initialize the transfer context with Rx data.
+    status = HAL_I3C_CTRL_InitTransferCtxRx(&ContextBuffers, pRxData,
+        ulRxDataSize);
+    if (status != HAL_OK) {
+      SWD_printf("HAL_I3C_CTRL_InitTransferCtxRx failed.\n");
+      return status;
+    }
+  }
+
+  status = HAL_I3C_CTRL_BuildTransferCtxPrivate(&ContextBuffers,
+      pDesc, ulDescCount, mode);
+  if (status != HAL_OK) {
+    SWD_printf("HAL_I3C_CTRL_BuildTransferCtxPrivate failed.\n");
+    return status;
+  }
+
+  hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
+  status = HAL_I3C_CTRL_Transfer_IT(hI3C, &ContextBuffers);
+  if (status != HAL_OK) {
+    SWD_printf("HAL_I3C_CTRL_Transfer_IT failed.\n");
+    return status;
+  }
+
+  I3C_State |= TRANSACT_PRIVATE_PENDING;
+  return HAL_OK;
+}
+
+/*
+ * @brief: Transfer complete handler
+ */
+hal_status_t I3C_TransferComplete() {
+  if ((I3C_State & TRANSACT_CCC_PENDING) == TRANSACT_CCC_PENDING) {
+    I3C_State &= ~TRANSACT_CCC_PENDING;
+
+    PrintCCCResults(RxBuffer);
+/*
+    I3C_Private_Transact(
+        Store_Private_Descriptor, COUNTOF(Store_Private_Descriptor),
+        (uint8_t *)&Store_CMD, STORE_CMD_TX_BYTES,
+        NULL, STORE_CMD_RX_BYTES, HAL_I3C_PRIVATE_WITH_ARB_STOP);
+*/
+    I3C_Private_Transact(
+        Load_Private_Descriptor, COUNTOF(Load_Private_Descriptor),
+        (uint8_t *)&Load_CMD, LOAD_CMD_TX_BYTES,
+        RxBuffer, LOAD_CMD_RX_BYTES, HAL_I3C_PRIVATE_WITHOUT_ARB_RESTART);
+  } else if ((I3C_State & TRANSACT_PRIVATE_PENDING) ==
+      TRANSACT_PRIVATE_PENDING) {
+    I3C_State &= ~TRANSACT_PRIVATE_PENDING;
+
+    hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
+
+    // Print the received bytes
+    SWD_printf("Bytes read: %d.\n", hI3C->data_size_byte);
+    for (uint32_t i = 0; i < hI3C->data_size_byte; i++) {
+      SWD_printf("Rx[i]: %x.\n", i, RxBuffer[i]);
+    }
+  }
 
   return HAL_OK;
 }
@@ -307,19 +458,6 @@ static void I3C_TransferCompleteCallback(hal_i3c_handle_t *hi3c) {
       &xHigherPriorityTaskWoken) == pdPASS) {
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
   }
-}
-
-/*
- * @brief: Transfer complete handler
- */
-hal_status_t I3C_TransferComplete() {
-  if ((I3C_State & TRANSACT_CCC_PENDING) == TRANSACT_CCC_PENDING) {
-    I3C_State &= ~TRANSACT_CCC_PENDING;
-
-    PrintCCCResults(RxBuffer);
-  }
-
-  return HAL_OK;
 }
 
 /*

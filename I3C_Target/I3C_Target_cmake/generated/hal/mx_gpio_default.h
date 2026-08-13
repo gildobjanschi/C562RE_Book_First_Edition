@@ -33,13 +33,6 @@ extern "C" {
 /* Exported defines for gpio_default in HAL layer                             */
 /******************************************************************************/
 
-/* Primary aliases for GPIO PA5 pin */
-#define LD1_PORT                                        HAL_GPIOA
-#define LD1_PIN                                         HAL_GPIO_PIN_5
-#define LD1_INIT_STATE                                  HAL_GPIO_PIN_RESET
-#define LD1_ACTIVE_STATE                                HAL_GPIO_PIN_SET
-#define LD1_INACTIVE_STATE                              HAL_GPIO_PIN_RESET
-
 /* Primary aliases for GPIO PB13 pin */
 #define LED_R_PORT                                      HAL_GPIOB
 #define LED_R_PIN                                       HAL_GPIO_PIN_13
@@ -60,6 +53,13 @@ extern "C" {
 #define LED_B_INIT_STATE                                HAL_GPIO_PIN_RESET
 #define LED_B_ACTIVE_STATE                              HAL_GPIO_PIN_SET
 #define LED_B_INACTIVE_STATE                            HAL_GPIO_PIN_RESET
+
+/* Secondary aliases for GPIO PB15 pin */
+#define LD1_PORT                                        HAL_GPIOB
+#define LD1_PIN                                         HAL_GPIO_PIN_15
+#define LD1_INIT_STATE                                  HAL_GPIO_PIN_RESET
+#define LD1_ACTIVE_STATE                                HAL_GPIO_PIN_SET
+#define LD1_INACTIVE_STATE                              HAL_GPIO_PIN_RESET
 
 /* Exported macros -----------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/

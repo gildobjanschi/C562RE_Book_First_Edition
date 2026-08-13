@@ -343,12 +343,10 @@
       <description>STMicroelectronics HAL CORE, GPIO and DMA Init dependencies</description>
       <require condition="CMSIS Core"/>
       <require Cclass="Device" Cgroup="STM32 HAL" Csub="GPIO"/>
-      <require Cclass="Device" Cgroup="STM32 HAL" Csub="DMA"/>
     </condition>
     <condition id="HAL CORE DMA Init">
       <description>STMicroelectronics HAL CORE and DMA Init dependencies</description>
       <require condition="CMSIS Core"/>
-      <require Cclass="Device" Cgroup="STM32 HAL" Csub="DMA"/>
     </condition>
     <condition id="HAL CORE Init and CRC">
       <description>STMicroelectronics HAL CRC Init dependencies</description>

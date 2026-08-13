@@ -1,7 +1,7 @@
 {
   "disclaimer": "Do not modify this file as it is used by STM32CubeMX2 to determine what and how to update your project with new configuration",
   "version": "1.0.0",
-  "timestamp": "2026-08-11T09:08:47.109Z",
+  "timestamp": "2026-08-12T13:43:06.164Z",
   "files": [
     {
       "fileGroup": "project_file",
@@ -199,7 +199,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "0597df864394ef255514e6d06e16b83af54541774e8f7f0852c1cfc330098c9a"
+        "digest": "49dc818683746e29e1a25b6929ea61f563bfe5b7bda9c27b5da0cf91469ba6ae"
       },
       "file": "generated/hal/STM32_HAL_Driver_codegen.cmake"
     },
@@ -207,7 +207,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "7d0538eee65e4b49dd53b36626023e3b41c9989cd495518f88cf944b966b8e1c"
+        "digest": "c78bc4bf06ca15a53f59a4163894d4702695158a43e0787709cf60e870331d83"
       },
       "file": "generated/hal/STM32_HAL_Driver_codegen.gpdsc"
     },
@@ -303,7 +303,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "3fcdc56ea60e5d92b2319f55dd478bdd06dd7f23a5c911284ff25c3d848df910"
+        "digest": "b5f8fe6ba0c4f0b64dd9cfec88dc303a9a5158215a86e278253a136a4de3b125"
       },
       "file": "generated/hal/mx_hal_def.h"
     },
@@ -311,7 +311,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "39b80fc048c8696b1f9d4095c50822265740a74de23fc6e578142199be94daeb"
+        "digest": "da0d31e636e21ba5fb4c4535575edf989c70d1a70fd94e4d01b8b1e8e5080f69"
       },
       "file": "generated/hal/mx_i3c1.c"
     },
@@ -319,7 +319,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "c36e6c7a38fd4de796af6655f8bf2d1234524cfae5f7c80f3708d734244e80eb"
+        "digest": "358c357424d3512c49b7d39c72c3fb56367b7ae6fcf6432aa553732e4c5fe315"
       },
       "file": "generated/hal/mx_i3c1.h"
     },
@@ -431,7 +431,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "909e39a932490ec74e2dcb022e94e31b4a6352434eb21a4e37ec2102f111f4e3"
+        "digest": "9ff38e37be932c3ea4f0316a8e8caf0ff54111ccac20a0ac3f646afd03d10a3e"
       },
       "file": "generated/hal/stm32c5xx_hal_conf.h"
     },
