@@ -254,7 +254,6 @@ hal_status_t I3C_RxComplete() {
         SWD_printf("%02x ", I3C_TxBuffer[i]);
       }
       SWD_printf("\n");
-
       break;
     }
 
@@ -331,7 +330,7 @@ static void I3C_NotifyCallback(hal_i3c_handle_t *hi3c, uint32_t ulNotifyId) {
 }
 
 /*
- * @brief: Rx complete IRQ callback
+ * @brief: Rx complete callback
  *
  * @param hi3c The I3C handle
  */
@@ -346,7 +345,7 @@ static void I3C_RxCompleteCallback(hal_i3c_handle_t *hi3c) {
 }
 
 /*
- * @brief: Tx complete irq callback
+ * @brief: Tx complete callback
  *
  * @param hi3c The I3C handle
  */
