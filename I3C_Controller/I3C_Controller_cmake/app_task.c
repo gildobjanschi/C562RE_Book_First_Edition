@@ -27,12 +27,17 @@ static void processInputEvent(uint8_t ucEvent) {
     switch (ucEventType) {
     case EVENT_CLICK: {
       SWD_printf("--> BTN_1 CLICK\n");
-      I3C_StartDAA();
+      if (I3C_IsDAACompleted() == HAL_OK) {
+        I3C_StoreData(0x1234, 16);
+      } else {
+        I3C_StartDAA();
+      }
       break;
     }
 
     case EVENT_LONG_CLICK: {
       SWD_printf("--> BTN_1 LONG CLICK\n");
+      I3C_LoadData(0x1234, 16);
       break;
     }
 

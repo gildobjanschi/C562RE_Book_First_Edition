@@ -15,9 +15,12 @@ extern "C" {
 #define EVENT_ERROR               3
 
 hal_status_t I3C_Init(QueueHandle_t I3CIntQueue);
+hal_status_t I3C_IsDAACompleted();
 hal_status_t I3C_StartDAA();
 hal_status_t I3C_DAAComplete();
 hal_status_t I3C_TransferComplete();
+hal_status_t I3C_StoreData(uint16_t uwAddress, uint32_t ulLength);
+hal_status_t I3C_LoadData(uint16_t uwAddress, uint32_t ulLength);
 
 #ifdef __cplusplus
 }

@@ -192,7 +192,7 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
   }
 
   if (I3C_NotificationsReceived == I3C_TGT_READY) {
-    // Start reading data from the controller
+    // Wait for a command from the controller
     I3C_ReadCommand();
   }
 
@@ -225,14 +225,14 @@ hal_status_t I3C_RxComplete() {
     }
 
     case I3C_LOAD_CMD: {
-      if (I3C_TxState != TX_IDLE) {
-        SWD_printf("I3C_RxComplete: [Error] Tx is pending.\n");
-        return HAL_BUSY;
-      }
-
       // Send the response
       for (uint32_t i = 0; i < ulLength; i++) {
         I3C_TxBuffer[i] = i;
+      }
+
+      if (I3C_TxState != TX_IDLE) {
+        SWD_printf("I3C_RxComplete: [Error] Tx is pending.\n");
+        return HAL_BUSY;
       }
 
       HAL_GPIO_WritePin(LD1_PORT, LD1_PIN, HAL_GPIO_PIN_SET);
@@ -247,13 +247,14 @@ hal_status_t I3C_RxComplete() {
 
       HAL_GPIO_WritePin(LD1_PORT, LD1_PIN, HAL_GPIO_PIN_RESET);
 
+      I3C_TxState = TX_PENDING;
+
       SWD_printf("LOAD CMD [%d bytes] @%02x: ", ulLength, I3C_uwLastAddress);
       for (uint32_t i = 0; i < ulLength; i++) {
         SWD_printf("%02x ", I3C_TxBuffer[i]);
       }
       SWD_printf("\n");
 
-      I3C_TxState = TX_PENDING;
       break;
     }
 
@@ -280,6 +281,9 @@ hal_status_t I3C_RxComplete() {
         SWD_printf("%02x ", I3C_RxBuffer[i]);
       }
       SWD_printf("\n");
+
+      // Wait for the next command from the controller
+      I3C_ReadCommand();
       break;
     }
 
@@ -302,7 +306,12 @@ hal_status_t I3C_RxComplete() {
  * @brief: Tx complete handler
  */
 hal_status_t I3C_TxComplete() {
-  I3C_TxState = TX_IDLE;
+  if (I3C_TxState == TX_PENDING) {
+    I3C_TxState = TX_IDLE;
+    // Load payload was sent. Wait for the next command from the controller.
+    I3C_ReadCommand();
+  }
+
   return HAL_OK;
 }
 
@@ -375,6 +384,11 @@ static hal_status_t I3C_ReadCommand() {
     return HAL_BUSY;
   }
 
+  if (I3C_TxState != TX_IDLE) {
+    SWD_printf("I3C_ReadCommand: [Error] Tx is pending.\n");
+    return HAL_BUSY;
+  }
+
   hal_status_t status;
   hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
   status = HAL_I3C_TGT_Receive_IT(hI3C, I3C_RxBuffer, 4);
@@ -384,6 +398,8 @@ static hal_status_t I3C_ReadCommand() {
   }
 
   I3C_RxState = RX_COMMAND_PENDING;
+
+  SWD_printf("I3C_ReadCommand pending...\n");
   return HAL_OK;
 }
 
@@ -395,6 +411,11 @@ static hal_status_t I3C_ReadCommand() {
 static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
   if (I3C_RxState != RX_IDLE) {
     SWD_printf("I3C_ReadPayload: [Error] Rx is pending.\n");
+    return HAL_BUSY;
+  }
+
+  if (I3C_TxState != TX_IDLE) {
+    SWD_printf("I3C_ReadPayload: [Error] Tx is pending.\n");
     return HAL_BUSY;
   }
 
