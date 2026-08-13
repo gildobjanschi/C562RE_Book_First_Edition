@@ -20,9 +20,9 @@ static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c);
 static void I3C_RxCompleteCallback(hal_i3c_handle_t *hi3c);
 static void I3C_TxCompleteCallback(hal_i3c_handle_t *hi3c);
 
-#define RX_BUFFER_SIZE 16
+#define RX_BUFFER_SIZE 32
 static uint8_t I3C_RxBuffer[RX_BUFFER_SIZE];
-#define TX_BUFFER_SIZE 16
+#define TX_BUFFER_SIZE 32
 static uint8_t I3C_TxBuffer[TX_BUFFER_SIZE];
 
 static volatile QueueHandle_t sI3CNotifyQueue;
@@ -155,10 +155,16 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
       return status;
     }
 
+    if (CCCInfo.max_read_data_size_byte > TX_BUFFER_SIZE) {
+      // Error occurred while retrieving CCC info.
+      SWD_printf("Error: MRL > TX_BUFFER_SIZE.\n");
+      return status;
+    } else {
+      SWD_printf("SETMRL complete: %d.\n", CCCInfo.max_read_data_size_byte);
+    }
+
     // SETMRL completed
     I3C_NotificationsReceived |= HAL_I3C_TGT_NOTIFICATION_SETMRL;
-
-    SWD_printf("SETMRL complete: %d.\n", CCCInfo.max_read_data_size_byte);
   }
 
   // SETMWL: Dictates the maximum number of bytes an I3C Controller can send to
@@ -173,10 +179,16 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
       return status;
     }
 
+    if (CCCInfo.max_write_data_size_byte > RX_BUFFER_SIZE) {
+      // Error occurred while retrieving CCC info.
+      SWD_printf("Error: MWL > RX_BUFFER_SIZE.\n");
+      return status;
+    } else {
+      SWD_printf("SETMWL complete: %d.\n", CCCInfo.max_write_data_size_byte);
+    }
+
     // SETMWL completed
     I3C_NotificationsReceived |= HAL_I3C_TGT_NOTIFICATION_SETMWL;
-
-    SWD_printf("SETMWL complete: %d.\n", CCCInfo.max_write_data_size_byte);
   }
 
   if (I3C_NotificationsReceived == I3C_TGT_READY) {
@@ -194,21 +206,21 @@ hal_status_t I3C_RxComplete() {
   if (I3C_RxState == RX_COMMAND_PENDING) {
     I3C_RxState = RX_IDLE;
     // Get the command
-    uint8_t ucCommand = I3C_RxBuffer[0];
+    I3C_ucLastCommand = I3C_RxBuffer[0];
 
     // Get the address
-    uint16_t uwAddress = I3C_RxBuffer[1];
-    uwAddress <<= 8;
-    uwAddress |= I3C_RxBuffer[2];
-    /*
-    SWD_printf("I3C_RxComplete: cmd: %02xh, address: %04xh\n",
-        ucCommand, uwAddress);
-    */
-    I3C_ucLastCommand = ucCommand;
-    I3C_uwLastAddress = uwAddress;
-    switch(ucCommand) {
+    I3C_uwLastAddress = I3C_RxBuffer[1];
+    I3C_uwLastAddress <<= 8;
+    I3C_uwLastAddress |= I3C_RxBuffer[2];
+
+    // Get the length of the payload
+    uint32_t ulLength = I3C_RxBuffer[3];
+    switch(I3C_ucLastCommand) {
     case I3C_STORE_CMD: {
-      I3C_ReadPayload(4);
+      I3C_ReadPayload(ulLength);
+
+      SWD_printf("STORE CMD: %02xh, address: %02xh, length: %d\n",
+          I3C_ucLastCommand, I3C_uwLastAddress, ulLength);
       break;
     }
 
@@ -219,24 +231,29 @@ hal_status_t I3C_RxComplete() {
       }
 
       // Send the response
-      I3C_TxBuffer[0] = 0x05;
-      I3C_TxBuffer[1] = 0x06;
-      I3C_TxBuffer[2] = 0x07;
-      I3C_TxBuffer[3] = 0x08;
+      for (uint32_t i = 0; i < ulLength; i++) {
+        I3C_TxBuffer[i] = i;
+      }
+
+      HAL_GPIO_WritePin(LD1_PORT, LD1_PIN, HAL_GPIO_PIN_SET);
 
       hal_status_t status;
       hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
-
-      HAL_GPIO_WritePin(LD1_PORT, LD1_PIN, HAL_GPIO_PIN_SET);
-      status = HAL_I3C_TGT_Transmit_IT(hI3C, I3C_TxBuffer, 4);
+      status = HAL_I3C_TGT_Transmit_IT(hI3C, I3C_TxBuffer, ulLength);
       if (status != HAL_OK) {
         SWD_printf("I3C_RxComplete: HAL_I3C_TGT_Transmit_IT: %lx\n", status);
         return status;
       }
+
       HAL_GPIO_WritePin(LD1_PORT, LD1_PIN, HAL_GPIO_PIN_RESET);
 
+      SWD_printf("LOAD CMD [%d bytes] @%02x: ", ulLength, I3C_uwLastAddress);
+      for (uint32_t i = 0; i < ulLength; i++) {
+        SWD_printf("%02x ", I3C_TxBuffer[i]);
+      }
+      SWD_printf("\n");
+
       I3C_TxState = TX_PENDING;
-      SWD_printf("I3C_RxComplete: Payload TX.\n");
       break;
     }
 
@@ -245,8 +262,9 @@ hal_status_t I3C_RxComplete() {
     }
 
     default: {
-      SWD_printf("I3C_RxComplete: Unhandled cmd: %02x, address: %04x\n",
-          ucCommand, uwAddress);
+      SWD_printf(
+          "I3C_RxComplete: Unhandled CMD: %02x, address: %02x, length: %d\n",
+          I3C_ucLastCommand, I3C_uwLastAddress, ulLength);
       break;
     }
     }
@@ -256,9 +274,10 @@ hal_status_t I3C_RxComplete() {
 
     switch (I3C_ucLastCommand) {
     case I3C_STORE_CMD: {
-      SWD_printf("I3C_RxComplete: ");
+      SWD_printf("STORE PAYLOAD [%d bytes] @%02x: ",
+          hI3C->data_size_byte, I3C_uwLastAddress);
       for (uint32_t i = 0; i < hI3C->data_size_byte; i++) {
-        SWD_printf("%02x", I3C_RxBuffer[i]);
+        SWD_printf("%02x ", I3C_RxBuffer[i]);
       }
       SWD_printf("\n");
       break;
@@ -358,7 +377,7 @@ static hal_status_t I3C_ReadCommand() {
 
   hal_status_t status;
   hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
-  status = HAL_I3C_TGT_Receive_IT(hI3C, I3C_RxBuffer, 3);
+  status = HAL_I3C_TGT_Receive_IT(hI3C, I3C_RxBuffer, 4);
   if (status != HAL_OK) {
     SWD_printf("I3C_ReadCommand: HAL_I3C_TGT_Receive_IT: %lx\n", status);
     return status;

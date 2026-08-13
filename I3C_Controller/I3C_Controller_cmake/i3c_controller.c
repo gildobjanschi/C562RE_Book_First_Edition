@@ -19,8 +19,11 @@ static void I3C_TransferCompleteCallback(hal_i3c_handle_t *hi3c);
 uint32_t ControlBuffer[20];
 
 /* Size of the Rx Buffer in bytes. */
-#define RX_BUFFER_SIZE             31U
+#define RX_BUFFER_SIZE  32U
 uint8_t RxBuffer[RX_BUFFER_SIZE];
+
+/* Size of the Tx Buffer in bytes. */
+#define TX_BUFFER_SIZE  32U
 
 /* Target device address for I3C communication. */
 #define DEVICE_TARGET_ADDR        0x32U
@@ -35,8 +38,9 @@ uint8_t RxBuffer[RX_BUFFER_SIZE];
 #define I3C_DIRECT_GETSTATUS_CCC  0x90
 
 // ---------------- CCC ----------------------
-/* Descriptor array for direct I3C CCC transactions write and read to the
- * target device */
+/* Descriptor array for direct I3C CCC transactions write and
+   read to the target device
+ */
 static hal_i3c_ccc_desc_t DirectWriteRead_CCC_Descriptor[8] = {
   {DEVICE_TARGET_ADDR, I3C_DIRECT_SETMWL_CCC,   2U, HAL_I3C_DIRECTION_WRITE},
   {DEVICE_TARGET_ADDR, I3C_DIRECT_GETMWL_CCC,   2U, HAL_I3C_DIRECTION_READ},
@@ -55,15 +59,15 @@ struct {
 }
 
 DirectWriteCCC = {
-  .SETMRL_associated_data = {0x0, 0x10},
-  .SETMWL_associated_data = {0x0, 0x10}
+  .SETMRL_associated_data = {0x0, RX_BUFFER_SIZE},
+  .SETMWL_associated_data = {0x0, TX_BUFFER_SIZE}
 };
 
 // DirectWrite CCC payload size: 2 bytes (SETMRL data) + 2 bytes (SETMWL data)
 #define DIRECT_WRITE_CCC_SIZE     (2+2)
 // Size of the data to be received from the target device.
 // Sum up all the read bytes from the DirectWriteRead_CCC_Descriptor.
-#define DIRECT_READ_DATA_SIZE       13U
+#define DIRECT_READ_DATA_SIZE     13U
 
 // Custom Command codes are in the range 0xC0 to 0xDF
 #define I3C_STORE_CMD             0xC0
@@ -71,43 +75,42 @@ DirectWriteCCC = {
 #define I3C_STALL_CMD             0xC2
 
 // ---------------- Store command ----------------------
+#define STORE_CMD_TX_BYTES 4U
+
 static hal_i3c_private_desc_t Store_Private_Descriptor[2] = {
-    {DEVICE_TARGET_ADDR, 3U, HAL_I3C_DIRECTION_WRITE},
-    {DEVICE_TARGET_ADDR, 4U, HAL_I3C_DIRECTION_WRITE},
+    {DEVICE_TARGET_ADDR, STORE_CMD_TX_BYTES, HAL_I3C_DIRECTION_WRITE},
+    {DEVICE_TARGET_ADDR, 0U, HAL_I3C_DIRECTION_WRITE},
 };
 
 struct {
-  uint8_t STORE_CMD_associated_data[3];
-  uint8_t STORE_PAYLOAD_associated_data[4];
+  uint8_t STORE_CMD_associated_data[STORE_CMD_TX_BYTES];
+  uint8_t STORE_PAYLOAD_associated_data[TX_BUFFER_SIZE];
 }
 
 static Store_CMD = {
-  .STORE_CMD_associated_data = {I3C_STORE_CMD, 0x01, 0x02},
-  .STORE_PAYLOAD_associated_data = {0xaa, 0xbb, 0xcc, 0xdd}
+  .STORE_CMD_associated_data = {I3C_STORE_CMD, 0x00, 0x00, 0x00},
+  .STORE_PAYLOAD_associated_data = {0x00}
 };
 
-#define STORE_CMD_TX_BYTES 7
-#define STORE_CMD_RX_BYTES 0
-
 // ---------------- Load command ----------------------
+#define LOAD_CMD_TX_BYTES 4U
+#define LOAD_STALL_TX_BYTES 16U // Maximum value: TX_BUFFER_SIZE
+
 static hal_i3c_private_desc_t Load_Private_Descriptor[3] = {
-    {DEVICE_TARGET_ADDR, 3U, HAL_I3C_DIRECTION_WRITE},
-    {DEVICE_TARGET_ADDR, 8U, HAL_I3C_DIRECTION_WRITE},
-    {DEVICE_TARGET_ADDR, 4U, HAL_I3C_DIRECTION_READ},
+    {DEVICE_TARGET_ADDR, LOAD_CMD_TX_BYTES, HAL_I3C_DIRECTION_WRITE},
+    {DEVICE_TARGET_ADDR, LOAD_STALL_TX_BYTES, HAL_I3C_DIRECTION_WRITE},
+    {DEVICE_TARGET_ADDR, 0, HAL_I3C_DIRECTION_READ},
 };
 
 struct {
-  uint8_t LOAD_CMD_associated_data[3];
-  uint8_t STALL_CMD_associated_data[8];
+  uint8_t LOAD_CMD_associated_data[LOAD_CMD_TX_BYTES];
+  uint8_t STALL_CMD_associated_data[TX_BUFFER_SIZE];
 }
 
 static Load_CMD = {
-  .LOAD_CMD_associated_data = {I3C_LOAD_CMD, 0x01, 0x02},
-  .STALL_CMD_associated_data = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07},
+  .LOAD_CMD_associated_data = {I3C_LOAD_CMD, 0x00, 0x00, 0x00},
+  .STALL_CMD_associated_data = {0x00},
 };
-
-#define LOAD_CMD_TX_BYTES (8+3)
-#define LOAD_CMD_RX_BYTES 4
 
 static hal_i3c_transfer_ctx_t ContextBuffers;
 
@@ -125,6 +128,9 @@ static volatile QueueHandle_t sI3CIntQueue;
 /* Size of the Tx Buffer in bytes. */
 #define COUNTOF(arr) (sizeof(arr) / sizeof((arr)[0]))
 
+/* Forward function declarations */
+static hal_status_t I3C_StoreData(uint16_t uwAddress, uint32_t ulLength);
+static hal_status_t I3C_LoadData(uint16_t uwAddress, uint32_t ulLength);
 static void PrintCCCResults(uint8_t *RxBuffer);
 /*
  * @brief:  Initialize I3C
@@ -419,30 +425,60 @@ hal_status_t I3C_TransferComplete() {
     I3C_State &= ~TRANSACT_CCC_PENDING;
 
     PrintCCCResults(RxBuffer);
-/*
-    I3C_Private_Transact(
-        Store_Private_Descriptor, COUNTOF(Store_Private_Descriptor),
-        (uint8_t *)&Store_CMD, STORE_CMD_TX_BYTES,
-        NULL, STORE_CMD_RX_BYTES, HAL_I3C_PRIVATE_WITH_ARB_STOP);
-*/
-    I3C_Private_Transact(
-        Load_Private_Descriptor, COUNTOF(Load_Private_Descriptor),
-        (uint8_t *)&Load_CMD, LOAD_CMD_TX_BYTES,
-        RxBuffer, LOAD_CMD_RX_BYTES, HAL_I3C_PRIVATE_WITHOUT_ARB_RESTART);
+
+    I3C_StoreData(0x1234, 16);
+    //I3C_LoadData(0x1234, 16);
   } else if ((I3C_State & TRANSACT_PRIVATE_PENDING) ==
       TRANSACT_PRIVATE_PENDING) {
     I3C_State &= ~TRANSACT_PRIVATE_PENDING;
-
-    hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
-
-    // Print the received bytes
-    SWD_printf("Bytes read: %d.\n", hI3C->data_size_byte);
-    for (uint32_t i = 0; i < hI3C->data_size_byte; i++) {
-      SWD_printf("Rx[i]: %x.\n", i, RxBuffer[i]);
-    }
   }
 
   return HAL_OK;
+}
+
+/*
+ * @brief: Store data from Store_CMD.STORE_PAYLOAD_associated_data
+ *
+ * @param uwAddress The address where data is stored
+ * @param ulLength The length of data
+ */
+static hal_status_t I3C_StoreData(uint16_t uwAddress, uint32_t ulLength) {
+  // Set the address
+  Store_CMD.STORE_CMD_associated_data[1] = uwAddress >> 8;
+  Store_CMD.STORE_CMD_associated_data[2] = (uint8_t)uwAddress;
+  // Set the length of the payload
+  Store_CMD.STORE_CMD_associated_data[3] = (uint8_t)ulLength;
+
+  // Specify how many bytes will be stored.
+  Store_Private_Descriptor[1].data_size_byte = ulLength;
+
+  return I3C_Private_Transact(
+      Store_Private_Descriptor, COUNTOF(Store_Private_Descriptor),
+      (uint8_t *)&Store_CMD, STORE_CMD_TX_BYTES + ulLength,
+      NULL, 0,
+      HAL_I3C_PRIVATE_WITH_ARB_STOP);
+}
+
+/*
+ * @brief: Load data into RxBuffer (maximum RX_BUFFER_SIZE)
+ *
+ * @param uwAddress The address where data is loaded from
+ * @param ulLength The length of data
+ */
+static hal_status_t I3C_LoadData(uint16_t uwAddress, uint32_t ulLength) {
+  // Set the address
+  Load_CMD.LOAD_CMD_associated_data[1] = uwAddress >> 8;
+  Load_CMD.LOAD_CMD_associated_data[2] = (uint8_t)uwAddress;
+  // Set the length of the payload
+  Load_CMD.LOAD_CMD_associated_data[3] = (uint8_t)ulLength;
+
+  // Specify how many bytes will be loaded.
+  Load_Private_Descriptor[2].data_size_byte = ulLength;
+
+  return I3C_Private_Transact(
+      Load_Private_Descriptor, COUNTOF(Load_Private_Descriptor),
+      (uint8_t *)&Load_CMD, LOAD_CMD_TX_BYTES + LOAD_STALL_TX_BYTES,
+      RxBuffer, ulLength, HAL_I3C_PRIVATE_WITHOUT_ARB_RESTART);
 }
 
 /*
@@ -451,7 +487,7 @@ hal_status_t I3C_TransferComplete() {
  * @param hi3c The I3C handle
  */
 static void I3C_TransferCompleteCallback(hal_i3c_handle_t *hi3c) {
-  SWD_printf("-- Transfer complete: %d bytes.\n", hi3c->data_size_byte);
+  SWD_printf("-- Transfer complete.\n");
   uint8_t ucEvent = EVENT_TRANSFER_COMPLETE;
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
   if (xQueueSendFromISR(sI3CIntQueue, &ucEvent,
