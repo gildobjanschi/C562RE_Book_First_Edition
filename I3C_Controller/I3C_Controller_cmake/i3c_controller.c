@@ -486,8 +486,7 @@ hal_status_t I3C_StoreData(uint16_t uwAddress, uint32_t ulLength) {
   return I3C_Private_Transact(
       Store_Private_Descriptor, COUNTOF(Store_Private_Descriptor),
       (uint8_t *)&Store_CMD, STORE_CMD_TX_BYTES + ulLength,
-      NULL, 0,
-      HAL_I3C_PRIVATE_WITH_ARB_STOP);
+      NULL, 0, HAL_I3C_PRIVATE_WITH_ARB_STOP);
 }
 
 /*
@@ -527,7 +526,7 @@ hal_status_t I3C_LoadData(uint16_t uwAddress, uint32_t ulLength) {
   return I3C_Private_Transact(
       Load_Private_Descriptor, COUNTOF(Load_Private_Descriptor),
       (uint8_t *)&Load_CMD, LOAD_CMD_TX_BYTES + LOAD_STALL_TX_BYTES,
-      I3C_RxBuffer, ulLength, HAL_I3C_PRIVATE_WITHOUT_ARB_RESTART);
+      I3C_RxBuffer, ulLength, HAL_I3C_PRIVATE_WITH_ARB_STOP);
 }
 
 /*

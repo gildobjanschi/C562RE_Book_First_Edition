@@ -321,7 +321,7 @@ hal_status_t I3C_TxComplete() {
  * @param ulNotifyId The event that occurred
  */
 static void I3C_NotifyCallback(hal_i3c_handle_t *hi3c, uint32_t ulNotifyId) {
-  SWD_printf("-- I3C_NotifyCallback --: %lx\n", ulNotifyId);
+  //SWD_printf("-- I3C_NotifyCallback --: %lx\n", ulNotifyId);
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
   if (xQueueSendFromISR(sI3CNotifyQueue, &ulNotifyId,
       &xHigherPriorityTaskWoken) == pdPASS) {
