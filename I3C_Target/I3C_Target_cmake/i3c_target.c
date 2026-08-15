@@ -23,16 +23,15 @@ static void I3C_TxCompleteCallback(hal_i3c_handle_t *hi3c);
 #define RX_BUFFER_SIZE 32
 static uint8_t I3C_RxBuffer[RX_BUFFER_SIZE];
 #define TX_BUFFER_SIZE 32
-static uint8_t I3C_TxBuffer[TX_BUFFER_SIZE];
 
 static volatile QueueHandle_t sI3CNotifyQueue;
 static volatile QueueHandle_t sI3CIntQueue;
 
-// The I3C state
 static uint32_t I3C_NotificationsReceived;
 static uint8_t I3C_ucLastCommand;
-static uint16_t I3C_uwLastAddress;
+static uint32_t I3C_ulLastAddress;
 
+// The I3C state
 typedef enum {
   IDLE,
   RX_COMMAND_PENDING,
@@ -41,6 +40,10 @@ typedef enum {
 } I3C_STATE;
 
 static I3C_STATE I3C_State;
+
+// The memory block that is being accessed over I3C
+#define MEM_SIZE 0x4000U
+static uint8_t pMem[MEM_SIZE];
 
 #define I3C_TGT_READY (HAL_I3C_TGT_NOTIFICATION_DAU | \
                         HAL_I3C_TGT_NOTIFICATION_SETMRL | \
@@ -101,6 +104,8 @@ hal_status_t I3C_Init(QueueHandle_t I3cNotifyQueue, QueueHandle_t I3cIntQueue) {
   sI3CIntQueue = I3cIntQueue;
 
   I3C_Reset();
+
+  // The initialization was successful
   HAL_GPIO_WritePin(LED_G_PORT, LED_G_PIN, HAL_GPIO_PIN_SET);
 
   return HAL_OK;
@@ -203,9 +208,11 @@ hal_status_t I3C_RxComplete() {
     I3C_ucLastCommand = I3C_RxBuffer[0];
 
     // Get the address
-    I3C_uwLastAddress = I3C_RxBuffer[1];
-    I3C_uwLastAddress <<= 8;
-    I3C_uwLastAddress |= I3C_RxBuffer[2];
+    I3C_ulLastAddress = I3C_RxBuffer[1];
+    I3C_ulLastAddress <<= 8;
+    I3C_ulLastAddress |= I3C_RxBuffer[2];
+    // The address can only have 14 bits (the addressed memory is 16KB)
+    I3C_ulLastAddress &= 0x3fff;
 
     // Get the length of the payload
     uint32_t ulLength = I3C_RxBuffer[3];
@@ -214,16 +221,11 @@ hal_status_t I3C_RxComplete() {
       I3C_ReadPayload(ulLength);
 
       SWD_printf("STORE CMD: %02xh, address: %02xh, length: %d\n",
-          I3C_ucLastCommand, I3C_uwLastAddress, ulLength);
+          I3C_ucLastCommand, I3C_ulLastAddress, ulLength);
       break;
     }
 
     case I3C_LOAD_CMD: {
-      // Send the response
-      for (uint32_t i = 0; i < ulLength; i++) {
-        I3C_TxBuffer[i] = i;
-      }
-
       if (I3C_State != IDLE) {
         SWD_printf("I3C_RxComplete: [Error] state not idle.\n");
         return HAL_BUSY;
@@ -232,8 +234,12 @@ hal_status_t I3C_RxComplete() {
       HAL_GPIO_WritePin(LD1_PORT, LD1_PIN, HAL_GPIO_PIN_SET);
 
       hal_status_t status;
+      uint32_t ulBytesCopy = (I3C_ulLastAddress + ulLength < MEM_SIZE) ?
+          ulLength : MEM_SIZE - I3C_ulLastAddress;
+
       hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
-      status = HAL_I3C_TGT_Transmit_IT(hI3C, I3C_TxBuffer, ulLength);
+      status = HAL_I3C_TGT_Transmit_IT(hI3C, pMem + I3C_ulLastAddress,
+          ulBytesCopy);
       if (status != HAL_OK) {
         SWD_printf("I3C_RxComplete: HAL_I3C_TGT_Transmit_IT: %lx\n", status);
         return status;
@@ -243,9 +249,9 @@ hal_status_t I3C_RxComplete() {
 
       I3C_State = TX_PAYLOAD_PENDING;
 
-      SWD_printf("LOAD CMD [%d bytes] @%02x: ", ulLength, I3C_uwLastAddress);
-      for (uint32_t i = 0; i < ulLength; i++) {
-        SWD_printf("%02x ", I3C_TxBuffer[i]);
+      SWD_printf("LOAD CMD [%d bytes] @%02x: ", ulLength, I3C_ulLastAddress);
+      for (uint32_t i = 0; i < ulBytesCopy; i++) {
+        SWD_printf("%02x ", (pMem + I3C_ulLastAddress)[i]);
       }
       SWD_printf("\n");
       break;
@@ -258,19 +264,24 @@ hal_status_t I3C_RxComplete() {
     default: {
       SWD_printf(
           "I3C_RxComplete: Unhandled CMD: %02x, address: %02x, length: %d\n",
-          I3C_ucLastCommand, I3C_uwLastAddress, ulLength);
+          I3C_ucLastCommand, I3C_ulLastAddress, ulLength);
       break;
     }
     }
   } else if (I3C_State == RX_PAYLOAD_PENDING) {
     I3C_State = IDLE;
-    hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
 
     switch (I3C_ucLastCommand) {
     case I3C_STORE_CMD: {
-      SWD_printf("STORE PAYLOAD [%d bytes] @%02x: ",
-          hI3C->data_size_byte, I3C_uwLastAddress);
-      for (uint32_t i = 0; i < hI3C->data_size_byte; i++) {
+      hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
+      uint32_t ulBytesReceived = hI3C->data_size_byte;
+      uint32_t ulBytesCopy = (I3C_ulLastAddress + ulBytesReceived < MEM_SIZE) ?
+              ulBytesReceived : MEM_SIZE - I3C_ulLastAddress;
+      memcpy(pMem + I3C_ulLastAddress, I3C_RxBuffer, ulBytesCopy);
+
+      SWD_printf("STORE PAYLOAD [Copied: %d bytes] @%02x: ",
+          ulBytesCopy, I3C_ulLastAddress);
+      for (uint32_t i = 0; i < ulBytesCopy; i++) {
         SWD_printf("%02x ", I3C_RxBuffer[i]);
       }
       SWD_printf("\n");
@@ -427,5 +438,5 @@ static void I3C_Reset() {
   I3C_NotificationsReceived = 0;
   I3C_State = IDLE;
   I3C_ucLastCommand = 0;
-  I3C_uwLastAddress = 0;
+  I3C_ulLastAddress = 0;
 }
