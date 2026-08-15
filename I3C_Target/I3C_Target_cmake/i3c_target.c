@@ -34,19 +34,13 @@ static uint8_t I3C_ucLastCommand;
 static uint16_t I3C_uwLastAddress;
 
 typedef enum {
-  RX_IDLE,
+  IDLE,
   RX_COMMAND_PENDING,
   RX_PAYLOAD_PENDING,
-} RX_STATE;
+  TX_PAYLOAD_PENDING
+} I3C_STATE;
 
-static RX_STATE I3C_RxState;
-
-typedef enum {
-  TX_IDLE,
-  TX_PENDING
-} TX_STATE;
-
-static TX_STATE I3C_TxState;
+static I3C_STATE I3C_State;
 
 #define I3C_TGT_READY (HAL_I3C_TGT_NOTIFICATION_DAU | \
                         HAL_I3C_TGT_NOTIFICATION_SETMRL | \
@@ -203,8 +197,8 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
  * @brief: Rx complete handler
  */
 hal_status_t I3C_RxComplete() {
-  if (I3C_RxState == RX_COMMAND_PENDING) {
-    I3C_RxState = RX_IDLE;
+  if (I3C_State == RX_COMMAND_PENDING) {
+    I3C_State = IDLE;
     // Get the command
     I3C_ucLastCommand = I3C_RxBuffer[0];
 
@@ -230,8 +224,8 @@ hal_status_t I3C_RxComplete() {
         I3C_TxBuffer[i] = i;
       }
 
-      if (I3C_TxState != TX_IDLE) {
-        SWD_printf("I3C_RxComplete: [Error] Tx is pending.\n");
+      if (I3C_State != IDLE) {
+        SWD_printf("I3C_RxComplete: [Error] state not idle.\n");
         return HAL_BUSY;
       }
 
@@ -247,7 +241,7 @@ hal_status_t I3C_RxComplete() {
 
       HAL_GPIO_WritePin(LD1_PORT, LD1_PIN, HAL_GPIO_PIN_RESET);
 
-      I3C_TxState = TX_PENDING;
+      I3C_State = TX_PAYLOAD_PENDING;
 
       SWD_printf("LOAD CMD [%d bytes] @%02x: ", ulLength, I3C_uwLastAddress);
       for (uint32_t i = 0; i < ulLength; i++) {
@@ -268,8 +262,8 @@ hal_status_t I3C_RxComplete() {
       break;
     }
     }
-  } else if (I3C_RxState == RX_PAYLOAD_PENDING) {
-    I3C_RxState = RX_IDLE;
+  } else if (I3C_State == RX_PAYLOAD_PENDING) {
+    I3C_State = IDLE;
     hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
 
     switch (I3C_ucLastCommand) {
@@ -305,8 +299,8 @@ hal_status_t I3C_RxComplete() {
  * @brief: Tx complete handler
  */
 hal_status_t I3C_TxComplete() {
-  if (I3C_TxState == TX_PENDING) {
-    I3C_TxState = TX_IDLE;
+  if (I3C_State == TX_PAYLOAD_PENDING) {
+    I3C_State = IDLE;
     // Load payload was sent. Wait for the next command from the controller.
     I3C_ReadCommand();
   }
@@ -378,13 +372,8 @@ static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c) {
  * brief: I3C read command
  */
 static hal_status_t I3C_ReadCommand() {
-  if (I3C_RxState != RX_IDLE) {
-    SWD_printf("I3C_ReadCommand: [Error] Rx is pending.\n");
-    return HAL_BUSY;
-  }
-
-  if (I3C_TxState != TX_IDLE) {
-    SWD_printf("I3C_ReadCommand: [Error] Tx is pending.\n");
+  if (I3C_State != IDLE) {
+    SWD_printf("I3C_ReadCommand: [Error] state not idle.\n");
     return HAL_BUSY;
   }
 
@@ -396,9 +385,9 @@ static hal_status_t I3C_ReadCommand() {
     return status;
   }
 
-  I3C_RxState = RX_COMMAND_PENDING;
+  I3C_State = RX_COMMAND_PENDING;
 
-  SWD_printf("I3C_ReadCommand pending...\n");
+  SWD_printf("Waiting for CMD...\n");
   return HAL_OK;
 }
 
@@ -408,13 +397,8 @@ static hal_status_t I3C_ReadCommand() {
  * @param ulPayloadLength The Rx payload length
  */
 static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
-  if (I3C_RxState != RX_IDLE) {
-    SWD_printf("I3C_ReadPayload: [Error] Rx is pending.\n");
-    return HAL_BUSY;
-  }
-
-  if (I3C_TxState != TX_IDLE) {
-    SWD_printf("I3C_ReadPayload: [Error] Tx is pending.\n");
+  if (I3C_State != IDLE) {
+    SWD_printf("I3C_ReadPayload: [Error] state is not idle.\n");
     return HAL_BUSY;
   }
 
@@ -431,7 +415,7 @@ static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
     return status;
   }
 
-  I3C_RxState = RX_PAYLOAD_PENDING;
+  I3C_State = RX_PAYLOAD_PENDING;
   return HAL_OK;
 }
 
@@ -441,8 +425,7 @@ static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
 static void I3C_Reset() {
   // Reset the state
   I3C_NotificationsReceived = 0;
-  I3C_RxState = RX_IDLE;
-  I3C_TxState = TX_IDLE;
+  I3C_State = IDLE;
   I3C_ucLastCommand = 0;
   I3C_uwLastAddress = 0;
 }

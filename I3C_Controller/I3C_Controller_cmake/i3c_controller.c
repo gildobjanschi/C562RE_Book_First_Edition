@@ -550,7 +550,7 @@ static void I3C_TransferCompleteCallback(hal_i3c_handle_t *hi3c) {
  * @param hi3c The I3C handle
  */
 static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c) {
-  SWD_printf("-- Error callback codes: %01x\n", hi3c->last_error_codes);
+  SWD_printf("-- Error callback codes: %x\n", hi3c->last_error_codes);
 
   uint8_t ucEvent = EVENT_ERROR;
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
