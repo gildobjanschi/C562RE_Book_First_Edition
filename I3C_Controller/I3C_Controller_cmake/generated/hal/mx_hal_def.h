@@ -174,12 +174,6 @@ extern "C" {
     ************************************************************* */
 
   /* *************************************************************
-    gpio_default / EXTI1: No EXTI software label has been defined for this peripheral instance
-      in the STM32CubeMX2 configuration panel.
-      As a result, no aliases are generated for mx_gpio_default_exti1_gethandle
-    ************************************************************* */
-
-  /* *************************************************************
     I3C1: No software label has been defined for this peripheral instance
       in the STM32CubeMX2 configuration panel.
       As a result, no aliases are generated for mx_i3c1_gethandle

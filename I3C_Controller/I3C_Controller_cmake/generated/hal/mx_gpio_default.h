@@ -33,10 +33,6 @@ extern "C" {
 /* Exported defines for gpio_default in HAL layer                             */
 /******************************************************************************/
 
-/* Primary aliases for GPIO PA1 pin */
-#define PA1_PORT                                        HAL_GPIOA
-#define PA1_PIN                                         HAL_GPIO_PIN_1
-
 /* Primary aliases for GPIO PA5 pin */
 #define PA5_PORT                                        HAL_GPIOA
 #define PA5_PIN                                         HAL_GPIO_PIN_5
@@ -87,21 +83,10 @@ system_status_t mx_gpio_default_init(void);
 system_status_t mx_gpio_default_deinit(void);
 
 /**
-  * @brief  Get the EXTI1 object.
-  * @retval Pointer on the EXTI1 Handle
-  */
-hal_exti_handle_t *mx_gpio_default_exti1_gethandle(void);
-
-/**
   * @brief  Get the EXTI13 object.
   * @retval Pointer on the EXTI13 Handle
   */
 hal_exti_handle_t *mx_gpio_default_exti13_gethandle(void);
-
-/******************************************************************************/
-/*                            EXTI Line1 interrupt                            */
-/******************************************************************************/
-void EXTI1_IRQHandler(void);
 
 /******************************************************************************/
 /*                           EXTI Line13 interrupt                            */

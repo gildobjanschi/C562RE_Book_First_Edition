@@ -929,7 +929,7 @@ hal_status_t HAL_I3C_CTRL_SetConfig(hal_i3c_handle_t *hi3c, const hal_i3c_ctrl_c
   /* Timing configuration: I3C timing register 1 (I3C_TIMINGR1) */
   LL_I3C_SetBusCharacteristic(p_i3cx, p_config->timing_reg1);
 
-  LL_I3C_Enable(p_i3cx);
+  //LL_I3C_Enable(p_i3cx);
   hi3c->global_state = HAL_I3C_STATE_IDLE;
 
   return HAL_OK;

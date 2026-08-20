@@ -26,6 +26,8 @@
 /* Exported variables by reference--------------------------------------------*/
 static hal_i3c_handle_t hI3C1;
 
+#define I3C_GET_INSTANCE(handle) ((I3C_TypeDef *)((uint32_t)((handle)->instance)))
+
 /******************************************************************************/
 /* Exported functions for I3C in HAL layer */
 /******************************************************************************/
@@ -47,16 +49,15 @@ hal_i3c_handle_t *mx_i3c1_init(void)
     * I3C1 timing_reg0 calculated by CubeMX2 with:
     * - SDA rise time = 350 ns
     * - Input frequency = 144 MHz
-    * - Bus usage = UTILS_I3C_I2C_MIXED_BUS
+    * - Bus usage = UTILS_I3C_PURE_I3C_BUS
     * - I3C bus frequency = 12.5 MHz
-    * - I2C bus frequency = 400 KHz
-    * - I2C and I3C duty cycle = 50 %
+    * - I3C duty cycle = 50 %
     * I3C1 timing_reg1 calculated by CubeMX2 with:
     * - Wait time = LL_I3C_OWN_ACTIVITY_STATE_0
     */
   hal_i3c_ctrl_config_t i3c_ctrl_config;
-  i3c_ctrl_config.timing_reg0 = 0xACBA0505UL;
-  i3c_ctrl_config.timing_reg1 = 0x77008EUL;
+  i3c_ctrl_config.timing_reg0 = 0x330505UL;
+  i3c_ctrl_config.timing_reg1 = 0x1D008EUL;
   if (HAL_I3C_CTRL_SetConfig(&hI3C1, &i3c_ctrl_config) != HAL_OK)
   {
     return NULL;
@@ -107,6 +108,19 @@ hal_i3c_handle_t *mx_i3c1_init(void)
 
        PB5     ------>   I3C1_SDA   ------>  PB5
     **/
+  // ----------- BEGIN Workaround ----------------
+  // Temporarily enable SDA pull-up
+  gpio_config.mode        = HAL_GPIO_MODE_ALTERNATE;
+  gpio_config.output_type = LL_GPIO_OUTPUT_OPENDRAIN;
+  gpio_config.pull        = HAL_GPIO_PULL_UP;
+  gpio_config.speed       = HAL_GPIO_SPEED_FREQ_HIGH;
+  gpio_config.alternate   = HAL_GPIO_AF_3;
+  HAL_GPIO_Init(PB5_PORT, PB5_PIN, &gpio_config);
+
+  // Enable I3C
+  LL_I3C_Enable(I3C_GET_INSTANCE(&hI3C1));
+  // ----------- END Workaround ----------------
+
   gpio_config.mode        = HAL_GPIO_MODE_ALTERNATE;
   gpio_config.output_type = HAL_GPIO_OUTPUT_PUSHPULL;
   gpio_config.pull        = HAL_GPIO_PULL_NO;

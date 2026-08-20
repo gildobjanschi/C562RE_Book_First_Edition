@@ -509,7 +509,7 @@
     },
     "HAL_CORTEX_PROJECT_USE_HAL": {
       "name": "HAL_CORTEX_PROJECT_USE_HAL",
-      "value": 10,
+      "value": 9,
       "originator": "sw-config-semaphore"
     },
     "HAL_ICACHE_CORE_ENABLED": {
@@ -589,7 +589,7 @@
     },
     "HAL_EXTI_PROJECT_USE_HAL": {
       "name": "HAL_EXTI_PROJECT_USE_HAL",
-      "value": 2,
+      "value": 1,
       "originator": "sw-config-semaphore"
     },
     "RCC_PROJECT_HSE_STARTUP_TIME": {
@@ -604,7 +604,7 @@
     },
     "HAL_EXTI_SYSTEM_GPIO_STANDARD_EXTI": {
       "name": "HAL_EXTI_SYSTEM_GPIO_STANDARD_EXTI",
-      "value": 2,
+      "value": 1,
       "originator": "sw-config-semaphore"
     }
   }
@@ -703,17 +703,6 @@
       "entity": "peripheral.EVENTCTL",
       "swProjectURI": "cube:ac3db731-4911-43c2-a55a-5ac6d481133e/b9b4b340-2033-41d1-84c6-52cf63948801",
       "swInstanceId": "0e6dcd93-385f-48a3-b3be-1724648bd87f"
-    },
-    {
-      "resourceId": "EXTI1",
-      "parentResourceId": "PA1",
-      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:GPIO@2.1.0#HAL GPIO Init",
-      "needId": "e1a5983c-7b8e-4f85-9ed3-e407c6e384c9",
-      "needType": "need.exti.lines",
-      "selector": "*",
-      "entity": "peripheral.EVENTCTL",
-      "swProjectURI": "cube:ac3db731-4911-43c2-a55a-5ac6d481133e/b9b4b340-2033-41d1-84c6-52cf63948801",
-      "swInstanceId": "0e6dcd93-385f-48a3-b3be-1724648bd87f"
     }
   ],
   "resourcesNeeds": [
@@ -725,16 +714,6 @@
       "selector": "*",
       "id": "20aa5cfd-819c-444f-aab6-fba6ca68ecda",
       "owner": "PC13",
-      "propertyPath": ""
-    },
-    {
-      "needType": "need.exti.lines",
-      "projectUri": "cube:ac3db731-4911-43c2-a55a-5ac6d481133e/b9b4b340-2033-41d1-84c6-52cf63948801",
-      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:GPIO@2.1.0#HAL GPIO Init",
-      "componentInstanceId": "0e6dcd93-385f-48a3-b3be-1724648bd87f",
-      "selector": "*",
-      "id": "e1a5983c-7b8e-4f85-9ed3-e407c6e384c9",
-      "owner": "PA1",
       "propertyPath": ""
     }
   ],
@@ -1651,13 +1630,6 @@
           "priority": 5,
           "subpriority": 0,
           "used": true
-        },
-        {
-          "id": 18,
-          "name": "EXTI1",
-          "priority": 0,
-          "subpriority": 0,
-          "used": true
         }
       ],
       "needs": [
@@ -1705,11 +1677,6 @@
           "needId": "9239164b-8913-47c7-ae54-cb178df7e7c2",
           "destination": "I3C1_ERR",
           "owner": "I3C1"
-        },
-        {
-          "needId": "36933748-859b-4889-9a3a-a8de0a603a8c",
-          "destination": "EXTI1",
-          "owner": "EXTI1"
         }
       ]
     }
@@ -1803,16 +1770,6 @@
       "selector": "ERR",
       "id": "9239164b-8913-47c7-ae54-cb178df7e7c2",
       "owner": "I3C1",
-      "propertyPath": ""
-    },
-    {
-      "needType": "need.interrupt.lines",
-      "projectUri": "cube:ac3db731-4911-43c2-a55a-5ac6d481133e/b9b4b340-2033-41d1-84c6-52cf63948801",
-      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32 LL:EXTI@2.1.0#LL",
-      "componentInstanceId": "0e6dcd93-385f-48a3-b3be-1724648bd87f",
-      "selector": "*",
-      "id": "36933748-859b-4889-9a3a-a8de0a603a8c",
-      "owner": "EXTI1",
       "propertyPath": ""
     }
   ],
@@ -2173,28 +2130,6 @@
           "index": 8,
           "port": "C"
         }
-      },
-      {
-        "pin": {
-          "name": "PA1",
-          "position": "15",
-          "type": "gpio",
-          "powerSource": "VDD",
-          "ioStructureOptions": [
-            "t",
-            "a"
-          ],
-          "ioType": "I/O",
-          "ioStructure": "FT",
-          "index": 1,
-          "port": "A"
-        },
-        "signal": {
-          "instance": "GPIOA",
-          "name": "GPIO",
-          "type": "user_gpio"
-        },
-        "pinned": true
       }
     ],
     "needConfigurations": [
@@ -2797,20 +2732,6 @@
           "ioStructure": "FT",
           "index": 8,
           "port": "C"
-        },
-        {
-          "name": "PA1",
-          "position": "15",
-          "type": "gpio",
-          "powerSource": "VDD",
-          "ioStructureOptions": [
-            "t",
-            "a"
-          ],
-          "ioType": "I/O",
-          "ioStructure": "FT",
-          "index": 1,
-          "port": "A"
         }
       ]
     }
@@ -5264,28 +5185,6 @@ solution:
               },
               "pins": [
                 {
-                  "_foreignKey": "PA1",
-                  "basic": {
-                    "mode": "INPUT",
-                    "pull": "UP",
-                    "enable_exti": true,
-                    "exti_config": {
-                      "needs": [
-                        {
-                          "needType": "need.exti.lines",
-                          "projectUri": "cube:ac3db731-4911-43c2-a55a-5ac6d481133e/b9b4b340-2033-41d1-84c6-52cf63948801",
-                          "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:GPIO@2.1.0#HAL GPIO Init",
-                          "componentInstanceId": "0e6dcd93-385f-48a3-b3be-1724648bd87f",
-                          "selector": "*",
-                          "id": "e1a5983c-7b8e-4f85-9ed3-e407c6e384c9",
-                          "owner": "PA1"
-                        }
-                      ]
-                    }
-                  },
-                  "label_name": []
-                },
-                {
                   "_foreignKey": "PA5",
                   "basic": {
                     "mode": "OUTPUT",
@@ -5305,7 +5204,7 @@ solution:
                     "pull": "NO",
                     "enable_exti": false,
                     "output_type": "PUSHPULL",
-                    "speed": "LOW"
+                    "speed": "VERY_HIGH"
                   },
                   "label_name": []
                 },
@@ -5626,15 +5525,14 @@ solution:
               },
               "basic": {
                 "mode": "CTRL",
-                "bus_usage": "UTILS_I3C_I2C_MIXED_BUS",
+                "bus_usage": "UTILS_I3C_PURE_I3C_BUS",
                 "clock_frequency": 144000000,
                 "clock_source": "APB1_Peripheral_Clock",
                 "ctrl_adv_timing": false,
-                "ctrl_timing_reg0": 2897872133,
+                "ctrl_timing_reg0": 3343621,
                 "freq_i3c": 12500,
-                "ctrl_timing_reg1": 7798926,
-                "duty_cycle_i2c": 50,
-                "freq_i2c": 400
+                "ctrl_timing_reg1": 1900686,
+                "duty_cycle_i3c": 50
               },
               "additional": {
                 "ctrl_enable_own_dyn_addr": false,
@@ -5894,37 +5792,6 @@ solution:
                       "selector": "*",
                       "id": "c1299336-b611-4578-be9e-258ca501d26d",
                       "owner": "EXTI13"
-                    }
-                  ]
-                }
-              }
-            },
-            "labels": []
-          }
-        },
-        {
-          "index": 8,
-          "needId": "e1a5983c-7b8e-4f85-9ed3-e407c6e384c9",
-          "rootId": "0e6dcd93-385f-48a3-b3be-1724648bd87f",
-          "needType": "need.exti.lines",
-          "parentId": "0e6dcd93-385f-48a3-b3be-1724648bd87f",
-          "settings": {
-            "basic": {
-              "mode": "INTERRUPT",
-              "trigger_detection": "FALLING",
-              "interruption": {
-                "enable_interruption": true,
-                "irq_handler_generation": true,
-                "nvic": {
-                  "needs": [
-                    {
-                      "needType": "need.interrupt.lines",
-                      "projectUri": "cube:ac3db731-4911-43c2-a55a-5ac6d481133e/b9b4b340-2033-41d1-84c6-52cf63948801",
-                      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32 LL:EXTI@2.1.0#LL",
-                      "componentInstanceId": "0e6dcd93-385f-48a3-b3be-1724648bd87f",
-                      "selector": "*",
-                      "id": "36933748-859b-4889-9a3a-a8de0a603a8c",
-                      "owner": "EXTI1"
                     }
                   ]
                 }
