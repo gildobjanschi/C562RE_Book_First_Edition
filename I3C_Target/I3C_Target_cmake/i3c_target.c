@@ -23,19 +23,16 @@ static void I3C_TxCompleteCallback(hal_i3c_handle_t *hi3c);
 static uint8_t I3C_RxBuffer[RX_BUFFER_SIZE];
 #define TX_BUFFER_SIZE 32
 
-static volatile QueueHandle_t sI3CNotifyQueue;
-static volatile QueueHandle_t sI3CIntQueue;
-
-static uint32_t I3C_NotificationsReceived;
-static uint8_t I3C_ucLastCommand;
-static uint32_t I3C_ulLastAddress;
-
-// The I3C state
+// The I3C state FLAGS
 typedef enum {
-  IDLE,
-  RX_COMMAND_PENDING,
-  RX_PAYLOAD_PENDING,
-  TX_PAYLOAD_PENDING
+  STATE_INIT              = 0x00000000,
+  STATE_IDLE              = 0x00000001,
+  NOTIFICATION_DAU_FLAG   = 0x00000002,
+  NOTIFICATION_MRL_FLAG   = 0x00000004,
+  NOTIFICATION_MWL_FLAG   = 0x00000008,
+  STATE_RX_COMMAND_PENDING = 0x00000010,
+  STATE_RX_PAYLOAD_PENDING = 0x00000020,
+  STATE_TX_PAYLOAD_PENDING = 0x00000040
 } I3C_STATE;
 
 static I3C_STATE I3C_State;
@@ -44,9 +41,11 @@ static I3C_STATE I3C_State;
 #define MEM_SIZE 0x4000U
 static uint8_t pMem[MEM_SIZE];
 
-#define I3C_TGT_READY (HAL_I3C_TGT_NOTIFICATION_DAU | \
-                        HAL_I3C_TGT_NOTIFICATION_SETMRL | \
-                        HAL_I3C_TGT_NOTIFICATION_SETMWL)
+static volatile QueueHandle_t sI3CNotifyQueue;
+static volatile QueueHandle_t sI3CIntQueue;
+
+static uint8_t I3C_ucLastCommand;
+static uint32_t I3C_ulLastAddress;
 
 static void I3C_Reset();
 static hal_status_t I3C_ReadCommand();
@@ -93,7 +92,6 @@ hal_status_t I3C_Init(QueueHandle_t I3cNotifyQueue, QueueHandle_t I3cIntQueue) {
                         HAL_I3C_TGT_NOTIFICATION_DAU |
                         HAL_I3C_TGT_NOTIFICATION_SETMRL |
                         HAL_I3C_TGT_NOTIFICATION_SETMWL);
-
   if (status != HAL_OK) {
     SWD_printf("HAL_I3C_TGT_ActivateNotification failed.\n");
     return status;
@@ -133,7 +131,7 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
 
     // DAA completed
     if (CCCInfo.dynamic_addr != 0) {
-      I3C_NotificationsReceived |= HAL_I3C_TGT_NOTIFICATION_DAU;
+      I3C_State |= NOTIFICATION_DAU_FLAG;
 
       SWD_printf("Dynamic address complete: %02xh.\n", CCCInfo.dynamic_addr);
     } else {
@@ -162,7 +160,7 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
     }
 
     // SETMRL completed
-    I3C_NotificationsReceived |= HAL_I3C_TGT_NOTIFICATION_SETMRL;
+    I3C_State |= NOTIFICATION_MRL_FLAG;
   }
 
   // SETMWL: Dictates the maximum number of bytes an I3C Controller can send to
@@ -186,10 +184,14 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
     }
 
     // SETMWL completed
-    I3C_NotificationsReceived |= HAL_I3C_TGT_NOTIFICATION_SETMWL;
+    I3C_State |= NOTIFICATION_MWL_FLAG;
   }
 
-  if (I3C_NotificationsReceived == I3C_TGT_READY) {
+  if (I3C_State == (NOTIFICATION_DAU_FLAG | NOTIFICATION_MRL_FLAG |
+      NOTIFICATION_MWL_FLAG)) {
+    // DAA is complete and we received MWL and MRL
+    I3C_State = STATE_IDLE;
+
     // Wait for a command from the controller
     I3C_ReadCommand();
   }
@@ -201,8 +203,8 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
  * @brief: Rx complete handler
  */
 hal_status_t I3C_RxComplete() {
-  if (I3C_State == RX_COMMAND_PENDING) {
-    I3C_State = IDLE;
+  if (I3C_State == STATE_RX_COMMAND_PENDING) {
+    I3C_State = STATE_IDLE;
     // Get the command
     I3C_ucLastCommand = I3C_RxBuffer[0];
 
@@ -225,7 +227,7 @@ hal_status_t I3C_RxComplete() {
     }
 
     case I3C_LOAD_CMD: {
-      if (I3C_State != IDLE) {
+      if (I3C_State != STATE_IDLE) {
         SWD_printf("I3C_RxComplete: [Error] state not idle.\n");
         return HAL_BUSY;
       }
@@ -243,7 +245,7 @@ hal_status_t I3C_RxComplete() {
         return status;
       }
 
-      I3C_State = TX_PAYLOAD_PENDING;
+      I3C_State = STATE_TX_PAYLOAD_PENDING;
 
       SWD_printf("LOAD CMD [%d bytes] @%02x: ", ulLength, I3C_ulLastAddress);
       for (uint32_t i = 0; i < ulBytesCopy; i++) {
@@ -260,8 +262,8 @@ hal_status_t I3C_RxComplete() {
       break;
     }
     }
-  } else if (I3C_State == RX_PAYLOAD_PENDING) {
-    I3C_State = IDLE;
+  } else if (I3C_State == STATE_RX_PAYLOAD_PENDING) {
+    I3C_State = STATE_IDLE;
 
     switch (I3C_ucLastCommand) {
     case I3C_STORE_CMD: {
@@ -302,8 +304,8 @@ hal_status_t I3C_RxComplete() {
  * @brief: Tx complete handler
  */
 hal_status_t I3C_TxComplete() {
-  if (I3C_State == TX_PAYLOAD_PENDING) {
-    I3C_State = IDLE;
+  if (I3C_State == STATE_TX_PAYLOAD_PENDING) {
+    I3C_State = STATE_IDLE;
     // Load payload was sent. Wait for the next command from the controller.
     I3C_ReadCommand();
   }
@@ -375,7 +377,7 @@ static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c) {
  * @brief: I3C read command
  */
 static hal_status_t I3C_ReadCommand() {
-  if (I3C_State != IDLE) {
+  if (I3C_State != STATE_IDLE) {
     SWD_printf("I3C_ReadCommand: [Error] state not idle.\n");
     return HAL_BUSY;
   }
@@ -388,7 +390,7 @@ static hal_status_t I3C_ReadCommand() {
     return status;
   }
 
-  I3C_State = RX_COMMAND_PENDING;
+  I3C_State = STATE_RX_COMMAND_PENDING;
 
   SWD_printf("Waiting for CMD...\n");
   return HAL_OK;
@@ -400,7 +402,7 @@ static hal_status_t I3C_ReadCommand() {
  * @param ulPayloadLength The Rx payload length
  */
 static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
-  if (I3C_State != IDLE) {
+  if (I3C_State != STATE_IDLE) {
     SWD_printf("I3C_ReadPayload: [Error] state is not idle.\n");
     return HAL_BUSY;
   }
@@ -418,7 +420,7 @@ static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
     return status;
   }
 
-  I3C_State = RX_PAYLOAD_PENDING;
+  I3C_State = STATE_RX_PAYLOAD_PENDING;
   return HAL_OK;
 }
 
@@ -427,8 +429,7 @@ static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
  */
 static void I3C_Reset() {
   // Reset the state
-  I3C_NotificationsReceived = 0;
-  I3C_State = IDLE;
+  I3C_State = STATE_INIT;
   I3C_ucLastCommand = 0;
   I3C_ulLastAddress = 0;
 }
