@@ -20,7 +20,7 @@ hal_status_t I3C_StartDAA();
 hal_status_t I3C_DAAComplete();
 hal_status_t I3C_TransferComplete();
 hal_status_t I3C_StoreData(uint16_t uwAddress, uint32_t ulLength);
-hal_status_t I3C_LoadData(uint16_t uwAddress, uint32_t ulLength);
+hal_status_t I3C_Load_Cmd(uint16_t uwAddress, uint32_t ulLength);
 
 #ifdef __cplusplus
 }

@@ -37,7 +37,7 @@ static void processInputEvent(uint8_t ucEvent) {
 
     case EVENT_LONG_CLICK: {
       SWD_printf("--> BTN_1 LONG CLICK\n");
-      I3C_LoadData(0x1234, 16);
+      I3C_Load_Cmd(0x1234, 16);
       break;
     }
 

@@ -12,7 +12,6 @@
 /* Custom Command codes are in the range 0xC0 to 0xDF */
 #define I3C_STORE_CMD             0xC0
 #define I3C_LOAD_CMD              0xC1
-#define I3C_STALL_CMD             0xC2
 
 // Interrupt callback
 static void I3C_NotifyCallback(hal_i3c_handle_t *hi3c, uint32_t ulNotifyId);
@@ -231,21 +230,18 @@ hal_status_t I3C_RxComplete() {
         return HAL_BUSY;
       }
 
-      hal_status_t status;
       uint32_t ulBytesCopy = (I3C_ulLastAddress + ulLength < MEM_SIZE) ?
           ulLength : MEM_SIZE - I3C_ulLastAddress;
 
       hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
 
-      //HAL_GPIO_WritePin(HAL_GPIOB, HAL_GPIO_PIN_15, HAL_GPIO_PIN_SET);
+      hal_status_t status;
       status = HAL_I3C_TGT_Transmit_IT(hI3C, pMem + I3C_ulLastAddress,
           ulBytesCopy);
       if (status != HAL_OK) {
         SWD_printf("I3C_RxComplete: HAL_I3C_TGT_Transmit_IT: %lx\n", status);
         return status;
       }
-
-      //HAL_GPIO_WritePin(HAL_GPIOB, HAL_GPIO_PIN_15, HAL_GPIO_PIN_RESET);
 
       I3C_State = TX_PAYLOAD_PENDING;
 
@@ -254,10 +250,6 @@ hal_status_t I3C_RxComplete() {
         SWD_printf("%02x ", (pMem + I3C_ulLastAddress)[i]);
       }
       SWD_printf("\n");
-      break;
-    }
-
-    case I3C_STALL_CMD: {
       break;
     }
 
@@ -380,7 +372,7 @@ static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c) {
 }
 
 /*
- * brief: I3C read command
+ * @brief: I3C read command
  */
 static hal_status_t I3C_ReadCommand() {
   if (I3C_State != IDLE) {
