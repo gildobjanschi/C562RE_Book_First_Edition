@@ -231,13 +231,13 @@ hal_status_t I3C_RxComplete() {
         return HAL_BUSY;
       }
 
-      HAL_GPIO_WritePin(LD1_PORT, LD1_PIN, HAL_GPIO_PIN_SET);
-
       hal_status_t status;
       uint32_t ulBytesCopy = (I3C_ulLastAddress + ulLength < MEM_SIZE) ?
           ulLength : MEM_SIZE - I3C_ulLastAddress;
 
       hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
+
+      //HAL_GPIO_WritePin(HAL_GPIOB, HAL_GPIO_PIN_15, HAL_GPIO_PIN_SET);
       status = HAL_I3C_TGT_Transmit_IT(hI3C, pMem + I3C_ulLastAddress,
           ulBytesCopy);
       if (status != HAL_OK) {
@@ -245,7 +245,7 @@ hal_status_t I3C_RxComplete() {
         return status;
       }
 
-      HAL_GPIO_WritePin(LD1_PORT, LD1_PIN, HAL_GPIO_PIN_RESET);
+      //HAL_GPIO_WritePin(HAL_GPIOB, HAL_GPIO_PIN_15, HAL_GPIO_PIN_RESET);
 
       I3C_State = TX_PAYLOAD_PENDING;
 
