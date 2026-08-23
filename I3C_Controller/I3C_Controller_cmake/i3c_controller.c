@@ -16,14 +16,9 @@ static void I3C_DynAddrRequestCallback(hal_i3c_handle_t *hi3c,
 static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c);
 static void I3C_TransferCompleteCallback(hal_i3c_handle_t *hi3c);
 
-uint32_t ControlBuffer[20];
-
-/* Size of the Rx Buffer in bytes. */
-#define RX_BUFFER_SIZE  32U
-uint8_t I3C_RxBuffer[RX_BUFFER_SIZE];
-
-/* Size of the Tx Buffer in bytes. */
-#define TX_BUFFER_SIZE  32U
+static uint32_t ControlBuffer[20];
+static uint8_t I3C_RxBuffer[RX_BUFFER_SIZE];
+static uint8_t I3C_TxBuffer[TX_BUFFER_SIZE];
 
 /* Target device address for I3C communication. */
 #define DEVICE_TARGET_ADDR        0x32U
@@ -76,19 +71,21 @@ DirectWriteCCC = {
 // ---------------- Store command ----------------------
 #define STORE_CMD_TX_BYTES 4U
 
-static hal_i3c_private_desc_t Store_Descriptor[2] = {
+static hal_i3c_private_desc_t Store_CMD_Descriptor[1] = {
     {DEVICE_TARGET_ADDR, STORE_CMD_TX_BYTES, HAL_I3C_DIRECTION_WRITE},
-    {DEVICE_TARGET_ADDR, 0U, HAL_I3C_DIRECTION_WRITE},
 };
 
 struct {
   uint8_t STORE_CMD_associated_data[STORE_CMD_TX_BYTES];
-  uint8_t STORE_PAYLOAD_associated_data[TX_BUFFER_SIZE];
 }
 
 static Store_CMD = {
   .STORE_CMD_associated_data = {I3C_STORE_CMD, 0x00, 0x00, 0x00},
-  .STORE_PAYLOAD_associated_data = {0x00}
+};
+
+// ---------------- Store payload ----------------------
+static hal_i3c_private_desc_t Store_Payload_Descriptor[1] = {
+    {DEVICE_TARGET_ADDR, 0, HAL_I3C_DIRECTION_WRITE},
 };
 
 // ---------------- Load command ----------------------
@@ -107,7 +104,7 @@ static Load_CMD = {
 };
 
 // ---------------- Load payload ----------------------
-static hal_i3c_private_desc_t Load_Payload_Private_Descriptor[1] = {
+static hal_i3c_private_desc_t Load_Payload_Descriptor[1] = {
     {DEVICE_TARGET_ADDR, 0, HAL_I3C_DIRECTION_READ},
 };
 // ----------------------------------------------------
@@ -115,15 +112,20 @@ static hal_i3c_private_desc_t Load_Payload_Private_Descriptor[1] = {
 static hal_i3c_transfer_ctx_t ContextBuffers;
 
 // Flags for I3C_State
-#define DAA_PENDING               0x00000001
-#define DAA_COMPLETE              0x00000002
-#define CCC_PENDING               0x00000004
-#define STORE_PENDING             0x00000008
-#define LOAD_CMD_PENDING          0x00000010
-#define LOAD_PAYLOAD_PENDING      0x00000020
+typedef enum {
+  I3C_IDLE                = 0X00000000,
+  DAA_PENDING             = 0x00000001,
+  DAA_COMPLETE            = 0x00000002,
+  CCC_PENDING             = 0x00000004,
+  STORE_CMD_PENDING       = 0x00000008,
+  STORE_PAYLOAD_PENDING   = 0x00000010,
+  LOAD_CMD_PENDING        = 0x00000020,
+  LOAD_PAYLOAD_PENDING    = 0x00000040,
+} I3C_STATE;
+
+static I3C_STATE I3C_State;
 
 static volatile uint64_t ulTarget_bcr_dcr_pid;
-static uint32_t I3C_State;
 static uint16_t I3C_uwLastAddress;
 static uint32_t I3C_ulLastLength;
 
@@ -177,8 +179,6 @@ hal_status_t I3C_Init(QueueHandle_t I3CIntQueue) {
     return status;
   }
 
-  // Prepare the context
-
   // Reset a controller transfer context.
   status = HAL_I3C_CTRL_ResetTransferCtx(&ContextBuffers);
   if (status != HAL_OK) {
@@ -214,7 +214,7 @@ hal_status_t I3C_Init(QueueHandle_t I3CIntQueue) {
   sI3CIntQueue = I3CIntQueue;
 
   // Reset the state
-  I3C_State = 0;
+  I3C_State = I3C_IDLE;
 
   return HAL_OK;
 }
@@ -355,16 +355,13 @@ hal_status_t I3C_DAAComplete() {
  * @param mode The I3C mode
  * @param type the type of transaction
  */
-static hal_status_t I3C_Private_Transact(
+static hal_status_t I3C_PrivateTransact(
     hal_i3c_private_desc_t *pDesc, uint32_t ulDescCount,
     uint8_t *pTxData, uint32_t ulTxDataSize,
     uint8_t *pRxData, uint32_t ulRxDataSize,
     hal_i3c_transfer_mode_t mode, uint32_t type) {
-  if((I3C_State & DAA_COMPLETE) != DAA_COMPLETE) {
-    SWD_printf("I3C_Private_Transact: DAA not complete.\n");
-    return HAL_ERROR;
-  } else if ((I3C_State & CCC_PENDING) == CCC_PENDING) {
-    SWD_printf("I3C_Private_Transact: CCC transaction pending.\n");
+  if(I3C_State != DAA_COMPLETE) {
+    SWD_printf("I3C_PrivateTransact: %x.\n", I3C_State);
     return HAL_BUSY;
   }
 
@@ -425,19 +422,15 @@ static hal_status_t I3C_Private_Transact(
 }
 
 /*
- * @brief: Store data from Store_CMD.STORE_PAYLOAD_associated_data
+ * @brief: Send Store command
  *
  * @param uwAddress The address where data is stored
+ * @param pBuf Pointer to data to send
  * @param ulLength The length of data
  */
-hal_status_t I3C_StoreData(uint16_t uwAddress, uint32_t ulLength) {
-  if((I3C_State & DAA_COMPLETE) != DAA_COMPLETE) {
-    SWD_printf("I3C_StoreData: DAA not complete.\n");
-    return HAL_ERROR;
-  } else if ((I3C_State & CCC_PENDING) == CCC_PENDING) {
-    SWD_printf("I3C_StoreData: CCC transaction pending.\n");
-    return HAL_BUSY;
-  }
+hal_status_t I3C_StoreCmd(uint16_t uwAddress, uint8_t* pBuf,
+    uint32_t ulLength) {
+  SWD_printf("STORE CMD [%d bytes] @%02x: ", ulLength, uwAddress);
 
   // Set the address
   Store_CMD.STORE_CMD_associated_data[1] = uwAddress >> 8;
@@ -445,22 +438,15 @@ hal_status_t I3C_StoreData(uint16_t uwAddress, uint32_t ulLength) {
   // Set the length of the payload
   Store_CMD.STORE_CMD_associated_data[3] = (uint8_t)ulLength;
 
-  // Specify how many bytes will be stored.
-  Store_Descriptor[1].data_size_byte = ulLength;
+  memcpy(I3C_TxBuffer, pBuf, ulLength);
 
   I3C_uwLastAddress = uwAddress;
   I3C_ulLastLength = ulLength;
 
-  SWD_printf("STORE CMD [%d bytes] @%02x: ", ulLength, uwAddress);
-  for (uint32_t i = 0; i < ulLength; i++) {
-    SWD_printf("%02x ", Store_CMD.STORE_PAYLOAD_associated_data[i]);
-  }
-  SWD_printf("\n");
-
-  return I3C_Private_Transact(
-      Store_Descriptor, COUNTOF(Store_Descriptor),
-      (uint8_t *)&Store_CMD, STORE_CMD_TX_BYTES + ulLength,
-      NULL, 0, HAL_I3C_PRIVATE_WITH_ARB_STOP, STORE_PENDING);
+  return I3C_PrivateTransact(
+      Store_CMD_Descriptor, COUNTOF(Store_CMD_Descriptor),
+      (uint8_t *)&Store_CMD, STORE_CMD_TX_BYTES,
+      NULL, 0, HAL_I3C_PRIVATE_WITH_ARB_STOP, STORE_CMD_PENDING);
 }
 
 /*
@@ -469,16 +455,8 @@ hal_status_t I3C_StoreData(uint16_t uwAddress, uint32_t ulLength) {
  * @param uwAddress The address where data is loaded from
  * @param ulLength The payload length
  */
-hal_status_t I3C_Load_Cmd(uint16_t uwAddress, uint32_t ulLength) {
-  if((I3C_State & DAA_COMPLETE) != DAA_COMPLETE) {
-    SWD_printf("I3C_Load_Cmd: DAA not complete.\n");
-    return HAL_ERROR;
-  } else if ((I3C_State & CCC_PENDING) == CCC_PENDING) {
-    SWD_printf("I3C_Load_Cmd: CCC transaction pending.\n");
-    return HAL_BUSY;
-  }
-
-  SWD_printf("I3C_Load_Cmd %d bytes @%02x\n", ulLength, uwAddress);
+hal_status_t I3C_LoadCmd(uint16_t uwAddress, uint32_t ulLength) {
+  SWD_printf("I3C_Load_Cmd [%d bytes] @%02x\n", ulLength, uwAddress);
 
   // Set the address
   Load_CMD.LOAD_CMD_associated_data[1] = uwAddress >> 8;
@@ -489,63 +467,81 @@ hal_status_t I3C_Load_Cmd(uint16_t uwAddress, uint32_t ulLength) {
   I3C_uwLastAddress = uwAddress;
   I3C_ulLastLength = ulLength;
 
-  return I3C_Private_Transact(
+  return I3C_PrivateTransact(
       Load_CMD_Descriptor, COUNTOF(Load_CMD_Descriptor),
       (uint8_t *)&Load_CMD, LOAD_CMD_TX_BYTES,
       NULL, 0, HAL_I3C_PRIVATE_WITH_ARB_STOP, LOAD_CMD_PENDING);
 }
 
 /*
- * @brief: Load payload into RxBuffer (maximum RX_BUFFER_SIZE)
+ * @brief: Write payload
  */
-hal_status_t I3C_Load_Payload() {
-  if((I3C_State & DAA_COMPLETE) != DAA_COMPLETE) {
-    SWD_printf("I3C_Load_Payload: DAA not complete.\n");
-    return HAL_ERROR;
-  } else if ((I3C_State & CCC_PENDING) == CCC_PENDING) {
-    SWD_printf("I3C_Load_Payload: CCC transaction pending.\n");
-    return HAL_BUSY;
-  }
+hal_status_t I3C_WritePayload() {
+  // Set the number of bytes to write
+  Store_Payload_Descriptor[0].data_size_byte = I3C_ulLastLength;
 
-  SWD_printf("I3C_Load_Payload %d bytes @%02x\n",
+  for (uint32_t i = 0; i < I3C_ulLastLength; i++) {
+      SWD_printf("%02x ", I3C_TxBuffer[i]);
+  }
+  SWD_printf("\n");
+
+  return I3C_PrivateTransact(
+      Store_Payload_Descriptor, COUNTOF(Store_Payload_Descriptor),
+      I3C_TxBuffer, I3C_ulLastLength, NULL, 0,
+      HAL_I3C_PRIVATE_WITH_ARB_STOP, STORE_PAYLOAD_PENDING);
+}
+
+/*
+ * @brief: Read a payload
+ */
+hal_status_t I3C_ReadPayload() {
+  SWD_printf("I3C_ReadPayload [%d bytes] @%02x: ",
       I3C_ulLastLength, I3C_uwLastAddress);
 
   // Set the number of bytes to read
-  Load_Payload_Private_Descriptor[0].data_size_byte = I3C_ulLastLength;
+  Load_Payload_Descriptor[0].data_size_byte = I3C_ulLastLength;
 
-  return I3C_Private_Transact(
-      Load_Payload_Private_Descriptor, COUNTOF(Load_Payload_Private_Descriptor),
+  return I3C_PrivateTransact(
+      Load_Payload_Descriptor, COUNTOF(Load_Payload_Descriptor),
       NULL, 0, I3C_RxBuffer, I3C_ulLastLength,
       HAL_I3C_PRIVATE_WITH_ARB_STOP, LOAD_PAYLOAD_PENDING);
 }
 
 /*
  * @brief: Transfer complete handler
+ *
+ * @param pRxBuffer
  */
-hal_status_t I3C_TransferComplete() {
+hal_status_t I3C_TransferComplete(uint8_t** ppRxBuffer,
+    uint32_t* pulRxByteCount) {
+  *ppRxBuffer = I3C_RxBuffer;
+  *pulRxByteCount = 0;
+
   if ((I3C_State & CCC_PENDING) == CCC_PENDING) {
     I3C_State &= ~CCC_PENDING;
 
     PrintCCCResults();
-  } else if ((I3C_State & STORE_PENDING) == STORE_PENDING) {
-    I3C_State &= ~STORE_PENDING;
+  } else if ((I3C_State & STORE_CMD_PENDING) == STORE_CMD_PENDING) {
+    I3C_State &= ~STORE_CMD_PENDING;
 
-    SWD_printf("STORE complete\n");
+    I3C_WritePayload();
+  } else if ((I3C_State & STORE_PAYLOAD_PENDING) == STORE_PAYLOAD_PENDING) {
+    I3C_State &= ~STORE_PAYLOAD_PENDING;
+
+    SWD_printf("STORE Payload complete\n");
   } else if ((I3C_State & LOAD_CMD_PENDING) == LOAD_CMD_PENDING) {
     I3C_State &= ~LOAD_CMD_PENDING;
 
-    SWD_printf("LOAD CMD complete\n");
-
-    I3C_Load_Payload();
+    I3C_ReadPayload();
   } else if ((I3C_State & LOAD_PAYLOAD_PENDING) == LOAD_PAYLOAD_PENDING) {
     I3C_State &= ~LOAD_PAYLOAD_PENDING;
 
-    SWD_printf("LOAD Payload [%d bytes] @%02x: ",
-        I3C_ulLastLength, I3C_uwLastAddress);
     for (uint32_t i = 0; i < I3C_ulLastLength; i++) {
-      SWD_printf("%02x ", I3C_RxBuffer[i]);
+        SWD_printf("%02x ", I3C_RxBuffer[i]);
     }
     SWD_printf("\n");
+
+    *pulRxByteCount = I3C_ulLastLength;
   }
 
   return HAL_OK;
@@ -603,12 +599,12 @@ static void PrintCCCResults() {
 
   uint8_t offset = 0;
   for (uint8_t i = 0; i < numCommands; i++) {
-    SWD_printf("%s = 0x", CommandCode[i]);
+    SWD_printf("%s = ", CommandCode[i]);
 
     for (uint8_t j = 0; j < CommandCodeSize[i]; j++) {
-      SWD_printf("%01x", I3C_RxBuffer[offset + j]);
+      SWD_printf("%x", I3C_RxBuffer[offset + j]);
     }
-
+    SWD_printf("h");
     offset += CommandCodeSize[i];
 
     if (i < (uint8_t)(numCommands - 1U)) {

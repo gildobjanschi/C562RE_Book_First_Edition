@@ -28,7 +28,7 @@ static uint8_t* I3C_RxBuffer = NULL;
 // The maximum Tx length
 static uint32_t I3C_Max_Tx_Buffer_Length = 0;
 
-// The I3C state FLAGS
+// The I3C state flags
 typedef enum {
   STATE_INIT              = 0x00000000,
   STATE_IDLE              = 0x00000001,
@@ -47,7 +47,7 @@ static I3C_STATE I3C_State;
 static uint8_t pMem[MEM_SIZE];
 
 static uint8_t I3C_ucLastCommand;
-static uint32_t I3C_ulLastAddress;
+static uint16_t I3C_uwLastAddress;
 
 static volatile QueueHandle_t sI3CNotifyQueue;
 static volatile QueueHandle_t sI3CIntQueue;
@@ -55,16 +55,17 @@ static volatile QueueHandle_t sI3CIntQueue;
 static void I3C_Reset();
 static hal_status_t I3C_ReadCommand();
 static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength);
+static hal_status_t I3C_WritePayload(uint32_t ulPayloadLength);
 
 /*
  * @brief  Initialize I3C
  *
- * @param I3cNotifyQueue The queue for notifying the task of events
+ * @param I3CNotifyQueue The queue for notifying the task of events
  * @param I3cIntQueue The queue for notifying of interrupt events
  *
  * @retval HAL_OK if it succeeds
  */
-hal_status_t I3C_Init(QueueHandle_t I3cNotifyQueue, QueueHandle_t I3cIntQueue) {
+hal_status_t I3C_Init(QueueHandle_t I3CNotifyQueue, QueueHandle_t I3CIntQueue) {
   hal_status_t status;
   hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
 
@@ -102,8 +103,8 @@ hal_status_t I3C_Init(QueueHandle_t I3cNotifyQueue, QueueHandle_t I3cIntQueue) {
     return status;
   }
 
-  sI3CNotifyQueue = I3cNotifyQueue;
-  sI3CIntQueue = I3cIntQueue;
+  sI3CNotifyQueue = I3CNotifyQueue;
+  sI3CIntQueue = I3CIntQueue;
 
   I3C_Reset();
 
@@ -134,7 +135,7 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
       return status;
     }
 
-    SWD_printf("Dynamic address: %02xh. ", CCCInfo.dynamic_addr);
+    SWD_printf("Dynamic address: %02xh, ", CCCInfo.dynamic_addr);
     // DAA completed
     if (CCCInfo.dynamic_addr != 0) {
       I3C_State |= NOTIFICATION_DAU_FLAG;
@@ -153,7 +154,7 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
       return status;
     }
 
-    SWD_printf("SETMWL: %02xh. ", CCCInfo.max_write_data_size_byte);
+    SWD_printf("SETMWL: %02xh, ", CCCInfo.max_write_data_size_byte);
     // Allocate the receive buffer
     I3C_Max_Rx_Buffer_Length = CCCInfo.max_write_data_size_byte;
     if (I3C_RxBuffer != NULL) {
@@ -207,11 +208,11 @@ hal_status_t I3C_RxComplete() {
     I3C_ucLastCommand = I3C_RxBuffer[0];
 
     // Get the address
-    I3C_ulLastAddress = I3C_RxBuffer[1];
-    I3C_ulLastAddress <<= 8;
-    I3C_ulLastAddress |= I3C_RxBuffer[2];
+    I3C_uwLastAddress = I3C_RxBuffer[1];
+    I3C_uwLastAddress <<= 8;
+    I3C_uwLastAddress |= I3C_RxBuffer[2];
     // The address can only have 14 bits (the addressed memory is 16KB)
-    I3C_ulLastAddress &= 0x3fff;
+    I3C_uwLastAddress &= 0x3fff;
 
     // Get the length of the payload
     uint32_t ulLength = I3C_RxBuffer[3];
@@ -220,51 +221,19 @@ hal_status_t I3C_RxComplete() {
       I3C_ReadPayload(ulLength);
 
       SWD_printf("STORE CMD: %02xh, address: %02xh, length: %d\n",
-          I3C_ucLastCommand, I3C_ulLastAddress, ulLength);
+          I3C_ucLastCommand, I3C_uwLastAddress, ulLength);
       break;
     }
 
     case I3C_LOAD_CMD: {
-      if (I3C_State != STATE_IDLE) {
-        SWD_printf("I3C_RxComplete: [Error] state not idle.\n");
-        return HAL_BUSY;
-      }
-
-      if (ulLength > I3C_Max_Tx_Buffer_Length) {
-        SWD_printf("I3C_RxComplete: ulLength (%lx) > "
-            "I3C_Max_Tx_Buffer_Length (%lx)\n",
-            ulLength, I3C_Max_Tx_Buffer_Length);
-        return HAL_ERROR;
-      }
-
-      // Check if we would end up reading beyond the end of the buffer.
-      uint32_t ulBytesCopy = (I3C_ulLastAddress + ulLength < MEM_SIZE) ?
-          ulLength : MEM_SIZE - I3C_ulLastAddress;
-
-      hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
-
-      hal_status_t status;
-      status = HAL_I3C_TGT_Transmit_IT(hI3C, pMem + I3C_ulLastAddress,
-          ulBytesCopy);
-      if (status != HAL_OK) {
-        SWD_printf("I3C_RxComplete: HAL_I3C_TGT_Transmit_IT: %lx\n", status);
-        return status;
-      }
-
-      I3C_State = STATE_TX_PAYLOAD_PENDING;
-
-      SWD_printf("LOAD CMD [%d bytes] @%02x: ", ulBytesCopy, I3C_ulLastAddress);
-      for (uint32_t i = 0; i < ulBytesCopy; i++) {
-        SWD_printf("%02x ", (pMem + I3C_ulLastAddress)[i]);
-      }
-      SWD_printf("\n");
+      I3C_WritePayload(ulLength);
       break;
     }
 
     default: {
       SWD_printf(
           "I3C_RxComplete: Unhandled CMD: %02x, address: %02x, length: %d\n",
-          I3C_ucLastCommand, I3C_ulLastAddress, ulLength);
+          I3C_ucLastCommand, I3C_uwLastAddress, ulLength);
       break;
     }
     }
@@ -277,12 +246,12 @@ hal_status_t I3C_RxComplete() {
 
       // Check if we would end up writing beyond the end of the buffer.
       uint32_t ulBytesReceived = hI3C->data_size_byte;
-      uint32_t ulBytesCopy = (I3C_ulLastAddress + ulBytesReceived < MEM_SIZE) ?
-              ulBytesReceived : MEM_SIZE - I3C_ulLastAddress;
-      memcpy(pMem + I3C_ulLastAddress, I3C_RxBuffer, ulBytesCopy);
+      uint32_t ulBytesCopy = (I3C_uwLastAddress + ulBytesReceived < MEM_SIZE) ?
+              ulBytesReceived : MEM_SIZE - I3C_uwLastAddress;
+      memcpy(pMem + I3C_uwLastAddress, I3C_RxBuffer, ulBytesCopy);
 
       SWD_printf("STORE PAYLOAD [Copied: %d bytes] @%02x: ",
-          ulBytesCopy, I3C_ulLastAddress);
+          ulBytesCopy, I3C_uwLastAddress);
       for (uint32_t i = 0; i < ulBytesCopy; i++) {
         SWD_printf("%02x ", I3C_RxBuffer[i]);
       }
@@ -416,7 +385,7 @@ static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
   }
 
   if (ulPayloadLength > I3C_Max_Rx_Buffer_Length) {
-    SWD_printf("I3C_RxComplete: ulPayloadLength (%lx) > "
+    SWD_printf("I3C_ReadPayload: ulPayloadLength (%lx) > "
         "I3C_Max_Rx_Buffer_Length (%lx)\n",
         ulPayloadLength, I3C_Max_Rx_Buffer_Length);
     return HAL_ERROR;
@@ -435,11 +404,53 @@ static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
 }
 
 /*
+ * brief: I3C write payload
+ *
+ * @param ulPayloadLength The Tx payload length
+ */
+static hal_status_t I3C_WritePayload(uint32_t ulPayloadLength) {
+  if (I3C_State != STATE_IDLE) {
+    SWD_printf("I3C_WritePayload: [Error] state not idle.\n");
+    return HAL_BUSY;
+  }
+
+  if (ulPayloadLength > I3C_Max_Tx_Buffer_Length) {
+    SWD_printf("I3C_WritePayload: ulLength (%lx) > "
+        "I3C_Max_Tx_Buffer_Length (%lx)\n",
+        ulPayloadLength, I3C_Max_Tx_Buffer_Length);
+    return HAL_ERROR;
+  }
+
+  // Check if we would end up reading beyond the end of the buffer.
+  uint32_t ulBytesCopy = (I3C_uwLastAddress + ulPayloadLength < MEM_SIZE) ?
+      ulPayloadLength : MEM_SIZE - I3C_uwLastAddress;
+
+  hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
+
+  hal_status_t status;
+  status = HAL_I3C_TGT_Transmit_IT(hI3C, pMem + I3C_uwLastAddress, ulBytesCopy);
+  if (status != HAL_OK) {
+    SWD_printf("I3C_WritePayload: HAL_I3C_TGT_Transmit_IT: %lx\n", status);
+    return status;
+  }
+
+  I3C_State = STATE_TX_PAYLOAD_PENDING;
+
+  SWD_printf("LOAD CMD [%d bytes] @%02x: ", ulBytesCopy, I3C_uwLastAddress);
+  for (uint32_t i = 0; i < ulBytesCopy; i++) {
+    SWD_printf("%02x ", (pMem + I3C_uwLastAddress)[i]);
+  }
+  SWD_printf("\n");
+
+  return status;
+}
+
+/*
  * @brief: Reset the target
  */
 static void I3C_Reset() {
   // Reset the state
   I3C_State = STATE_INIT;
   I3C_ucLastCommand = 0;
-  I3C_ulLastAddress = 0;
+  I3C_uwLastAddress = 0;
 }

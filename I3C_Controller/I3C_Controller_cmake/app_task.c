@@ -13,6 +13,9 @@
 #include "app_input.h"
 #include "i3c_controller.h"
 
+static uint8_t Task_Tx_Buffer[TX_BUFFER_SIZE];
+static uint8_t ucFirstSendDataValue = 0;
+
 /*
  * @brief:  Process the input event
  *
@@ -28,7 +31,14 @@ static void processInputEvent(uint8_t ucEvent) {
     case EVENT_CLICK: {
       SWD_printf("--> BTN_1 CLICK\n");
       if (I3C_IsDAACompleted() == HAL_OK) {
-        I3C_StoreData(0x1234, 16);
+        uint32_t ulSendBytes = 8;
+        for (uint32_t i = 0; i < ulSendBytes; i++) {
+          Task_Tx_Buffer[i] = ucFirstSendDataValue + i;
+        }
+
+        I3C_StoreCmd(0x1234, Task_Tx_Buffer, 8);
+
+        ucFirstSendDataValue += 0x20;
       } else {
         I3C_StartDAA();
       }
@@ -37,7 +47,7 @@ static void processInputEvent(uint8_t ucEvent) {
 
     case EVENT_LONG_CLICK: {
       SWD_printf("--> BTN_1 LONG CLICK\n");
-      I3C_Load_Cmd(0x1234, 16);
+      I3C_LoadCmd(0x1234, 8);
       break;
     }
 
@@ -138,7 +148,12 @@ static void vAppTaskFunction(void *pvParameters) {
       }
 
       case EVENT_TRANSFER_COMPLETE: {
-        I3C_TransferComplete();
+        uint8_t* pRxBuffer;
+        uint32_t ulRxByteCount;
+        I3C_TransferComplete(&pRxBuffer, &ulRxByteCount);
+        if (ulRxByteCount > 0) {
+          SWD_printf("Data received.\n");
+        }
         break;
       }
 

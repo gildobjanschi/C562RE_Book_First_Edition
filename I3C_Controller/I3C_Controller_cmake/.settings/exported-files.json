@@ -1,7 +1,7 @@
 {
   "disclaimer": "Do not modify this file as it is used by STM32CubeMX2 to determine what and how to update your project with new configuration",
   "version": "1.0.0",
-  "timestamp": "2026-08-20T16:33:38.284Z",
+  "timestamp": "2026-08-23T13:02:08.259Z",
   "files": [
     {
       "fileGroup": "project_file",
@@ -311,7 +311,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "8f21c3fc3457cee39e36be7f43f3ebb48cbdfebf3acdd2f5e175e83fe75ecdd3"
+        "digest": "1cdb09ba087d0cf8d9c2f9e74446f6488efb5a065572a362da14519854b5da12"
       },
       "file": "generated/hal/mx_i3c1.c"
     },
