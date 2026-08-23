@@ -9,7 +9,10 @@
 #include "../../Shared/Debug/swd_printf.h"
 #include "i3c_target.h"
 
-/* Custom Command codes are in the range 0xC0 to 0xDF */
+/* Custom Command codes are in the range 0xC0 to 0xDF.
+ * These commands must match the defines with the same name on the Controller
+ * side.
+ */
 #define I3C_STORE_CMD             0xC0
 #define I3C_LOAD_CMD              0xC1
 
@@ -19,9 +22,11 @@ static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c);
 static void I3C_RxCompleteCallback(hal_i3c_handle_t *hi3c);
 static void I3C_TxCompleteCallback(hal_i3c_handle_t *hi3c);
 
-#define RX_BUFFER_SIZE 32
-static uint8_t I3C_RxBuffer[RX_BUFFER_SIZE];
-#define TX_BUFFER_SIZE 32
+// The maximum Rx length
+static uint32_t I3C_Max_Rx_Buffer_Length = 0;
+static uint8_t* I3C_RxBuffer = NULL;
+// The maximum Tx length
+static uint32_t I3C_Max_Tx_Buffer_Length = 0;
 
 // The I3C state FLAGS
 typedef enum {
@@ -41,11 +46,11 @@ static I3C_STATE I3C_State;
 #define MEM_SIZE 0x4000U
 static uint8_t pMem[MEM_SIZE];
 
-static volatile QueueHandle_t sI3CNotifyQueue;
-static volatile QueueHandle_t sI3CIntQueue;
-
 static uint8_t I3C_ucLastCommand;
 static uint32_t I3C_ulLastAddress;
+
+static volatile QueueHandle_t sI3CNotifyQueue;
+static volatile QueueHandle_t sI3CIntQueue;
 
 static void I3C_Reset();
 static hal_status_t I3C_ReadCommand();
@@ -129,38 +134,11 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
       return status;
     }
 
+    SWD_printf("Dynamic address: %02xh. ", CCCInfo.dynamic_addr);
     // DAA completed
     if (CCCInfo.dynamic_addr != 0) {
       I3C_State |= NOTIFICATION_DAU_FLAG;
-
-      SWD_printf("Dynamic address complete: %02xh.\n", CCCInfo.dynamic_addr);
-    } else {
-      SWD_printf("Dynamic address cleared.\n");
     }
-  }
-
-  // SETMRL: Dictates the maximum number of bytes a Target can return to an
-  // I3C Controller in a single read transfer.
-  if ((ulNotifyId & HAL_I3C_TGT_NOTIFICATION_SETMRL) ==
-      HAL_I3C_TGT_NOTIFICATION_SETMRL) {
-    status = HAL_I3C_GetCCCInfo(hI3C, HAL_I3C_TGT_NOTIFICATION_SETMRL,
-        &CCCInfo);
-    if (status != HAL_OK) {
-      // Error occurred while retrieving CCC info.
-      SWD_printf("HAL_I3C_GetCCCInfo SETMRL failed.\n");
-      return status;
-    }
-
-    if (CCCInfo.max_read_data_size_byte > TX_BUFFER_SIZE) {
-      // Error occurred while retrieving CCC info.
-      SWD_printf("Error: MRL > TX_BUFFER_SIZE.\n");
-      return status;
-    } else {
-      SWD_printf("SETMRL complete: %d.\n", CCCInfo.max_read_data_size_byte);
-    }
-
-    // SETMRL completed
-    I3C_State |= NOTIFICATION_MRL_FLAG;
   }
 
   // SETMWL: Dictates the maximum number of bytes an I3C Controller can send to
@@ -175,16 +153,36 @@ hal_status_t I3C_Notify(uint32_t ulNotifyId) {
       return status;
     }
 
-    if (CCCInfo.max_write_data_size_byte > RX_BUFFER_SIZE) {
-      // Error occurred while retrieving CCC info.
-      SWD_printf("Error: MWL > RX_BUFFER_SIZE.\n");
-      return status;
-    } else {
-      SWD_printf("SETMWL complete: %d.\n", CCCInfo.max_write_data_size_byte);
+    SWD_printf("SETMWL: %02xh. ", CCCInfo.max_write_data_size_byte);
+    // Allocate the receive buffer
+    I3C_Max_Rx_Buffer_Length = CCCInfo.max_write_data_size_byte;
+    if (I3C_RxBuffer != NULL) {
+      vPortFree(I3C_RxBuffer);
+      I3C_RxBuffer = NULL;
     }
+    I3C_RxBuffer = pvPortMalloc(I3C_Max_Rx_Buffer_Length);
 
     // SETMWL completed
     I3C_State |= NOTIFICATION_MWL_FLAG;
+  }
+
+  // SETMRL: Dictates the maximum number of bytes a Target can return to an
+  // I3C Controller in a single target read/controller write transfer.
+  if ((ulNotifyId & HAL_I3C_TGT_NOTIFICATION_SETMRL) ==
+      HAL_I3C_TGT_NOTIFICATION_SETMRL) {
+    status = HAL_I3C_GetCCCInfo(hI3C, HAL_I3C_TGT_NOTIFICATION_SETMRL,
+        &CCCInfo);
+    if (status != HAL_OK) {
+      // Error occurred while retrieving CCC info.
+      SWD_printf("HAL_I3C_GetCCCInfo SETMRL failed.\n");
+      return status;
+    }
+
+    SWD_printf("SETMRL: %02xh.\n", CCCInfo.max_read_data_size_byte);
+    I3C_Max_Tx_Buffer_Length = CCCInfo.max_read_data_size_byte;
+
+    // SETMRL completed
+    I3C_State |= NOTIFICATION_MRL_FLAG;
   }
 
   if (I3C_State == (NOTIFICATION_DAU_FLAG | NOTIFICATION_MRL_FLAG |
@@ -232,6 +230,14 @@ hal_status_t I3C_RxComplete() {
         return HAL_BUSY;
       }
 
+      if (ulLength > I3C_Max_Tx_Buffer_Length) {
+        SWD_printf("I3C_RxComplete: ulLength (%lx) > "
+            "I3C_Max_Tx_Buffer_Length (%lx)\n",
+            ulLength, I3C_Max_Tx_Buffer_Length);
+        return HAL_ERROR;
+      }
+
+      // Check if we would end up reading beyond the end of the buffer.
       uint32_t ulBytesCopy = (I3C_ulLastAddress + ulLength < MEM_SIZE) ?
           ulLength : MEM_SIZE - I3C_ulLastAddress;
 
@@ -247,7 +253,7 @@ hal_status_t I3C_RxComplete() {
 
       I3C_State = STATE_TX_PAYLOAD_PENDING;
 
-      SWD_printf("LOAD CMD [%d bytes] @%02x: ", ulLength, I3C_ulLastAddress);
+      SWD_printf("LOAD CMD [%d bytes] @%02x: ", ulBytesCopy, I3C_ulLastAddress);
       for (uint32_t i = 0; i < ulBytesCopy; i++) {
         SWD_printf("%02x ", (pMem + I3C_ulLastAddress)[i]);
       }
@@ -268,6 +274,8 @@ hal_status_t I3C_RxComplete() {
     switch (I3C_ucLastCommand) {
     case I3C_STORE_CMD: {
       hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
+
+      // Check if we would end up writing beyond the end of the buffer.
       uint32_t ulBytesReceived = hI3C->data_size_byte;
       uint32_t ulBytesCopy = (I3C_ulLastAddress + ulBytesReceived < MEM_SIZE) ?
               ulBytesReceived : MEM_SIZE - I3C_ulLastAddress;
@@ -349,7 +357,7 @@ static void I3C_RxCompleteCallback(hal_i3c_handle_t *hi3c) {
  * @param hi3c The I3C handle
  */
 static void I3C_TxCompleteCallback(hal_i3c_handle_t *hi3c) {
-  SWD_printf("-- I3C_TxCompleteCallback --\n");
+  //SWD_printf("-- I3C_TxCompleteCallback --\n");
   uint8_t ucEvent = EVENT_TX_COMPLETE;
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
   if (xQueueSendFromISR(sI3CIntQueue, &ucEvent,
@@ -407,8 +415,10 @@ static hal_status_t I3C_ReadPayload(uint32_t ulPayloadLength) {
     return HAL_BUSY;
   }
 
-  if (ulPayloadLength > RX_BUFFER_SIZE) {
-    SWD_printf("I3C_ReadPayload: Rx payload to large: %ld.\n", ulPayloadLength);
+  if (ulPayloadLength > I3C_Max_Rx_Buffer_Length) {
+    SWD_printf("I3C_RxComplete: ulPayloadLength (%lx) > "
+        "I3C_Max_Rx_Buffer_Length (%lx)\n",
+        ulPayloadLength, I3C_Max_Rx_Buffer_Length);
     return HAL_ERROR;
   }
 
