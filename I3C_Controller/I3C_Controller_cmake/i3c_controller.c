@@ -296,6 +296,8 @@ hal_status_t I3C_DirectCCCTransact() {
     return status;
   }
 
+  I3C_State |= CCC_PENDING;
+
   return HAL_OK;
 }
 
@@ -348,8 +350,6 @@ hal_status_t I3C_DAAComplete() {
   }
 
   I3C_DirectCCCTransact();
-
-  I3C_State |= CCC_PENDING;
 
   return HAL_OK;
 }
