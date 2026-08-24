@@ -349,9 +349,7 @@ hal_status_t I3C_DAAComplete() {
     return status;
   }
 
-  I3C_DirectCCCTransact();
-
-  return HAL_OK;
+  return I3C_DirectCCCTransact();
 }
 
 /*
