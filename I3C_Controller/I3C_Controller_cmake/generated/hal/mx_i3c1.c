@@ -63,26 +63,6 @@ hal_i3c_handle_t *mx_i3c1_init(void)
     return NULL;
   }
 
-  /**
-    * Set the SCL clock stalling cycles (converted from nanoseconds to cycles using kernel clock frequency).
-    * stall_time_cycle = (stall_time_ns * input_frequency_hz / 1000000000), rounded up to the next integer
-    * stall_time_cycle = (1020 * 144000000 / 1000000000), rounded up = 147U
-    */
-  if (HAL_I3C_CTRL_SetConfigStallTime(&hI3C1, 147U, HAL_I3C_CTRL_STALL_TX | HAL_I3C_CTRL_STALL_RX) != HAL_OK)
-  {
-    return NULL;
-  }
-
-  /* Set the FIFO configuration */
-  hal_i3c_ctrl_fifo_config_t i3c_ctrl_fifo_config;
-  i3c_ctrl_fifo_config.tx_fifo_threshold = HAL_I3C_TX_FIFO_THRESHOLD_1_8;
-  i3c_ctrl_fifo_config.rx_fifo_threshold = HAL_I3C_RX_FIFO_THRESHOLD_1_8;
-  i3c_ctrl_fifo_config.ctrl_fifo         = HAL_I3C_CTRL_FIFO_CONTROL_ONLY;
-  if (HAL_I3C_CTRL_SetConfigFifo(&hI3C1, &i3c_ctrl_fifo_config) != HAL_OK)
-  {
-    return NULL;
-  }
-
   /* ### I3C1 GPIO Configuration ########################### */
   /* GPIO Clocks activation */
   HAL_RCC_GPIOC_EnableClock();

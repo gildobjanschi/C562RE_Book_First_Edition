@@ -509,7 +509,7 @@
     },
     "HAL_CORTEX_PROJECT_USE_HAL": {
       "name": "HAL_CORTEX_PROJECT_USE_HAL",
-      "value": 9,
+      "value": 8,
       "originator": "sw-config-semaphore"
     },
     "HAL_ICACHE_CORE_ENABLED": {
@@ -601,11 +601,6 @@
       "name": "RCC_PROJECT_HSE",
       "value": true,
       "originator": "826a8632-2ccb-4dbb-ab64-92eca3b862e3"
-    },
-    "HAL_EXTI_SYSTEM_GPIO_STANDARD_EXTI": {
-      "name": "HAL_EXTI_SYSTEM_GPIO_STANDARD_EXTI",
-      "value": 1,
-      "originator": "sw-config-semaphore"
     }
   }
 }"""
@@ -5539,22 +5534,12 @@ solution:
                 "ctrl_fifo_config": {
                   "tx_fifo_threshold": "1_8",
                   "rx_fifo_threshold": "1_8",
-                  "ctrl_fifo": "CONTROL_ONLY"
+                  "ctrl_fifo": "NONE"
                 },
                 "ctrl_hot_join": false,
                 "ctrl_reset_pattern": false,
                 "ctrl_sda_high_keeper": false,
-                "ctrl_stall": true,
-                "stall_config": {
-                  "stall_time": 1020,
-                  "ack": false,
-                  "ccc_tbit": false,
-                  "tx_parity": true,
-                  "rx_parity": true,
-                  "ack_i2c": false,
-                  "tx_parity_i2c": false,
-                  "rx_parity_i2c": false
-                }
+                "ctrl_stall": false
               },
               "system": {
                 "gpio": {
