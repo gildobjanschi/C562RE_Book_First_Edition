@@ -179,38 +179,6 @@ hal_status_t I3C_Init(QueueHandle_t I3CIntQueue) {
     return status;
   }
 
-  // Reset a controller transfer context.
-  status = HAL_I3C_CTRL_ResetTransferCtx(&ContextBuffers);
-  if (status != HAL_OK) {
-    SWD_printf("HAL_I3C_CTRL_ResetTransferCtx failed.\n");
-    return status;
-  }
-
-  // Initialize the transfer context.
-  status = HAL_I3C_CTRL_InitTransferCtxTc(&ContextBuffers, ControlBuffer,
-      HAL_I3C_GET_CTRL_BUFFER_SIZE_WORD(COUNTOF(DirectWriteRead_CCC_Descriptor),
-      HAL_I3C_CCC_DIRECT_WITHOUT_DEFBYTE_RESTART));
-  if (status != HAL_OK) {
-    SWD_printf("HAL_I3C_CTRL_InitTransferCtxTc failed.\n");
-    return status;
-  }
-
-  // Initialize the transfer context with Tx data.
-  status = HAL_I3C_CTRL_InitTransferCtxTx(&ContextBuffers,
-      (uint8_t *)&DirectWriteCCC, DIRECT_WRITE_CCC_SIZE);
-  if (status != HAL_OK) {
-    SWD_printf("HAL_I3C_CTRL_InitTransferCtxTx failed.\n");
-    return status;
-  }
-
-  // Initialize the transfer context with Rx data.
-  status = HAL_I3C_CTRL_InitTransferCtxRx(&ContextBuffers,
-      I3C_RxBuffer, DIRECT_READ_DATA_SIZE);
-  if (status != HAL_OK) {
-    SWD_printf("HAL_I3C_CTRL_InitTransferCtxRx failed.\n");
-    return status;
-  }
-
   sI3CIntQueue = I3CIntQueue;
 
   // Reset the state
@@ -277,6 +245,61 @@ hal_status_t I3C_IsDAACompleted() {
 }
 
 /*
+ * @brief: Perform the Direct CCC transactions.
+ */
+hal_status_t I3C_DirectCCCTransact() {
+  hal_status_t status;
+  // Reset a controller transfer context.
+  status = HAL_I3C_CTRL_ResetTransferCtx(&ContextBuffers);
+  if (status != HAL_OK) {
+    SWD_printf("HAL_I3C_CTRL_ResetTransferCtx failed.\n");
+    return status;
+  }
+
+  // Initialize the transfer context.
+  status = HAL_I3C_CTRL_InitTransferCtxTc(&ContextBuffers, ControlBuffer,
+      HAL_I3C_GET_CTRL_BUFFER_SIZE_WORD(COUNTOF(DirectWriteRead_CCC_Descriptor),
+      HAL_I3C_CCC_DIRECT_WITHOUT_DEFBYTE_RESTART));
+  if (status != HAL_OK) {
+    SWD_printf("HAL_I3C_CTRL_InitTransferCtxTc failed.\n");
+    return status;
+  }
+
+  // Initialize the transfer context with Tx data.
+  status = HAL_I3C_CTRL_InitTransferCtxTx(&ContextBuffers,
+      (uint8_t *)&DirectWriteCCC, DIRECT_WRITE_CCC_SIZE);
+  if (status != HAL_OK) {
+    SWD_printf("HAL_I3C_CTRL_InitTransferCtxTx failed.\n");
+    return status;
+  }
+
+  // Initialize the transfer context with Rx data.
+  status = HAL_I3C_CTRL_InitTransferCtxRx(&ContextBuffers,
+      I3C_RxBuffer, DIRECT_READ_DATA_SIZE);
+  if (status != HAL_OK) {
+    SWD_printf("HAL_I3C_CTRL_InitTransferCtxRx failed.\n");
+    return status;
+  }
+
+  status = HAL_I3C_CTRL_BuildTransferCtxCCC(&ContextBuffers,
+      DirectWriteRead_CCC_Descriptor, COUNTOF(DirectWriteRead_CCC_Descriptor),
+      HAL_I3C_CCC_DIRECT_WITHOUT_DEFBYTE_RESTART);
+  if (status != HAL_OK) {
+    SWD_printf("HAL_I3C_CTRL_BuildTransferCtxCCC failed.\n");
+    return status;
+  }
+
+  hal_i3c_handle_t *hI3C = mx_i3c1_gethandle();
+  status = HAL_I3C_CTRL_Transfer_IT(hI3C, &ContextBuffers);
+  if (status != HAL_OK) {
+    SWD_printf("HAL_I3C_CTRL_Transfer_IT failed.\n");
+    return status;
+  }
+
+  return HAL_OK;
+}
+
+/*
  * @brief: Dynamic Address Assignment complete handler
  */
 hal_status_t I3C_DAAComplete() {
@@ -324,19 +347,7 @@ hal_status_t I3C_DAAComplete() {
     return status;
   }
 
-  status = HAL_I3C_CTRL_BuildTransferCtxCCC(&ContextBuffers,
-      DirectWriteRead_CCC_Descriptor, COUNTOF(DirectWriteRead_CCC_Descriptor),
-      HAL_I3C_CCC_DIRECT_WITHOUT_DEFBYTE_RESTART);
-  if (status != HAL_OK) {
-    SWD_printf("HAL_I3C_CTRL_BuildTransferCtxCCC failed.\n");
-    return status;
-  }
-
-  status = HAL_I3C_CTRL_Transfer_IT(hI3C, &ContextBuffers);
-  if (status != HAL_OK) {
-    SWD_printf("HAL_I3C_CTRL_Transfer_IT failed.\n");
-    return status;
-  }
+  I3C_DirectCCCTransact();
 
   I3C_State |= CCC_PENDING;
 
