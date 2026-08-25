@@ -507,7 +507,8 @@ hal_status_t I3C_ReadPayload() {
 /*
  * @brief: Transfer complete handler
  *
- * @param pRxBuffer
+ * @param ppRxBuffer Pointer to the pointer receive buffer
+ * @param pulRxByteCount Pointer to the number of bytes in the receive buffer
  */
 hal_status_t I3C_TransferComplete(uint8_t** ppRxBuffer,
     uint32_t* pulRxByteCount) {
