@@ -125,7 +125,7 @@ typedef enum {
 
 static I3C_STATE I3C_State;
 
-static volatile uint64_t ulTarget_bcr_dcr_pid;
+static volatile uint64_t ulTargetProvisionedID;
 static uint16_t I3C_uwLastAddress;
 static uint32_t I3C_ulLastLength;
 
@@ -219,7 +219,8 @@ hal_status_t I3C_StartDAA() {
 static void I3C_DynAddrRequestCallback(hal_i3c_handle_t *hi3c,
     uint64_t targetPayload) {
   SWD_printf("-- Target requested DA; payload: %x\n", targetPayload);
-  ulTarget_bcr_dcr_pid = targetPayload;
+  ulTargetProvisionedID = targetPayload;
+  // Start the I3C transaction that assigns the address to the target.
   HAL_I3C_CTRL_SetDynAddr(hi3c, DEVICE_TARGET_ADDR);
 }
 
@@ -310,11 +311,6 @@ hal_status_t I3C_DAAComplete() {
   I3C_State &= ~DAA_PENDING;
   I3C_State |= DAA_COMPLETE;
   // Configure the controller device table entry for this target.
-  // This per-target configuration is required to handle IBI correctly:
-  // - identify the target (device index + dynamic address)
-  // - determine whether to accept (ACK) its IBI requests
-  // - indicate whether an IBI payload is supported/expected
-  uint32_t bcr = HAL_I3C_GET_BCR(ulTarget_bcr_dcr_pid);
   hal_i3c_ctrl_device_config_t DeviceConf;
 
   // Application target identifier.
@@ -323,19 +319,20 @@ hal_status_t I3C_DAAComplete() {
   // Target dynamic address (assigned during ENTDAA).
   DeviceConf.tgt_dynamic_addr = DEVICE_TARGET_ADDR;
 
-  // IBI capability (from BCR).
+  uint32_t ulBCR = HAL_I3C_GET_BCR(ulTargetProvisionedID);
+  // Determine whether to accept (ACK) its IBI requests
   DeviceConf.ibi_ack =
-        (HAL_I3C_GET_IBI_CAPABLE(bcr) == HAL_I3C_IBI_REQ_ENABLED)
+        (HAL_I3C_GET_IBI_CAPABLE(ulBCR) == HAL_I3C_IBI_REQ_ENABLED)
         ? HAL_I3C_CTRL_IBI_ACK_ENABLED : HAL_I3C_CTRL_IBI_ACK_DISABLED;
 
-  // IBI payload capability (from BCR).
+  // Indicate whether an IBI payload is supported/expected
   DeviceConf.ibi_payload =
-        (HAL_I3C_GET_IBI_PAYLOAD(bcr) == HAL_I3C_IBI_PAYLOAD_ENABLED)
+        (HAL_I3C_GET_IBI_PAYLOAD(ulBCR) == HAL_I3C_IBI_PAYLOAD_ENABLED)
         ? HAL_I3C_CTRL_IBI_PAYLOAD_ENABLED : HAL_I3C_CTRL_IBI_PAYLOAD_DISABLED;
 
-  // Controller role request capability (from BCR).
+  // Controller role request capability.
   DeviceConf.ctrl_role_req_ack =
-        (HAL_I3C_GET_CTRL_ROLE_CAPABLE(bcr) == HAL_I3C_CTRL_ROLE_ENABLED)
+        (HAL_I3C_GET_CTRL_ROLE_CAPABLE(ulBCR) == HAL_I3C_CTRL_ROLE_ENABLED)
         ? HAL_I3C_CTRL_ROLE_ACK_ENABLED : HAL_I3C_CTRL_ROLE_ACK_DISABLED;
 
   // No forced STOP for this target.
