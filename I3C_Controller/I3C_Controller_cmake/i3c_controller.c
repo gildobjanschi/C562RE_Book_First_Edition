@@ -85,7 +85,7 @@ static hal_i3c_private_desc_t Store_Payload_Descriptor[] = {
 // ---------------- Load command ----------------------
 #define LOAD_CMD_TX_BYTES 4U
 
-static hal_i3c_private_desc_t Load_CMD_Descriptor[1] = {
+static hal_i3c_private_desc_t Load_CMD_Descriptor[] = {
     {DEVICE_TARGET_ADDR, LOAD_CMD_TX_BYTES, HAL_I3C_DIRECTION_WRITE},
 };
 
@@ -98,7 +98,7 @@ static Load_CMD = {
 };
 
 // ---------------- Load payload ----------------------
-static hal_i3c_private_desc_t Load_Payload_Descriptor[1] = {
+static hal_i3c_private_desc_t Load_Payload_Descriptor[] = {
     {DEVICE_TARGET_ADDR, 0, HAL_I3C_DIRECTION_READ},
 };
 // ----------------------------------------------------
