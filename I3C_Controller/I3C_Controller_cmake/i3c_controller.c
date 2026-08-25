@@ -16,35 +16,29 @@ static void I3C_DynAddrRequestCallback(hal_i3c_handle_t *hi3c,
 static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c);
 static void I3C_TransferCompleteCallback(hal_i3c_handle_t *hi3c);
 
+/* Buffers used for transactions */
 static uint32_t ControlBuffer[20];
 static uint8_t I3C_RxBuffer[RX_BUFFER_SIZE];
 static uint8_t I3C_TxBuffer[TX_BUFFER_SIZE];
 
 /* Target device address for I3C communication. */
 #define DEVICE_TARGET_ADDR        0x32U
-/* Direct Command code */
+
+/* Direct Command codes */
 #define I3C_DIRECT_SETMWL_CCC     0x89
 #define I3C_DIRECT_SETMRL_CCC     0x8A
 #define I3C_DIRECT_GETMWL_CCC     0x8B
 #define I3C_DIRECT_GETMRL_CCC     0x8C
-#define I3C_DIRECT_GETPID_CCC     0x8D
-#define I3C_DIRECT_GETBCR_CCC     0x8E
-#define I3C_DIRECT_GETDCR_CCC     0x8F
-#define I3C_DIRECT_GETSTATUS_CCC  0x90
 
 // ---------------- CCC ----------------------
 /* Descriptor array for direct I3C CCC transactions write and
-   read to the target device
+   read to the target device.
  */
-static hal_i3c_ccc_desc_t DirectWriteRead_CCC_Descriptor[8] = {
+static hal_i3c_ccc_desc_t Direct_CCC_Descriptor[] = {
   {DEVICE_TARGET_ADDR, I3C_DIRECT_SETMWL_CCC,   2U, HAL_I3C_DIRECTION_WRITE},
   {DEVICE_TARGET_ADDR, I3C_DIRECT_GETMWL_CCC,   2U, HAL_I3C_DIRECTION_READ},
   {DEVICE_TARGET_ADDR, I3C_DIRECT_SETMRL_CCC,   2U, HAL_I3C_DIRECTION_WRITE},
-  {DEVICE_TARGET_ADDR, I3C_DIRECT_GETMRL_CCC,   2U, HAL_I3C_DIRECTION_READ},
-  {DEVICE_TARGET_ADDR, I3C_DIRECT_GETPID_CCC,   6U, HAL_I3C_DIRECTION_READ},
-  {DEVICE_TARGET_ADDR, I3C_DIRECT_GETBCR_CCC,   1U, HAL_I3C_DIRECTION_READ},
-  {DEVICE_TARGET_ADDR, I3C_DIRECT_GETDCR_CCC,   1U, HAL_I3C_DIRECTION_READ},
-  {DEVICE_TARGET_ADDR, I3C_DIRECT_GETSTATUS_CCC,1U, HAL_I3C_DIRECTION_READ}
+  {DEVICE_TARGET_ADDR, I3C_DIRECT_GETMRL_CCC,   2U, HAL_I3C_DIRECTION_READ}
 };
 
 // Structure holding associated data for SETMRL and SETMWL CCC write command
@@ -62,7 +56,7 @@ DirectWriteCCC = {
 #define DIRECT_WRITE_CCC_SIZE     (2+2)
 // Size of the data to be received from the target device.
 // Sum up all the read bytes from the DirectWriteRead_CCC_Descriptor.
-#define DIRECT_READ_DATA_SIZE     13U
+#define DIRECT_READ_DATA_SIZE     (2+2)
 
 // Custom Command codes are in the range 0xC0 to 0xDF
 #define I3C_STORE_CMD             0xC0
@@ -71,7 +65,7 @@ DirectWriteCCC = {
 // ---------------- Store command ----------------------
 #define STORE_CMD_TX_BYTES 4U
 
-static hal_i3c_private_desc_t Store_CMD_Descriptor[1] = {
+static hal_i3c_private_desc_t Store_CMD_Descriptor[] = {
     {DEVICE_TARGET_ADDR, STORE_CMD_TX_BYTES, HAL_I3C_DIRECTION_WRITE},
 };
 
@@ -84,7 +78,7 @@ static Store_CMD = {
 };
 
 // ---------------- Store payload ----------------------
-static hal_i3c_private_desc_t Store_Payload_Descriptor[1] = {
+static hal_i3c_private_desc_t Store_Payload_Descriptor[] = {
     {DEVICE_TARGET_ADDR, 0, HAL_I3C_DIRECTION_WRITE},
 };
 
@@ -133,9 +127,6 @@ static volatile QueueHandle_t sI3CIntQueue;
 
 /* Size of the Tx Buffer in bytes. */
 #define COUNTOF(arr) (sizeof(arr) / sizeof((arr)[0]))
-
-/* Forward function declarations */
-static void PrintCCCResults();
 
 /*
  * @brief:  Initialize I3C
@@ -259,7 +250,7 @@ hal_status_t I3C_DirectCCCTransact() {
 
   // Initialize the transfer context.
   status = HAL_I3C_CTRL_InitTransferCtxTc(&ContextBuffers, ControlBuffer,
-      HAL_I3C_GET_CTRL_BUFFER_SIZE_WORD(COUNTOF(DirectWriteRead_CCC_Descriptor),
+      HAL_I3C_GET_CTRL_BUFFER_SIZE_WORD(COUNTOF(Direct_CCC_Descriptor),
       HAL_I3C_CCC_DIRECT_WITHOUT_DEFBYTE_RESTART));
   if (status != HAL_OK) {
     SWD_printf("HAL_I3C_CTRL_InitTransferCtxTc failed.\n");
@@ -283,7 +274,7 @@ hal_status_t I3C_DirectCCCTransact() {
   }
 
   status = HAL_I3C_CTRL_BuildTransferCtxCCC(&ContextBuffers,
-      DirectWriteRead_CCC_Descriptor, COUNTOF(DirectWriteRead_CCC_Descriptor),
+      Direct_CCC_Descriptor, COUNTOF(Direct_CCC_Descriptor),
       HAL_I3C_CCC_DIRECT_WITHOUT_DEFBYTE_RESTART);
   if (status != HAL_OK) {
     SWD_printf("HAL_I3C_CTRL_BuildTransferCtxCCC failed.\n");
@@ -526,7 +517,33 @@ hal_status_t I3C_TransferComplete(uint8_t** ppRxBuffer,
   if ((I3C_State & CCC_PENDING) == CCC_PENDING) {
     I3C_State &= ~CCC_PENDING;
 
-    PrintCCCResults();
+    /* CCC names used by PrintCCCResults. */
+    char *CommandCode[] = {
+      "GETMWL",
+      "GETMRL",
+    };
+
+    /* Array of bytes received for each GET* CCC above. */
+    uint8_t CommandCodeSize[] = {2U, 2U};
+    uint8_t ucNumCommands = (uint8_t)COUNTOF(CommandCodeSize);
+
+    SWD_printf("Direct CCC results: ");
+    uint8_t ucOffset = 0;
+    for (uint8_t i = 0; i < ucNumCommands; i++) {
+      SWD_printf("%s = ", CommandCode[i]);
+
+      for (uint8_t j = 0; j < CommandCodeSize[i]; j++) {
+        SWD_printf("%x", I3C_RxBuffer[ucOffset + j]);
+      }
+      SWD_printf("h");
+      ucOffset += CommandCodeSize[i];
+
+      if (i < (uint8_t)(ucNumCommands - 1U)) {
+        SWD_printf(", ");
+      }
+    }
+
+    SWD_printf(".\n");
   } else if ((I3C_State & STORE_CMD_PENDING) == STORE_CMD_PENDING) {
     I3C_State &= ~STORE_CMD_PENDING;
 
@@ -584,39 +601,3 @@ static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c) {
   }
 }
 
-/*
- * @brief: Prints the results of received CCC command responses.
- */
-static void PrintCCCResults() {
-  /* CCC names used by PrintCCCResults() (trace only). */
-  char *CommandCode[] = {
-    "GETMWL",
-    "GETMRL",
-    "GETPID",
-    "GETBCR",
-    "GETDCR",
-    "GETSTATUS"
-  };
-
-  /* Bytes received for each GET* CCC above (for debug message only).
-   * Sum must match DATA_SIZE. */
-  uint8_t CommandCodeSize[] = {2U, 2U, 6U, 1U, 1U, 1U};
-  uint8_t numCommands = (uint8_t)COUNTOF(CommandCodeSize);
-
-  uint8_t offset = 0;
-  for (uint8_t i = 0; i < numCommands; i++) {
-    SWD_printf("%s = ", CommandCode[i]);
-
-    for (uint8_t j = 0; j < CommandCodeSize[i]; j++) {
-      SWD_printf("%x", I3C_RxBuffer[offset + j]);
-    }
-    SWD_printf("h");
-    offset += CommandCodeSize[i];
-
-    if (i < (uint8_t)(numCommands - 1U)) {
-      SWD_printf(", ");
-    }
-  }
-
-  SWD_printf(".\n");
-}
