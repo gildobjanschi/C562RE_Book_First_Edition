@@ -12,7 +12,7 @@
 // Interrupt callback
 static void I3C_DynAddrCompleteCallback(hal_i3c_handle_t *hi3c);
 static void I3C_DynAddrRequestCallback(hal_i3c_handle_t *hi3c,
-    uint64_t targetPayload);
+    uint64_t ullTargetPayload);
 static void I3C_ErrorCallback(hal_i3c_handle_t *hi3c);
 static void I3C_TransferCompleteCallback(hal_i3c_handle_t *hi3c);
 
@@ -119,7 +119,7 @@ typedef enum {
 
 static I3C_STATE I3C_State;
 
-static volatile uint64_t ulTargetProvisionedID;
+static volatile uint64_t ullTargetProvisionedID_BCR_DCR;
 static uint16_t I3C_uwLastAddress;
 static uint32_t I3C_ulLastLength;
 
@@ -205,12 +205,14 @@ hal_status_t I3C_StartDAA() {
  * @brief: Dynamic Address Assignment target request IRQ callback
  *
  * @param hi3c The I3C handle
- * @param targetPayload The target payload
+ * @param ullTargetPayload The target payload
  */
 static void I3C_DynAddrRequestCallback(hal_i3c_handle_t *hi3c,
-    uint64_t targetPayload) {
-  SWD_printf("-- Target requested DA; payload: %x\n", targetPayload);
-  ulTargetProvisionedID = targetPayload;
+    uint64_t ullTargetPayload) {
+  uint32_t tpl = ullTargetPayload >> 32;
+  uint32_t tph = (uint32_t)ullTargetPayload;
+  SWD_printf("-- Target requested DA; payload: %X%X\n", tpl, tph);
+  ullTargetProvisionedID_BCR_DCR = ullTargetPayload;
   // Start the I3C transaction that assigns the address to the target.
   HAL_I3C_CTRL_SetDynAddr(hi3c, DEVICE_TARGET_ADDR);
 }
@@ -310,7 +312,7 @@ hal_status_t I3C_DAAComplete() {
   // Target dynamic address (assigned during ENTDAA).
   DeviceConf.tgt_dynamic_addr = DEVICE_TARGET_ADDR;
 
-  uint32_t ulBCR = HAL_I3C_GET_BCR(ulTargetProvisionedID);
+  uint32_t ulBCR = HAL_I3C_GET_BCR(ullTargetProvisionedID_BCR_DCR);
   // Determine whether to accept (ACK) its IBI requests
   DeviceConf.ibi_ack =
         (HAL_I3C_GET_IBI_CAPABLE(ulBCR) == HAL_I3C_IBI_REQ_ENABLED)
