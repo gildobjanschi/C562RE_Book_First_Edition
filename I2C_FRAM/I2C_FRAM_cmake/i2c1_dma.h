@@ -16,7 +16,7 @@ extern "C" {
 #define EVENT_RX_COMPLETE  2
 #define EVENT_ERROR        3
 
-hal_status_t I2C1_Init(QueueHandle_t I2cQueue, uint32_t ulDeviceAddress);
+hal_status_t I2C1_Init(QueueHandle_t I2CQueue, uint32_t ulDeviceAddress);
 uint32_t I2C1_GetWriteBufferSize();
 uint32_t I2C1_GetReadBufferSize();
 hal_status_t I2C1_Write(uint16_t uwAddress, uint8_t* pDataBuffer,
