@@ -44,13 +44,13 @@ static void I2C1_TransferErrorCallback(hal_i2c_handle_t *hI2C);
 /*
  * @brief  Initialize I2C1
  *
- * @param I2cQueue The queue used to notify of interrupts
+ * @param I2CQueue The queue used to notify of interrupts
  * @param pCallback Pointer to the application state machine
  * @param ulDeviceAddress The I2C devices shifted address
  *
  * @retval HAL_OK if it succeeds
  */
-hal_status_t I2C1_Init(QueueHandle_t I2cQueue, hal_i2c1_sm_cb_t pCallback,
+hal_status_t I2C1_Init(QueueHandle_t I2CQueue, hal_i2c1_sm_cb_t pCallback,
     uint32_t ulDeviceAddress) {
   hal_status_t status;
   hal_i2c_handle_t *hI2C = mx_i2c1_i2c_gethandle();
@@ -88,7 +88,7 @@ hal_status_t I2C1_Init(QueueHandle_t I2cQueue, hal_i2c1_sm_cb_t pCallback,
   // Store the pointer to the application state machine
   I2C1_pAppStateMachine = pCallback;
 
-  sI2C1Queue = I2cQueue;
+  sI2C1Queue = I2CQueue;
   return HAL_OK;
 }
 

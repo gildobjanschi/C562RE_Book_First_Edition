@@ -61,7 +61,7 @@ static hal_status_t I3C_WritePayload(uint32_t ulPayloadLength);
  * @brief  Initialize I3C
  *
  * @param I3CNotifyQueue The queue for notifying the task of events
- * @param I3cIntQueue The queue for notifying of interrupt events
+ * @param I3CIntQueue The queue for notifying of interrupt events
  *
  * @retval HAL_OK if it succeeds
  */

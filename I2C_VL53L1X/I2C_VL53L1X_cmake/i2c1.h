@@ -21,7 +21,7 @@ extern "C" {
 typedef  hal_status_t (*hal_i2c1_sm_cb_t)(uint8_t* pRxBuffer,
     uint32_t ulRxBytes, uint16_t *puwDistance);
 
-hal_status_t I2C1_Init(QueueHandle_t I2cQueue, hal_i2c1_sm_cb_t pCallback,
+hal_status_t I2C1_Init(QueueHandle_t I2CQueue, hal_i2c1_sm_cb_t pCallback,
     uint32_t ulDeviceAddress);
 hal_status_t I2C1_Send(uint16_t uwRegisterAddr, uint8_t* pDataBuffer,
     uint32_t ulDataLength);
