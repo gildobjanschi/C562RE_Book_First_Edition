@@ -9,6 +9,9 @@
 #include "../../Shared/Utils/error_handler.h"
 #include "app_task.h"
 
+// Needed only for Experiment 3
+#define GPIO_GET_INSTANCE(instance)  ((GPIO_TypeDef *)((uint32_t)(instance)))
+
 /*
  * @brief:  The application task function
  *
