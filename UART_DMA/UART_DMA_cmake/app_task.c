@@ -176,7 +176,6 @@ static void vAppTaskFunction(void *pvParameters) {
     if (xActivatedMember == xIntUARTQueue) {
       switch (ucEvent) {
       case EVENT_USART1_RX_COMPLETE: {
-        // This instruction generates an EVENTOUT pulse on pin PC8.
         HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_SET);
         if (USART1_Rx() != HAL_OK) {
           SWD_printf("USART1_Rx error!");
