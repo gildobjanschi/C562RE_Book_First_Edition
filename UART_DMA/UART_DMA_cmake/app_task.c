@@ -176,6 +176,9 @@ static void vAppTaskFunction(void *pvParameters) {
     if (xActivatedMember == xIntUARTQueue) {
       switch (ucEvent) {
       case EVENT_USART1_RX_COMPLETE: {
+        // Enable the line of code below to simulate a full Rx FIFO
+        // which make RTS go HIGH.
+        //vTaskDelay(pdMS_TO_TICKS(1));
         HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_SET);
         if (USART1_Rx() != HAL_OK) {
           SWD_printf("USART1_Rx error!");
@@ -198,7 +201,6 @@ static void vAppTaskFunction(void *pvParameters) {
         if (USART1_Tx() != HAL_OK) {
           SWD_printf("USART1_Tx error!");
         }
-        //vTaskDelay(1);
 
         break;
       }
