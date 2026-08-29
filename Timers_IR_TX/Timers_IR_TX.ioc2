@@ -2086,31 +2086,6 @@
     "needConfigurations": [
       {
         "signal": {
-          "instance": "TIM5",
-          "name": "TIM5_CH1",
-          "type": "alternate",
-          "alternateFunctionId": "AF2"
-        },
-        "pin": {
-          "name": "PA0",
-          "position": "14",
-          "type": "gpio",
-          "powerSource": "VDD",
-          "ioStructureOptions": [
-            "t",
-            "a"
-          ],
-          "ioType": "I/O",
-          "ioStructure": "FT",
-          "index": 0,
-          "port": "A"
-        },
-        "needId": "d5a4f51b-8151-4d4f-ad8d-98c53babcc15",
-        "ownedByUser": false,
-        "pinned": false
-      },
-      {
-        "signal": {
           "instance": "DEBUG",
           "name": "DEBUG_SWDIO",
           "type": "alternate",
@@ -2176,6 +2151,32 @@
         "needId": "aad8dbed-d08f-4262-aec0-4b5fd2e83001",
         "ownedByUser": true,
         "pinned": true
+      },
+      {
+        "id": "d5a4f51b-8151-4d4f-ad8d-98c53babcc15",
+        "pin": {
+          "name": "PA0",
+          "position": "14",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "t",
+            "a"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 0,
+          "port": "A"
+        },
+        "signal": {
+          "instance": "TIM5",
+          "name": "TIM5_CH1",
+          "type": "alternate",
+          "alternateFunctionId": "AF2"
+        },
+        "needId": "d5a4f51b-8151-4d4f-ad8d-98c53babcc15",
+        "pinned": true,
+        "ownedByUser": false
       }
     ]
   },
@@ -2637,10 +2638,11 @@
       "instanceName": "CM33"
     },
     {
-      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:TIM@2.1.0#HAL CORE GPIO DMA Init and TIM",
-      "componentInstanceId": "aabfe8fa-e49e-49aa-9696-848a93aa734b",
+      "id": "d5a4f51b-8151-4d4f-ad8d-98c53babcc15",
       "needId": "d5a4f51b-8151-4d4f-ad8d-98c53babcc15",
       "softwareProjectId": "b9b4b340-2033-41d1-84c6-52cf63948801",
+      "componentInstanceId": "aabfe8fa-e49e-49aa-9696-848a93aa734b",
+      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:TIM@2.1.0#HAL CORE GPIO DMA Init and TIM",
       "signal": "TIM5_CH1",
       "instanceName": "TIM5"
     }

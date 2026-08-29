@@ -104,7 +104,7 @@ void EnableModulation(uint32_t ulDuration, uint8_t ucStart) {
     }
 
     hal_tim_handle_t *htim5 = mx_tim5_gethandle();
-    // Start TIM5 channel which operates on pin PA6.
+    // Start TIM5 channel which operates on pin PA0.
     if (HAL_TIM_OC_StartChannel(htim5, HAL_TIM_CHANNEL_1) != HAL_OK) {
       SWD_printf("HAL_TIM_OC_StartChannel failed.\n");
       return;
@@ -122,7 +122,7 @@ void EnableModulation(uint32_t ulDuration, uint8_t ucStart) {
   HAL_TIM_SetCounter(htim1, ulDuration);
 
   // Enable the output pin.
-  LL_GPIO_SetPinOutputType(GPIO_GET_INSTANCE(HAL_GPIOA), HAL_GPIO_PIN_6,
+  LL_GPIO_SetPinOutputType(GPIO_GET_INSTANCE(HAL_GPIOA), HAL_GPIO_PIN_0,
       HAL_GPIO_OUTPUT_PUSHPULL);
 }
 
@@ -133,7 +133,7 @@ void EnableModulation(uint32_t ulDuration, uint8_t ucStart) {
  */
 void DisableModulation(uint32_t ulDuration) {
   // Turn off the output pin.
-  LL_GPIO_SetPinOutputType(GPIO_GET_INSTANCE(HAL_GPIOA), HAL_GPIO_PIN_6,
+  LL_GPIO_SetPinOutputType(GPIO_GET_INSTANCE(HAL_GPIOA), HAL_GPIO_PIN_0,
       HAL_GPIO_OUTPUT_OPENDRAIN);
 
   hal_tim_handle_t *htim1 = mx_tim1_gethandle();
