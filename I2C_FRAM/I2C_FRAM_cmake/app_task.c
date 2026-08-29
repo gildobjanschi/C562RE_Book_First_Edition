@@ -32,7 +32,7 @@ static uint8_t processInputEvent(uint8_t ucEvent) {
     switch (ucEventType) {
     case EVENT_CLICK: {
       SWD_printf("--> BTN_1 CLICK\n");
-      if (I2C1_Write(1024, pWrBuffer, I2C1_GetWriteBufferSize()) == HAL_OK) {
+      if (I2C1_Write(128, pWrBuffer, I2C1_GetWriteBufferSize()) == HAL_OK) {
         return 1;
       }
 
@@ -41,7 +41,7 @@ static uint8_t processInputEvent(uint8_t ucEvent) {
 
     case EVENT_LONG_CLICK: {
       SWD_printf("--> BTN_1 LONG CLICK\n");
-      if (I2C1_Read(1024, I2C1_GetReadBufferSize()) == HAL_OK) {
+      if (I2C1_Read(128, I2C1_GetReadBufferSize()) == HAL_OK) {
         return 1;
       }
 
