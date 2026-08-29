@@ -136,11 +136,11 @@ static void USART1_RxCpltCallback(hal_uart_handle_t *hUART,
     uint32_t ulBytesReceived, hal_uart_rx_event_types_t rxEvent) {
   if (hUART == mx_usart1_uart_gethandle()) {
     USART1_RxState = RX_IDLE;
-    //__asm__ volatile ("sev": : :"memory");
     // Write the received data to the Rx stream buffer
+    __asm__ volatile ("sev": : :"memory");
     xStreamBufferSendFromISR(sRx_USART1_StreamBuffer, USART1_RxDMABuffer,
         ulBytesReceived, NULL);
-    //__asm__ volatile ("sev": : :"memory");
+    __asm__ volatile ("sev": : :"memory");
 
     // Notify the task of this interrupt.
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
@@ -215,7 +215,6 @@ hal_status_t USART1_Tx() {
  */
 static void USART1_TxCpltCallback(hal_uart_handle_t *hUART) {
   if (hUART == mx_usart1_uart_gethandle()) {
-    //__asm__ volatile ("sev": : :"memory");
     USART1_TxState = TX_IDLE;
 
     uint8_t ucEvent = EVENT_USART1_TX_COMPLETE;

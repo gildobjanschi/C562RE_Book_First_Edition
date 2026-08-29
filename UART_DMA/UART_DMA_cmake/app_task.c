@@ -15,6 +15,9 @@
 #include "app_task.h"
 #include "usart1_dma.h"
 
+#define RX_BUFFER_SIZE 32
+uint8_t RxBuffer[RX_BUFFER_SIZE];
+
 /*
  * @brief:  Process the input event
  *
@@ -174,19 +177,25 @@ static void vAppTaskFunction(void *pvParameters) {
       switch (ucEvent) {
       case EVENT_USART1_RX_COMPLETE: {
         // This instruction generates an EVENTOUT pulse on pin PC8.
+        HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_SET);
         if (USART1_Rx() != HAL_OK) {
           SWD_printf("USART1_Rx error!");
         }
 
         // Consume all the bytes in the Rx stream buffer
-        while (xStreamBufferReceive(xRxUARTStreamBuffer, &ucEvent, 1, 0) == 1) {
-          SWD_printf("%c", ucEvent);
+        uint32_t ulRxBytes;
+        while ((ulRxBytes = xStreamBufferReceive(xRxUARTStreamBuffer,
+            RxBuffer, RX_BUFFER_SIZE, 0)) > 0) {
+          // Null terminate the string
+          RxBuffer[ulRxBytes] = 0;
+          SWD_printf("%s", RxBuffer);
         }
+
+        HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_RESET);
         break;
       }
 
       case EVENT_USART1_TX_COMPLETE: {
-        //__asm__ volatile ("sev": : :"memory");
         if (USART1_Tx() != HAL_OK) {
           SWD_printf("USART1_Tx error!");
         }
