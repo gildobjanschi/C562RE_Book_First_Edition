@@ -206,6 +206,8 @@ hal_status_t SPI2_Read(uint16_t uwAddress, uint32_t ulDataLength) {
   SPI2_DMA_TxBuffer[1] = uwAddress >> 8;
   SPI2_DMA_TxBuffer[2] = uwAddress & 0xFF;
 
+  // Clear the rest of the buffer size
+  memset (SPI2_DMA_TxBuffer + 3, 0, BUFFER_SIZE);
   SPI2_State = SM_READ;
   ulAppDataLength = ulDataLength;
 
