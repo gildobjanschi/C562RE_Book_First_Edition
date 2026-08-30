@@ -47,6 +47,13 @@ extern "C" {
 #define LD1_ACTIVE_STATE                                HAL_GPIO_PIN_SET
 #define LD1_INACTIVE_STATE                              HAL_GPIO_PIN_RESET
 
+/* Primary aliases for GPIO PC0 pin */
+#define PC0_PORT                                        HAL_GPIOC
+#define PC0_PIN                                         HAL_GPIO_PIN_0
+#define PC0_INIT_STATE                                  HAL_GPIO_PIN_RESET
+#define PC0_ACTIVE_STATE                                HAL_GPIO_PIN_SET
+#define PC0_INACTIVE_STATE                              HAL_GPIO_PIN_RESET
+
 /* Primary aliases for GPIO PC7 pin */
 #define PC7_PORT                                        HAL_GPIOC
 #define PC7_PIN                                         HAL_GPIO_PIN_7

@@ -554,7 +554,7 @@
     },
     "HAL_CORTEX_PROJECT_USE_HAL": {
       "name": "HAL_CORTEX_PROJECT_USE_HAL",
-      "value": 8,
+      "value": 6,
       "originator": "sw-config-semaphore"
     },
     "HAL_ICACHE_CORE_ENABLED": {
@@ -639,11 +639,6 @@
     },
     "HAL_EXTI_PROJECT_USE_HAL": {
       "name": "HAL_EXTI_PROJECT_USE_HAL",
-      "value": 1,
-      "originator": "sw-config-semaphore"
-    },
-    "HAL_EXTI_SYSTEM_GPIO_STANDARD_EXTI": {
-      "name": "HAL_EXTI_SYSTEM_GPIO_STANDARD_EXTI",
       "value": 1,
       "originator": "sw-config-semaphore"
     },
@@ -2158,6 +2153,27 @@
           "index": 7,
           "port": "C"
         }
+      },
+      {
+        "pin": {
+          "name": "PC0",
+          "position": "8",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "a"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 0,
+          "port": "C"
+        },
+        "signal": {
+          "instance": "GPIOC",
+          "name": "GPIO",
+          "type": "user_gpio"
+        },
+        "pinned": true
       }
     ],
     "needConfigurations": [
@@ -2694,6 +2710,19 @@
           "ioType": "I/O",
           "ioStructure": "FT",
           "index": 7,
+          "port": "C"
+        },
+        {
+          "name": "PC0",
+          "position": "8",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "a"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 0,
           "port": "C"
         }
       ]
@@ -5034,6 +5063,19 @@ solution:
               "pins": [
                 {
                   "_foreignKey": "PA5",
+                  "basic": {
+                    "mode": "OUTPUT",
+                    "pull": "NO",
+                    "enable_exti": false,
+                    "output_active_state": "SET",
+                    "output_init_state": "RESET",
+                    "output_type": "PUSHPULL",
+                    "speed": "LOW"
+                  },
+                  "label_name": []
+                },
+                {
+                  "_foreignKey": "PC0",
                   "basic": {
                     "mode": "OUTPUT",
                     "pull": "NO",

@@ -184,7 +184,7 @@ hal_status_t DAC_Stop() {
 static void DACHalfTransfCallback(hal_dac_handle_t *hDAC,
     hal_dac_channel_t channel) {
   if (hDAC == mx_dac1_gethandle()) {
-    __asm__ volatile ("sev": : :"memory");
+    HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_SET);
 
     uint8_t ucEvent = EVENT_DAC_HALF_CPLT_DATA;
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
@@ -204,7 +204,7 @@ static void DACHalfTransfCallback(hal_dac_handle_t *hDAC,
 static void DACTransfCallback(hal_dac_handle_t *hDAC,
     hal_dac_channel_t channel) {
   if (hDAC == mx_dac1_gethandle()) {
-    __asm__ volatile ("sev": : :"memory");
+    HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_RESET);
     // Important: If the DAC DMA is setup for 'Direct transfer' the line below
     // must be uncommented to stop the timer (or else an error occurs).
     //DAC_Stop();
