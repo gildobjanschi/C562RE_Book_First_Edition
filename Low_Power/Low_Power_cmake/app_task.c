@@ -26,14 +26,18 @@
  * @param ulExpectedIdleTime The low power mode expected duration
  */
 void app_configPRE_SLEEP_PROCESSING (uint32_t ulExpectedIdleTime) {
+#if (MODE_SEL == MODE_TICKLESS_SLEEP)
+  HAL_SuspendTick();
+#elif (MODE_SEL == MODE_TICKLESS_STOP_0)
   HAL_SuspendTick();
 
-#if (MODE_SEL == MODE_TICKLESS_STOP_0)
   HAL_RCC_TIM7_DisableClock();
   __disable_irq();
   SCB_EnableDeepSleep();
   LL_PWR_SetPowerMode(HAL_PWR_STOP0_MODE);
 #elif (MODE_SEL == MODE_TICKLESS_STOP_1)
+  HAL_SuspendTick();
+
   HAL_RCC_TIM7_DisableClock();
   __disable_irq();
   SCB_EnableDeepSleep();
@@ -47,18 +51,22 @@ void app_configPRE_SLEEP_PROCESSING (uint32_t ulExpectedIdleTime) {
  * @param ulExpectedIdleTime The low power mode expected duration
  */
 void app_configPOST_SLEEP_PROCESSING (uint32_t ulExpectedIdleTime) {
-  //__asm__ volatile ("sev": : :"memory");
-#if (MODE_SEL == MODE_TICKLESS_STOP_0)
+  __asm__ volatile ("sev": : :"memory");
+#if (MODE_SEL == MODE_TICKLESS_SLEEP)
+  HAL_ResumeTick();
+#elif (MODE_SEL == MODE_TICKLESS_STOP_0)
   SCB_DisableDeepSleep();
   __enable_irq();
   HAL_RCC_TIM7_EnableClock();
+
+  HAL_ResumeTick();
 #elif (MODE_SEL == MODE_TICKLESS_STOP_1)
   SCB_DisableDeepSleep();
   __enable_irq();
   HAL_RCC_TIM7_EnableClock();
-#endif
 
   HAL_ResumeTick();
+#endif
 }
 
 /*

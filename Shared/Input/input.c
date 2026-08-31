@@ -99,7 +99,7 @@ void reportInputEvent(uint8_t ucEvent) {
  */
 void ExtiInputTriggerCallback(hal_exti_handle_t *hexti,
     hal_exti_trigger_t trigger) {
-  //__asm__ volatile ("sev": : :"memory");
+  __asm__ volatile ("sev": : :"memory");
 
   for (uint32_t i = 0; i < ulInputCount; i++) {
     if (pInputs[i]->hExti == hexti) {
