@@ -139,18 +139,8 @@ static void vAppTaskFunction(void *pvParameters) {
     xQueueReceive(xActivatedMember, &ucEvent, 0);
     if (xActivatedMember == xFDCANQueue) {
       switch(ucEvent) {
-      case EVENT_CONTROLLER_TX_COMPLETE: {
-        FDCAN_Controller_Tx_Complete();
-        break;
-      }
-
-      case EVENT_CONTROLLER_RX_0_COMPLETE: {
+      case EVENT_CONTROLLER_RX_1_COMPLETE: {
         FDCAN_Controller_Rx_Complete();
-        break;
-      }
-
-      case EVENT_RESPONDER_TX_COMPLETE: {
-        FDCAN_Responder_Tx_Complete();
         break;
       }
 

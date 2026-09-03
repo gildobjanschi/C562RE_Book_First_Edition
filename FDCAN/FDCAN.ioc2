@@ -509,7 +509,7 @@
     },
     "HAL_CORTEX_PROJECT_USE_HAL": {
       "name": "HAL_CORTEX_PROJECT_USE_HAL",
-      "value": 7,
+      "value": 8,
       "originator": "sw-config-semaphore"
     },
     "HAL_ICACHE_CORE_ENABLED": {
@@ -814,6 +814,13 @@
           "priority": 5,
           "subpriority": 0,
           "used": true
+        },
+        {
+          "id": 45,
+          "name": "FDCAN1_IT1",
+          "priority": 5,
+          "subpriority": 0,
+          "used": true
         }
       ],
       "needs": [
@@ -851,6 +858,11 @@
           "needId": "608e2382-0364-448d-a669-cae41527f91a",
           "destination": "TIM12",
           "owner": "TIM12"
+        },
+        {
+          "needId": "5e55ad2a-83aa-4bf0-9e04-81fae7fc88cb",
+          "destination": "FDCAN1_IT1",
+          "owner": "FDCAN1"
         }
       ]
     }
@@ -924,6 +936,16 @@
       "selector": "GLOBAL",
       "id": "608e2382-0364-448d-a669-cae41527f91a",
       "owner": "TIM12",
+      "propertyPath": ""
+    },
+    {
+      "needType": "need.interrupt.lines",
+      "projectUri": "cube:6bd69907-e082-4432-a132-369515c411e6/4d8d947e-6efa-4f36-8487-018179c935cd",
+      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:FDCAN@2.1.0#HAL CORE GPIO Init and FDCAN",
+      "componentInstanceId": "a2fe7594-ef69-461c-8f87-08b6e67250cd",
+      "selector": "IT1",
+      "id": "5e55ad2a-83aa-4bf0-9e04-81fae7fc88cb",
+      "owner": "FDCAN1",
       "propertyPath": ""
     }
   ],
@@ -4408,7 +4430,7 @@ solution:
                 "protocol_exception": true,
                 "tx_fifo_queue_mode": "FIFO",
                 "frame_filters": {
-                  "std_filters_nbr": 1,
+                  "std_filters_nbr": 2,
                   "ext_filters_nbr": 0,
                   "filter_standard": [
                     {
@@ -4418,13 +4440,21 @@ solution:
                       "filter_id1": 257,
                       "filter_id2": 2047,
                       "filter_type": "CLASSIC"
+                    },
+                    {
+                      "configure": true,
+                      "_foreignKey": "Standard Filter1",
+                      "filter_config": "TO_RX_FIFO_1",
+                      "filter_id1": 258,
+                      "filter_id2": 2047,
+                      "filter_type": "CLASSIC"
                     }
                   ],
                   "filter_extended": [],
                   "global_filter_config": {
                     "acceptance_non_matching_std": "REJECT",
-                    "acceptance_non_matching_ext": "TO_RX_FIFO_1",
-                    "acceptance_remote_std": "REJECT",
+                    "acceptance_non_matching_ext": "TO_RX_FIFO_0",
+                    "acceptance_remote_std": "ACCEPT",
                     "acceptance_remote_ext": "REJECT"
                   }
                 },
@@ -4499,7 +4529,7 @@ solution:
                     "interrupt_lines": "LINE_0"
                   },
                   "rx_fifo_1_interrupts": {
-                    "it_rx_fifo_1_new_msg": false,
+                    "it_rx_fifo_1_new_msg": true,
                     "it_rx_fifo_1_full": false,
                     "it_rx_fifo_1_msg_lost": false,
                     "interrupt_lines": "LINE_1"
@@ -4591,7 +4621,7 @@ solution:
                 },
                 "nvic": {
                   "enable_interrupt_line0": true,
-                  "enable_interrupt_line1": false,
+                  "enable_interrupt_line1": true,
                   "irq_handler_generation_line0": true,
                   "nvic_config_line0": {
                     "needs": [
@@ -4602,6 +4632,20 @@ solution:
                         "componentInstanceId": "a2fe7594-ef69-461c-8f87-08b6e67250cd",
                         "selector": "IT0",
                         "id": "f68916e0-9b15-4150-a507-3ae723c4799b",
+                        "owner": "FDCAN1"
+                      }
+                    ]
+                  },
+                  "irq_handler_generation_line1": true,
+                  "nvic_config_line1": {
+                    "needs": [
+                      {
+                        "needType": "need.interrupt.lines",
+                        "projectUri": "cube:6bd69907-e082-4432-a132-369515c411e6/4d8d947e-6efa-4f36-8487-018179c935cd",
+                        "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:FDCAN@2.1.0#HAL CORE GPIO Init and FDCAN",
+                        "componentInstanceId": "a2fe7594-ef69-461c-8f87-08b6e67250cd",
+                        "selector": "IT1",
+                        "id": "5e55ad2a-83aa-4bf0-9e04-81fae7fc88cb",
                         "owner": "FDCAN1"
                       }
                     ]

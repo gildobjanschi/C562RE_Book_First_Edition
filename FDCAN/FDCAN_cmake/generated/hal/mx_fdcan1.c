@@ -77,7 +77,7 @@ hal_fdcan_handle_t *mx_fdcan1_init(void)
   fdcan_config.auto_retransmission  = HAL_FDCAN_AUTO_RETRANSMISSION_ENABLE;
   fdcan_config.transmit_pause       = HAL_FDCAN_TRANSMIT_PAUSE_DISABLE;
   fdcan_config.protocol_exception   = HAL_FDCAN_PROTOCOL_EXCEPTION_ENABLE;
-  fdcan_config.std_filters_nbr      = 1U;
+  fdcan_config.std_filters_nbr      = 2U;
   fdcan_config.ext_filters_nbr      = 0U;
   fdcan_config.tx_fifo_queue_mode   = HAL_FDCAN_TX_MODE_FIFO;
 
@@ -91,7 +91,7 @@ hal_fdcan_handle_t *mx_fdcan1_init(void)
     return NULL;
   }
 
-  /* Standard filters: 1 of 1 are configured, the remaining(s) is(are) allocated but not configured */
+  /* Standard filters: 2 of 2 are configured, the remaining(s) is(are) allocated but not configured */
 
   hal_fdcan_filter_t filter_cfg;
 
@@ -108,13 +108,26 @@ hal_fdcan_handle_t *mx_fdcan1_init(void)
     return NULL;
   }
 
+  /* Standard filter 1 */
+  filter_cfg.filter_index    = 1U;
+  filter_cfg.id_type         = HAL_FDCAN_ID_STANDARD;
+  filter_cfg.filter_type     = HAL_FDCAN_FILTER_TYPE_CLASSIC;
+  filter_cfg.filter_config   = HAL_FDCAN_FILTER_TO_RX_FIFO_1;
+  filter_cfg.filter_id1      = 0x102;
+  filter_cfg.filter_id2      = 0x7FF;
+
+  if (HAL_FDCAN_SetFilter(&hFDCAN1, &filter_cfg) != HAL_OK)
+  {
+    return NULL;
+  }
+
   /* Extended filters: No filters allocated */
 
   /* Configure the global filter acceptance/rejection rules */
   hal_fdcan_global_filter_config_t global_filter_cfg;
   global_filter_cfg.acceptance_non_matching_std = HAL_FDCAN_NO_MATCH_REJECT;
-  global_filter_cfg.acceptance_non_matching_ext = HAL_FDCAN_NO_MATCH_TO_RX_FIFO_1;
-  global_filter_cfg.acceptance_remote_std       = HAL_FDCAN_REMOTE_REJECT;
+  global_filter_cfg.acceptance_non_matching_ext = HAL_FDCAN_NO_MATCH_TO_RX_FIFO_0;
+  global_filter_cfg.acceptance_remote_std       = HAL_FDCAN_REMOTE_ACCEPT;
   global_filter_cfg.acceptance_remote_ext       = HAL_FDCAN_REMOTE_REJECT;
   if (HAL_FDCAN_SetGlobalFilter(&hFDCAN1, &global_filter_cfg) != HAL_OK)
   {
@@ -151,6 +164,7 @@ hal_fdcan_handle_t *mx_fdcan1_init(void)
 
   /* Enable individual interrupts */
   if (HAL_FDCAN_EnableInterrupts(&hFDCAN1, HAL_FDCAN_IT_RX_FIFO_0_NEW_MSG
+                                         | HAL_FDCAN_IT_RX_FIFO_1_NEW_MSG
                                          | HAL_FDCAN_IT_TX_COMPLETE) != HAL_OK)
   {
     return NULL;
@@ -171,13 +185,24 @@ hal_fdcan_handle_t *mx_fdcan1_init(void)
     return NULL;
   }
 
-  if (HAL_FDCAN_EnableInterruptLines(&hFDCAN1, HAL_FDCAN_IT_LINE_0) != HAL_OK)
+  /* Connect interrupt groups to interrupt line_1 */
+  if (HAL_FDCAN_SetInterruptGroupsToLine(&hFDCAN1,
+                                         HAL_FDCAN_IT_GROUP_RX_FIFO_1,
+                                         HAL_FDCAN_IT_LINE_1) != HAL_OK)
+  {
+    return NULL;
+  }
+
+  if (HAL_FDCAN_EnableInterruptLines(&hFDCAN1, HAL_FDCAN_IT_LINE_0 | HAL_FDCAN_IT_LINE_1) != HAL_OK)
   {
     return NULL;
   }
 
   HAL_CORTEX_NVIC_SetPriority(FDCAN1_IT0_IRQn, HAL_CORTEX_NVIC_PREEMP_PRIORITY_5, HAL_CORTEX_NVIC_SUB_PRIORITY_0);
   HAL_CORTEX_NVIC_EnableIRQ(FDCAN1_IT0_IRQn);
+
+  HAL_CORTEX_NVIC_SetPriority(FDCAN1_IT1_IRQn, HAL_CORTEX_NVIC_PREEMP_PRIORITY_5, HAL_CORTEX_NVIC_SUB_PRIORITY_0);
+  HAL_CORTEX_NVIC_EnableIRQ(FDCAN1_IT1_IRQn);
 
   return &hFDCAN1;
 }
@@ -186,6 +211,9 @@ void mx_fdcan1_deinit(void)
 {
   /* Disable the FDCAN interrupt line 0 */
   HAL_CORTEX_NVIC_DisableIRQ(FDCAN1_IT0_IRQn);
+
+  /* Disable the FDCAN interrupt line 1 */
+  HAL_CORTEX_NVIC_DisableIRQ(FDCAN1_IT1_IRQn);
 
   /* Deinitialize the FDCAN peripheral */
   (void)HAL_FDCAN_DeInit(&hFDCAN1);
@@ -209,4 +237,12 @@ hal_fdcan_handle_t *mx_fdcan1_gethandle(void)
 void FDCAN1_IT0_IRQHandler(void)
 {
   HAL_FDCAN_Line0_IRQHandler(&hFDCAN1);
+}
+
+/******************************************************************************/
+/*                             FDCAN1 Interrupt 1                             */
+/******************************************************************************/
+void FDCAN1_IT1_IRQHandler(void)
+{
+  HAL_FDCAN_Line1_IRQHandler(&hFDCAN1);
 }
