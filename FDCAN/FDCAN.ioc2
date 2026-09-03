@@ -509,7 +509,7 @@
     },
     "HAL_CORTEX_PROJECT_USE_HAL": {
       "name": "HAL_CORTEX_PROJECT_USE_HAL",
-      "value": 8,
+      "value": 7,
       "originator": "sw-config-semaphore"
     },
     "HAL_ICACHE_CORE_ENABLED": {
@@ -589,11 +589,6 @@
     },
     "HAL_FDCAN_PROJECT_USE_HAL": {
       "name": "HAL_FDCAN_PROJECT_USE_HAL",
-      "value": 1,
-      "originator": "sw-config-semaphore"
-    },
-    "HAL_EXTI_SYSTEM_GPIO_STANDARD_EXTI": {
-      "name": "HAL_EXTI_SYSTEM_GPIO_STANDARD_EXTI",
       "value": 1,
       "originator": "sw-config-semaphore"
     },
@@ -1310,6 +1305,48 @@
           "type": "user_gpio"
         },
         "pinned": true
+      },
+      {
+        "pin": {
+          "name": "PC2",
+          "position": "10",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "a"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 2,
+          "port": "C"
+        },
+        "signal": {
+          "instance": "GPIOC",
+          "name": "GPIO",
+          "type": "user_gpio"
+        },
+        "pinned": true
+      },
+      {
+        "pin": {
+          "name": "PC3",
+          "position": "11",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "a"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 3,
+          "port": "C"
+        },
+        "signal": {
+          "instance": "GPIOC",
+          "name": "GPIO",
+          "type": "user_gpio"
+        },
+        "pinned": true
       }
     ],
     "needConfigurations": [
@@ -1936,6 +1973,32 @@
           "ioType": "I/O",
           "ioStructure": "FT",
           "index": 8,
+          "port": "C"
+        },
+        {
+          "name": "PC2",
+          "position": "10",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "a"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 2,
+          "port": "C"
+        },
+        {
+          "name": "PC3",
+          "position": "11",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "a"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 3,
           "port": "C"
         }
       ]
@@ -3817,6 +3880,32 @@ solution:
                 },
                 {
                   "_foreignKey": "PC0",
+                  "basic": {
+                    "mode": "OUTPUT",
+                    "pull": "NO",
+                    "enable_exti": false,
+                    "output_active_state": "SET",
+                    "output_init_state": "RESET",
+                    "output_type": "PUSHPULL",
+                    "speed": "LOW"
+                  },
+                  "label_name": []
+                },
+                {
+                  "_foreignKey": "PC2",
+                  "basic": {
+                    "mode": "OUTPUT",
+                    "pull": "NO",
+                    "enable_exti": false,
+                    "output_active_state": "SET",
+                    "output_init_state": "RESET",
+                    "output_type": "PUSHPULL",
+                    "speed": "LOW"
+                  },
+                  "label_name": []
+                },
+                {
+                  "_foreignKey": "PC3",
                   "basic": {
                     "mode": "OUTPUT",
                     "pull": "NO",

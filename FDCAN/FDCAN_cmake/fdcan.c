@@ -143,6 +143,8 @@ hal_status_t FDCAN_Controller_Send(uint8_t* pTxData, uint32_t ulTxData) {
   if (status == HAL_OK) {
     FDCAN_Tx_State |= STATE_TX_CONTROLLER_PENDING;
     FDCAN_Rx_State |= STATE_RX_RESPONDER_WAITING;
+
+    HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_SET);
   }
 
   return status;
@@ -153,7 +155,9 @@ hal_status_t FDCAN_Controller_Send(uint8_t* pTxData, uint32_t ulTxData) {
  */
 void FDCAN_Controller_Tx_Complete() {
   FDCAN_Tx_State &= ~STATE_TX_CONTROLLER_PENDING;
-  SWD_printf("Controller Tx complete\n");
+
+  HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_RESET);
+  //SWD_printf("Controller Tx complete\n");
 }
 
 /*
@@ -172,6 +176,7 @@ void FDCAN_Controller_Rx_Complete() {
         hfdcan->last_error_codes);
     return;
   }
+  HAL_GPIO_WritePin(HAL_GPIOC, PC3_PIN, HAL_GPIO_PIN_RESET);
 
   // Display the buffer received from the responder
   uint32_t ulTxData = rx_element_header.b.data_length;
@@ -187,7 +192,9 @@ void FDCAN_Controller_Rx_Complete() {
  */
 void FDCAN_Responder_Tx_Complete() {
   FDCAN_Tx_State &= ~STATE_TX_RESPONDER_PENDING;
-  SWD_printf("Responder Tx complete\n");
+
+  HAL_GPIO_WritePin(HAL_GPIOC, PC2_PIN, HAL_GPIO_PIN_RESET);
+  //SWD_printf("Responder Tx complete\n");
 }
 
 /*
@@ -206,6 +213,7 @@ void FDCAN_Responder_Rx_Complete(){
         hfdcan->last_error_codes);
     return;
   }
+  HAL_GPIO_WritePin(HAL_GPIOC, PC3_PIN, HAL_GPIO_PIN_RESET);
 
   // Display the buffer received and build the response buffer
   uint32_t ulTxData = rx_element_header.b.data_length;
@@ -221,6 +229,7 @@ void FDCAN_Responder_Rx_Complete(){
   if (status == HAL_OK) {
     FDCAN_Tx_State |= STATE_TX_RESPONDER_PENDING;
     FDCAN_Rx_State |= STATE_RX_CONTROLLER_WAITING;
+    HAL_GPIO_WritePin(HAL_GPIOC, PC2_PIN, HAL_GPIO_PIN_SET);
   }
 }
 
@@ -248,6 +257,7 @@ static void TxCompleteCallback(hal_fdcan_handle_t *hfdcan,
  */
 static void RxFifo0EventCallback(hal_fdcan_handle_t *hfdcan,
     uint32_t buffer_indexes) {
+  HAL_GPIO_WritePin(HAL_GPIOC, PC3_PIN, HAL_GPIO_PIN_SET);
 
   uint8_t ucEvent = (FDCAN_Rx_State & STATE_RX_RESPONDER_WAITING) ==
       STATE_RX_RESPONDER_WAITING?
