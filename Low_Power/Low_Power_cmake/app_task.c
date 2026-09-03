@@ -17,7 +17,7 @@
 #define MODE_TICKLESS_STOP_0    2
 #define MODE_TICKLESS_STOP_1    3
 
-// Set the mode that is in use here.
+// Set the mode that is in use in the line below.
 #define MODE_SEL MODE_TICK
 
 /*
