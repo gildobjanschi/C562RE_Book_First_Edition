@@ -87,7 +87,10 @@ hal_status_t ADC_Start(uint32_t ulChannel, app_adc_mode_t mode) {
   adc_channel_config.sequencer_rank = 1;
   adc_channel_config.sampling_time = HAL_ADC_SAMPLING_TIME_289CYCLES;
   adc_channel_config.input_mode = HAL_ADC_IN_SINGLE_ENDED;
-  HAL_ADC_SetConfigChannel(hADC, ulChannel, &adc_channel_config);
+  status = HAL_ADC_SetConfigChannel(hADC, ulChannel, &adc_channel_config);
+  if (status != HAL_OK) {
+    return status;
+  }
 
   ulADCChannel = ulChannel;
   ADCMode = mode;

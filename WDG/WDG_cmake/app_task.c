@@ -281,7 +281,7 @@ static void vWWDGTaskFunction(void *pvParameters) {
       }
     } else if (xActivatedMember == xWDG_Semaphore) {
       xSemaphoreTake(xWDG_Semaphore, 0);
-      SWD_printf("Early WWG interrupt.\n");
+      SWD_printf("Early WWDG interrupt.\n");
     } else {
       // Timeout
       if (HAL_WWDG_Refresh(pWWDG) != HAL_OK) {
