@@ -58,14 +58,14 @@ static uint8_t processInputEvent(uint8_t ucEvent) {
 /*
  * @brief:  Process I2C events
  *
- * @param xI2cQueue The I2C queue
+ * @param xI2CQueue The I2C queue
  */
-void processI2cEvents(QueueHandle_t xI2cQueue) {
+void processI2CEvents(QueueHandle_t xI2CQueue) {
   uint8_t ucExitI2cLoop = 0;
   uint8_t ucEvent;
 
   while (1) {
-    if (xQueueReceive(xI2cQueue, &ucEvent, portMAX_DELAY) == pdPASS) {
+    if (xQueueReceive(xI2CQueue, &ucEvent, portMAX_DELAY) == pdPASS) {
       switch (ucEvent) {
       case EVENT_TX_COMPLETE: {
         if (I2C1_TxComplete() != HAL_OK) {
@@ -109,11 +109,11 @@ void processI2cEvents(QueueHandle_t xI2cQueue) {
  *
  * @param error A description of the error that occurred
  * @param xInputQueue The input queue
- * @param xI2cQueue The I2C queue
+ * @param xI2CQueue The I2C queue
  */
 static void exitAppTask(char *error,
     QueueHandle_t xInputQueue,
-    QueueHandle_t xI2cQueue) {
+    QueueHandle_t xI2CQueue) {
   ErrorHandler(error);
 
   // Release the input handling
@@ -125,8 +125,8 @@ static void exitAppTask(char *error,
   }
 
   // Free the I2C queue
-  if (xI2cQueue != NULL) {
-    vQueueDelete(xI2cQueue);
+  if (xI2CQueue != NULL) {
+    vQueueDelete(xI2CQueue);
   }
 
   vTaskDelete(NULL);
@@ -150,14 +150,14 @@ static void vAppTaskFunction(void *pvParameters) {
   }
 
   // Create the I2C queue
-  QueueHandle_t xI2cQueue = xQueueCreate(8, sizeof(uint8_t));
-  if (xI2cQueue == NULL) {
+  QueueHandle_t xI2CQueue = xQueueCreate(8, sizeof(uint8_t));
+  if (xI2CQueue == NULL) {
     return exitAppTask("Cannot create I2C queue.\n", xInputQueue, NULL);
   }
 
   // Initialize the sensor
-  if (VL53L1X_Init(xI2cQueue) != HAL_OK) {
-    return exitAppTask("VL53L1X_Init failed.\n", xInputQueue, xI2cQueue);
+  if (VL53L1X_Init(xI2CQueue) != HAL_OK) {
+    return exitAppTask("VL53L1X_Init failed.\n", xInputQueue, xI2CQueue);
   }
 
   SWD_printf("--> Place an object in front of the sensor and press the button "
@@ -168,7 +168,7 @@ static void vAppTaskFunction(void *pvParameters) {
   while (1) {
     if (xQueueReceive(xInputQueue, &ucEvent, portMAX_DELAY) == pdPASS) {
       if (processInputEvent(ucEvent) == 1) {
-        processI2cEvents(xI2cQueue);
+        processI2CEvents(xI2CQueue);
       }
     }
   }

@@ -52,12 +52,12 @@ static volatile QueueHandle_t sI2C1Queue;
 /*
  * @brief  Initialize I2C1 DMA
  *
- * @param I2cQueue The queue for notifying the task of interrupt events
+ * @param I2CQueue The queue for notifying the task of interrupt events
  * @param ulDeviceAddress The I2C devices shifted address
  *
  * @retval HAL_OK if it succeeds
  */
-hal_status_t I2C1_Init(QueueHandle_t I2cQueue, uint32_t ulDeviceAddress) {
+hal_status_t I2C1_Init(QueueHandle_t I2CQueue, uint32_t ulDeviceAddress) {
   hal_status_t status;
   hal_i2c_handle_t *hI2C = mx_i2c1_i2c_gethandle();
 
@@ -92,7 +92,7 @@ hal_status_t I2C1_Init(QueueHandle_t I2cQueue, uint32_t ulDeviceAddress) {
   I2C1_TxState = TX_IDLE;
   I2C1_ulRxBytes = 0;
 
-  sI2C1Queue = I2cQueue;
+  sI2C1Queue = I2CQueue;
 
   return HAL_OK;
 }

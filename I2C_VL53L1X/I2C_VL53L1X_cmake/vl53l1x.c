@@ -141,11 +141,11 @@ static hal_status_t VL53L1X_StateMachine(uint8_t *pRxBuffer,
 /*
  * @brief  Initialize the I2C
  *
- * @param xQueue The I2cQueue
+ * @param xI2CQueue The I2C Queue
  * @retval HAL_OK if it succeeds
  */
-hal_status_t VL53L1X_Init(QueueHandle_t I2cQueue) {
-  return I2C1_Init(I2cQueue, VL53L1X_StateMachine, I2C_ADDR_7BIT_SHIFTED);
+hal_status_t VL53L1X_Init(QueueHandle_t I2CQueue) {
+  return I2C1_Init(I2CQueue, VL53L1X_StateMachine, I2C_ADDR_7BIT_SHIFTED);
 }
 
 /*

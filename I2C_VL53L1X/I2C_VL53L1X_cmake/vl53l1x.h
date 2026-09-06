@@ -9,7 +9,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-hal_status_t VL53L1X_Init(QueueHandle_t I2cQueue);
+hal_status_t VL53L1X_Init(QueueHandle_t I2CQueue);
 hal_status_t VL53L1X_Start();
 
 #ifdef __cplusplus
