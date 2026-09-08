@@ -1,4 +1,4 @@
-# C562RE Book — First Edition Source Code
+# STM32 Projects with FreeRTOS — First Edition Source Code
 
 This repository contains the source code accompanying the first edition of the **STM32 Projects with FreeRTOS/Practical STM32C5 Projects with STM32CubeMX2** book (soon to be published on Amazon) — a collection of hands-on peripheral examples for the **STM32C562RE** microcontroller (STM32C5 series, Arm® Cortex®-M33 core), targeting the **NUCLEO-C562RE** development board.
 
