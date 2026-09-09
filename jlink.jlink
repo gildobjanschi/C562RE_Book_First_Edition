@@ -1,4 +1,4 @@
 Device STM32C562RE
 SelectInterface SWD
 Speed auto
-Connect
+Connect STM32C562RE
