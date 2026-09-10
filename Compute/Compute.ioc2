@@ -1261,6 +1261,25 @@
           "type": "user_gpio"
         },
         "pinned": true
+      },
+      {
+        "pin": {
+          "name": "PC8",
+          "position": "39",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 8,
+          "port": "C"
+        },
+        "signal": {
+          "instance": "GPIOC",
+          "name": "GPIO",
+          "type": "user_gpio"
+        },
+        "pinned": true
       }
     ],
     "needConfigurations": [
@@ -1847,6 +1866,17 @@
           "ioType": "I/O",
           "ioStructure": "FT",
           "index": 7,
+          "port": "C"
+        },
+        {
+          "name": "PC8",
+          "position": "39",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 8,
           "port": "C"
         }
       ]
@@ -4251,6 +4281,19 @@ solution:
                     "speed": "LOW"
                   },
                   "label_name": []
+                },
+                {
+                  "_foreignKey": "PC8",
+                  "basic": {
+                    "mode": "OUTPUT",
+                    "pull": "NO",
+                    "enable_exti": false,
+                    "output_active_state": "SET",
+                    "output_init_state": "RESET",
+                    "output_type": "PUSHPULL",
+                    "speed": "LOW"
+                  },
+                  "label_name": []
                 }
               ]
             }
@@ -4272,14 +4315,14 @@ solution:
               "basic": {
                 "algorithm": true,
                 "aes_standard": 2,
-                "init_vect": "0x00000000000000000000000000000000"
+                "init_vect": "000102030405060708090A0B0C0D0E0F"
               },
               "additional": {
-                "activate_key": false,
+                "activate_key": true,
                 "key_settings": {
                   "aes_key": 1,
                   "key_size": 128,
-                  "key_128": "0x00000000000000000000000000000000"
+                  "key_128": "2B7E151628AED2A6ABF7158809CF4F3C"
                 },
                 "swapping": false,
                 "data_swapping": "NO"

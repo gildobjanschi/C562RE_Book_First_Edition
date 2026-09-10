@@ -11,16 +11,19 @@
 #include "../../Shared/Debug/swd_printf.h"
 #include "../../Shared/Utils/error_handler.h"
 #include "../../Shared/Faults/m33_it.h"
+#include "aes_cbc_enc_task.h"
 #include "rng_task.h"
 #include "cordic_task.h"
 #include "crc_task.h"
 #include "sha256_integrity_task.h"
+#include "aes_cbc_enc_task.h"
 
 static EventGroupHandle_t xTasksEventGroup;
 static RNG_PARAMETERS rngParams;
 static CORDIC_PARAMETERS cordicParams;
 static CRC_PARAMETERS crcParams;
 static SHA256_INTEGRITY_PARAMETERS sha256IntegrityParams;
+static AES_CBC_ENC_PARAMETERS aescbcencParams;
 
 /*
  * brief:  The application entry point.
@@ -100,9 +103,18 @@ int main(void) {
     return (-1);
   }
 
+  // Initialize the AES CBC encrypt task
+  aescbcencParams.xTasksEventGroup = xTasksEventGroup;
+  aescbcencParams.xPrintMutex = xPrintMutex;
+  if (AES_CBC_Enc_Init(&aescbcencParams) != HAL_OK) {
+    ErrorHandler("AES_CBC_Enc_Init failed.");
+    return (-1);
+  }
+
   // Set the event bits for all tasks
   xEventGroupSetBits(xTasksEventGroup, RNG_EV_GROUP_BIT | CORDIC_EV_GROUP_BIT |
-      CRC_EV_GROUP_BIT | SHA256_INTEGRITY_EV_GROUP_BIT);
+      CRC_EV_GROUP_BIT | SHA256_INTEGRITY_EV_GROUP_BIT |
+      AES_CBC_ENC_EV_GROUP_BIT);
 
   // Start the scheduler
   vTaskStartScheduler();

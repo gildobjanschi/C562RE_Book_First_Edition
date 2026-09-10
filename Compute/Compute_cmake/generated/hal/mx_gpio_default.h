@@ -75,6 +75,13 @@ extern "C" {
 #define PC7_ACTIVE_STATE                                HAL_GPIO_PIN_SET
 #define PC7_INACTIVE_STATE                              HAL_GPIO_PIN_RESET
 
+/* Primary aliases for GPIO PC8 pin */
+#define PC8_PORT                                        HAL_GPIOC
+#define PC8_PIN                                         HAL_GPIO_PIN_8
+#define PC8_INIT_STATE                                  HAL_GPIO_PIN_RESET
+#define PC8_ACTIVE_STATE                                HAL_GPIO_PIN_SET
+#define PC8_INACTIVE_STATE                              HAL_GPIO_PIN_RESET
+
 /* Exported macros -----------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */

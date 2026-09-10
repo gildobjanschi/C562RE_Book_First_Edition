@@ -26,9 +26,14 @@
 /* Exported variables by reference--------------------------------------------*/
 static hal_aes_handle_t hAES;
 
+const uint32_t AESKey[4] =
+  {
+    0x2B7E1516, 0x28AED2A6, 0xABF71588, 0x09CF4F3C
+  };
+
 uint32_t AESIV[4] =
   {
-    0x00000000, 0x00000000, 0x00000000, 0x00000000
+    0x00010203, 0x04050607, 0x08090A0B, 0x0C0D0E0F
   };
 
 /******************************************************************************/
@@ -47,6 +52,8 @@ hal_aes_handle_t *mx_aes_init(void)
   {
     return NULL;
   }
+
+  HAL_AES_SetNormalKey(&hAES, HAL_AES_KEY_SIZE_128BIT, AESKey);
   return &hAES;
 }
 
