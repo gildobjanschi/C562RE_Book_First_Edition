@@ -8,6 +8,7 @@
 #include "middleware/freertos/include/task.h"
 #include "middleware/freertos/include/semphr.h"
 #include "middleware/freertos/include/event_groups.h"
+#include "middleware/freertos/include/stream_buffer.h"
 #include "../../Shared/Debug/swd_printf.h"
 #include "../../Shared/Utils/error_handler.h"
 #include "../../Shared/Faults/m33_it.h"
@@ -17,13 +18,17 @@
 #include "crc_task.h"
 #include "sha256_integrity_task.h"
 #include "aes_cbc_enc_task.h"
+#include "aes_cbc_dec_task.h"
 
 static EventGroupHandle_t xTasksEventGroup;
+static SemaphoreHandle_t xPrintMutex;
+static StreamBufferHandle_t xAESStreamBuffer;
 static RNG_PARAMETERS rngParams;
 static CORDIC_PARAMETERS cordicParams;
 static CRC_PARAMETERS crcParams;
 static SHA256_INTEGRITY_PARAMETERS sha256IntegrityParams;
 static AES_CBC_ENC_PARAMETERS aescbcencParams;
+static AES_CBC_DEC_PARAMETERS aescbcdecParams;
 
 /*
  * brief:  The application entry point.
@@ -58,7 +63,7 @@ int main(void) {
   SWD_printf("---- MCU configured at %lu[Hz] ----\n", HAL_RCC_GetHCLKFreq());
 
   // Create the print mutex
-  SemaphoreHandle_t xPrintMutex = xSemaphoreCreateMutex();
+  xPrintMutex = xSemaphoreCreateMutex();
   if (xPrintMutex == NULL) {
     ErrorHandler("Cannot create mutex.\n");
     return (-1);
@@ -103,11 +108,25 @@ int main(void) {
     return (-1);
   }
 
+  // Create the stream buffer that is used to send encrypted data to the decrypt
+  // task. The decrypt task will be unblocked after all the 64 bytes from the
+  // encrypt task have been received.
+  xAESStreamBuffer = xStreamBufferCreate(64, 64);
+
   // Initialize the AES CBC encrypt task
   aescbcencParams.xTasksEventGroup = xTasksEventGroup;
+  aescbcencParams.xAESStreamBuffer = xAESStreamBuffer;
   aescbcencParams.xPrintMutex = xPrintMutex;
   if (AES_CBC_Enc_Init(&aescbcencParams) != HAL_OK) {
     ErrorHandler("AES_CBC_Enc_Init failed.");
+    return (-1);
+  }
+
+  // Initialize the AES CBC decrypt task
+  aescbcdecParams.xAESStreamBuffer = xAESStreamBuffer;
+  aescbcdecParams.xPrintMutex = xPrintMutex;
+  if (AES_CBC_Dec_Init(&aescbcdecParams) != HAL_OK) {
+    ErrorHandler("AES_CBC_Dec_Init failed.");
     return (-1);
   }
 

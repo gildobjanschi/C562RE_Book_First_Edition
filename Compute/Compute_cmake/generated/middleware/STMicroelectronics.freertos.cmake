@@ -123,7 +123,7 @@ endif()
 
 # condition: generated_STMicroelectronics.freertos.2.0.0:FreeRTOS Init condition
 # description: STMicroelectronics FreeRTOS Init
-set(generated_STMicroelectronics.freertos.2.0.0_FreeRTOS_Init_condition "$<AND:$<NOT:$<STREQUAL:$<FILTER:${CMSIS_COMPONENTS_LIST},INCLUDE,.*Cclass:RTOS#.*Cgroup:FreeRTOS#.*Csub:MemMang#.*Cvariant:Heap_4(#.*|$)>,>>,$<NOT:$<STREQUAL:$<FILTER:${CMSIS_COMPONENTS_LIST},INCLUDE,.*Cclass:RTOS#.*Cgroup:FreeRTOS#.*Csub:Core(#.*|$)>,>>>")
+set(generated_STMicroelectronics.freertos.2.0.0_FreeRTOS_Init_condition "$<AND:$<NOT:$<STREQUAL:$<FILTER:${CMSIS_COMPONENTS_LIST},INCLUDE,.*Cclass:RTOS#.*Cgroup:FreeRTOS#.*Csub:Stream Buffer(#.*|$)>,>>,$<NOT:$<STREQUAL:$<FILTER:${CMSIS_COMPONENTS_LIST},INCLUDE,.*Cclass:RTOS#.*Cgroup:FreeRTOS#.*Csub:MemMang#.*Cvariant:Heap_4(#.*|$)>,>>,$<NOT:$<STREQUAL:$<FILTER:${CMSIS_COMPONENTS_LIST},INCLUDE,.*Cclass:RTOS#.*Cgroup:FreeRTOS#.*Csub:Core(#.*|$)>,>>>")
 message(DEBUG "CMSIS condition generated_STMicroelectronics.freertos.2.0.0_FreeRTOS_Init_condition enabled")
 
 
@@ -145,7 +145,7 @@ endif()
 
 # condition: generated_STMicroelectronics.freertos.2.0.0:Stream Buffers condition
 # description: Stream Buffers condition
-set(generated_STMicroelectronics.freertos.2.0.0_Stream_Buffers_condition "1")
+set(generated_STMicroelectronics.freertos.2.0.0_Stream_Buffers_condition "$<NOT:$<STREQUAL:$<FILTER:${CMSIS_COMPONENTS_LIST},INCLUDE,.*Cclass:RTOS#.*Cgroup:FreeRTOS#.*Csub:Stream Buffer(#.*|$)>,>>")
 message(DEBUG "CMSIS condition generated_STMicroelectronics.freertos.2.0.0_Stream_Buffers_condition enabled")
 
 # Files and components in this package

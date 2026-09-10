@@ -616,6 +616,11 @@
       "name": "HAL_CORDIC_PROJECT_USE_HAL",
       "value": 1,
       "originator": "sw-config-semaphore"
+    },
+    "stream_buffers": {
+      "name": "stream_buffers",
+      "value": true,
+      "originator": "d48cd726-00ab-4a1c-abbd-0e3c1a9e7f74"
     }
   }
 }"""
@@ -2914,6 +2919,14 @@ solution:
         "label": "DSP:Source",
         "expanded": true,
         "userAdded": true
+      },
+      {
+        "$type": "http://st.com/schema/sw-composer#//SWComponent",
+        "id": "51748323-99c7-49a2-bca6-ed008c0c7766",
+        "componentDescriptionId": "STMicroelectronics.freertos.2.1.0$STMicroelectronics::RTOS:FreeRTOS:Stream Buffer@11.2.0#Stream Buffers condition",
+        "label": "FreeRTOS:Stream Buffer",
+        "expanded": true,
+        "userAdded": false
       }
     ]
   },
@@ -3940,7 +3953,7 @@ solution:
                     "queue_sets": true,
                     "queue_size": 8,
                     "event_groups": true,
-                    "stream_buffers": false,
+                    "stream_buffers": true,
                     "software_timer": true,
                     "timer_task_priority_level": 2,
                     "timer_queue_length": 10,
@@ -3971,7 +3984,7 @@ solution:
                     "memory_management_schema": "HEAP_4",
                     "dynamic_memory_allocation": true,
                     "static_memory_allocation": false,
-                    "total_heap_size": 8192,
+                    "total_heap_size": 16384,
                     "more": {
                       "application_allocated_heap": false,
                       "stack_allocation_from_separate_heap": false,
@@ -4851,6 +4864,7 @@ project:
     - component: STMicroelectronics::Device:STM32CubeMX2 Config:TIM@2.1.0
     - component: STMicroelectronics::RTOS:FreeRTOS:Core@11.2.0
     - component: STMicroelectronics::RTOS:FreeRTOS:MemMang&Heap_4@11.2.0
+    - component: STMicroelectronics::RTOS:FreeRTOS:Stream Buffer@11.2.0
     - component: STMicroelectronics::RTOS:STM32CubeMX2 Config:FreeRTOS@2.1.0
     - component: STMicroelectronics::Utility:STM32CubeMX2 Config:syscalls@1.0.0
     - component: STMicroelectronics::Utility:syscalls&Standalone syscalls@1.0.0

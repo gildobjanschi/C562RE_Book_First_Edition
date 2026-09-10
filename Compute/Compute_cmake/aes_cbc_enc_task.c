@@ -7,6 +7,7 @@
 #include "middleware/freertos/include/task.h"
 #include "middleware/freertos/include/semphr.h"
 #include "middleware/freertos/include/event_groups.h"
+#include "middleware/freertos/include/stream_buffer.h"
 #include "../../Shared/Debug/swd_printf.h"
 #include "../../Shared/Utils/error_handler.h"
 #include "aes_cbc_enc_task.h"
@@ -66,6 +67,10 @@ static hal_status_t performAESCBCEnc(AES_CBC_ENC_PARAMETERS * params) {
   }
 
   HAL_GPIO_WritePin(HAL_GPIOC, PC8_PIN, HAL_GPIO_PIN_RESET);
+
+  // Send the encrypted buffer to the decrypt task
+  xStreamBufferSend(params->xAESStreamBuffer, computedCiphertext, 64,
+      portMAX_DELAY);
 
   return HAL_OK;
 }

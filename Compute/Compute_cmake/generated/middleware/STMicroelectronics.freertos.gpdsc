@@ -85,6 +85,7 @@
   </condition>
     <condition id="Stream Buffers condition">
       <description>Stream Buffers condition</description>
+      <require Cclass="RTOS" Cgroup="FreeRTOS" Csub="Stream Buffer"/>
     </condition>
     <condition id="FreeRTOS Memory Heap condition">
       <description>FreeRTOS Memory Heap condition</description>
