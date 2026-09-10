@@ -77,7 +77,7 @@ static hal_status_t performCORDIC(CORDIC_PARAMETERS * params) {
 
   if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
     // Print the CORDIC sine values
-    SWD_printf("CORDIC Sine values\n");
+    SWD_printf("CORDIC Sine values:\n");
     for (uint32_t i = 0; i < ARRAY_SIZE/8; i++) {
       for (uint32_t j = 0; j < 8; j++) {
         SWD_printf("%08x ", SineValues[8*i + j]);

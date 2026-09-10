@@ -76,7 +76,7 @@ static hal_status_t performSHA256Integrity(
 
   // Print the hash
   if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
-    SWD_printf("SHA256 integrity hash\n");
+    SWD_printf("SHA256 integrity hash:\n");
     for (uint32_t i = 0; i < HASH_OUTPUT_BUFFER_SIZE/8; i++) {
       for (uint32_t j = 0; j < 8; j++) {
         SWD_printf("%02x ", computed_hash_message[8*i + j]);

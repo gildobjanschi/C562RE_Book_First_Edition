@@ -53,7 +53,7 @@ static hal_status_t performAESCBCEnc(AES_CBC_ENC_PARAMETERS * params) {
 
   // Print the encrypted buffer
   if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
-    SWD_printf("AES CBC encryption\n");
+    SWD_printf("AES CBC encrypted:\n");
     for (uint32_t i = 0; i < 2; i++) {
       for (uint32_t j = 0; j < 8; j++) {
         SWD_printf("%08x ", computedCiphertext[8*i + j]);
