@@ -40,7 +40,7 @@ hal_hash_handle_t *mx_hash_init(void)
 
   HAL_RCC_HASH_EnableClock();
 
-  config.data_swapping = HAL_HASH_DATA_SWAP_NO;
+  config.data_swapping = HAL_HASH_DATA_SWAP_BYTE;
   config.algorithm     = HAL_HASH_ALGO_SHA256;
   if (HAL_HASH_SetConfig(&hHASH, &config) != HAL_OK)
   {

@@ -56,10 +56,11 @@ static hal_status_t performRNG(RNG_PARAMETERS * params) {
 
   // Print the random numbers
   if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
+    SWD_printf("Random numbers\n");
     for (uint32_t i = 0; i < RNG_NUMBERS; i++) {
-      SWD_printf("Random number: %08x\n", RandomNumbers[i]);
+      SWD_printf("%08x ", RandomNumbers[i]);
     }
-    SWD_printf("-------------------\n");
+    SWD_printf("\n-------------------\n");
 
     xSemaphoreGive(params->xPrintMutex);
   }

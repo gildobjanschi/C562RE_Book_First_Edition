@@ -13,7 +13,7 @@
 
 #define BUFFER_SIZE    114U
 
-const uint32_t DataBuffer[BUFFER_SIZE] = {
+static const uint32_t DataBuffer[BUFFER_SIZE] = {
   0x00001021, 0x20423063, 0x408450a5, 0x60c670e7, 0x9129a14a, 0xb16bc18c,
   0xd1ade1ce, 0xf1ef1231, 0x32732252, 0x52b54294, 0x72f762d6, 0x93398318,
   0xa35ad3bd, 0xc39cf3ff, 0xe3de2462, 0x34430420, 0x64e674c7, 0x44a45485,
@@ -87,7 +87,6 @@ static void vCRCTaskFunction(void *pvParameters) {
   CRC_PARAMETERS * params = (CRC_PARAMETERS *)pvParameters;
 
   EventBits_t uxBits;
-
   while (1) {
     // Clear the bit on exit. Do not wait for all bits.
     uxBits = xEventGroupWaitBits(params->xTasksEventGroup, CRC_EV_GROUP_BIT,

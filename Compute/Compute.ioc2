@@ -4309,7 +4309,7 @@ solution:
                 "init_type": "called"
               },
               "basic": {
-                "data_swapping": "NO",
+                "data_swapping": "BYTE",
                 "algo": "SHA256",
                 "use_hmac_feature": false
               },

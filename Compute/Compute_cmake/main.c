@@ -14,11 +14,13 @@
 #include "rng_task.h"
 #include "cordic_task.h"
 #include "crc_task.h"
+#include "sha256_integrity_task.h"
 
 static EventGroupHandle_t xTasksEventGroup;
 static RNG_PARAMETERS rngParams;
 static CORDIC_PARAMETERS cordicParams;
 static CRC_PARAMETERS crcParams;
+static SHA256_INTEGRITY_PARAMETERS sha256IntegrityParams;
 
 /*
  * brief:  The application entry point.
@@ -90,9 +92,17 @@ int main(void) {
     return (-1);
   }
 
+  // Initialize the integrity SHA256 hash task
+  sha256IntegrityParams.xTasksEventGroup = xTasksEventGroup;
+  sha256IntegrityParams.xPrintMutex = xPrintMutex;
+  if (SHA256_Integrity_Init(&sha256IntegrityParams) != HAL_OK) {
+    ErrorHandler("SHA256_Integrity_Init failed.");
+    return (-1);
+  }
+
   // Set the event bits for all tasks
-  xEventGroupSetBits(xTasksEventGroup,
-      RNG_EV_GROUP_BIT | CORDIC_EV_GROUP_BIT | CRC_EV_GROUP_BIT);
+  xEventGroupSetBits(xTasksEventGroup, RNG_EV_GROUP_BIT | CORDIC_EV_GROUP_BIT |
+      CRC_EV_GROUP_BIT | SHA256_INTEGRITY_EV_GROUP_BIT);
 
   // Start the scheduler
   vTaskStartScheduler();
