@@ -6,6 +6,7 @@
 #include "middleware/freertos/include/FreeRTOS.h"
 #include "middleware/freertos/include/task.h"
 #include "middleware/freertos/include/semphr.h"
+#include "middleware/freertos/include/event_groups.h"
 #include "../../Shared/Debug/swd_printf.h"
 #include "../../Shared/Utils/error_handler.h"
 #include "rng_task.h"
@@ -25,42 +26,70 @@ static void exitRNGTask(char *error) {
 #define RNG_NUMBERS 8
 
 /*
+ * @brief: Perform Random Numbers Generation
+ *
+ * @param params The task parameters
+ *
+ * @return HAL status
+ */
+static hal_status_t performRNG(RNG_PARAMETERS * params) {
+  HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_SET);
+  uint32_t RandomNumbers[RNG_NUMBERS] = {0};
+
+  hal_rng_handle_t * pRNG = mx_rng_gethandle();
+  // Generate the random numbers using a 10 milliseconds timeout.
+  hal_status_t hal_status = HAL_RNG_GenerateRandomNumber(pRNG, RandomNumbers,
+      RNG_NUMBERS, 10);
+  if (hal_status != HAL_OK) {
+    if (HAL_RNG_GetLastErrorCodes(pRNG) != HAL_RNG_ERROR_SEED) {
+      HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_RESET);
+      SWD_printf("Last error != HAL_RNG_ERROR_SEED\n");
+      return hal_status;
+    }
+
+    if (HAL_RNG_RecoverSeedError(pRNG) != HAL_OK) {
+      HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_RESET);
+      SWD_printf("HAL_RNG_RecoverSeedError failed\n");
+      return hal_status;
+    }
+  }
+
+  // Print the random numbers
+  if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
+    for (uint32_t i = 0; i < RNG_NUMBERS; i++) {
+      SWD_printf("Random number: %08x\n", RandomNumbers[i]);
+    }
+    SWD_printf("-------------------\n");
+
+    xSemaphoreGive(params->xPrintMutex);
+  }
+
+  HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_RESET);
+
+  return HAL_OK;
+}
+
+/*
  * @brief:  The RNG task function
  *
  * @param pvParameters Task parameters
  */
 static void vRNGTaskFunction(void *pvParameters) {
-  uint32_t RandomNumbers[RNG_NUMBERS] = {0};
-
-  hal_rng_handle_t * pRNG = mx_rng_gethandle();
-  // Generate the random numbers using a 10 milliseconds timeout
-  if (HAL_RNG_GenerateRandomNumber(pRNG, RandomNumbers, RNG_NUMBERS, 10)
-      != HAL_OK) {
-    if (HAL_RNG_GetLastErrorCodes(pRNG) != HAL_RNG_ERROR_SEED) {
-      exitRNGTask("Last error != HAL_RNG_ERROR_SEED\n");
-      return;
-    }
-
-    if (HAL_RNG_RecoverSeedError(pRNG) != HAL_OK) {
-      exitRNGTask("HAL_RNG_RecoverSeedError failed.\n");
-      return;
-    }
-  }
-
   RNG_PARAMETERS * params = (RNG_PARAMETERS *)pvParameters;
-  if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
-    // Critical section — exclusive access
-    // Print the random numbers
-    for (uint32_t i = 0; i < RNG_NUMBERS; i++) {
-      SWD_printf("Random number: %08x\n", RandomNumbers[i]);
+
+  EventBits_t uxBits;
+  while (1) {
+    // Clear the bit on exit. Do not wait for all bits.
+    uxBits = xEventGroupWaitBits(params->xTasksEventGroup, RNG_EV_GROUP_BIT,
+        pdTRUE, pdFALSE, portMAX_DELAY);
+
+    if ((uxBits & RNG_EV_GROUP_BIT) != 0) {
+      if (performRNG(params) != HAL_OK) {
+        exitRNGTask("performRNG failed\n");
+        return;
+      }
     }
-
-    // Release the mutex when done
-    xSemaphoreGive(params->xPrintMutex);
   }
-
-  // Exit the task
-  vTaskDelete(NULL);
 }
 
 /*

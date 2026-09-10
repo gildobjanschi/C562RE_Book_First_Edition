@@ -8,6 +8,7 @@
 #include "middleware/freertos/include/FreeRTOS.h"
 #include "middleware/freertos/include/task.h"
 #include "middleware/freertos/include/semphr.h"
+#include "middleware/freertos/include/event_groups.h"
 #include "../../Shared/Debug/swd_printf.h"
 #include "../../Shared/Utils/error_handler.h"
 #include "cordic_task.h"
@@ -54,6 +55,46 @@ static void exitCORDICTask(char *error) {
 }
 
 /*
+ * @brief: Perform CORDIC sine generation
+ *
+ * @param params The task parameters
+ *
+ * @return HAL status
+ */
+static hal_status_t performCORDIC(CORDIC_PARAMETERS * params) {
+  HAL_GPIO_WritePin(HAL_GPIOC, PC2_PIN, HAL_GPIO_PIN_SET);
+
+  hal_cordic_handle_t *pCORDIC = mx_cordic_gethandle();
+  hal_cordic_buffer_desc_t SourceBuffer = {Q1_31, ARRAY_SIZE};
+  hal_cordic_buffer_desc_t DestBuffer = {SineValues, ARRAY_SIZE};
+
+  // Start CORDIC calculations
+  hal_status_t hal_status = HAL_CORDIC_Calculate(pCORDIC,
+      &SourceBuffer, &DestBuffer, 1000);
+  if (hal_status != HAL_OK) {
+    return hal_status;
+  }
+
+  if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
+    // Print the CORDIC sine values
+    SWD_printf("CORDIC Sine values\n");
+    for (uint32_t i = 0; i < ARRAY_SIZE/8; i++) {
+      for (uint32_t j = 0; j < 8; j++) {
+        SWD_printf("%08x ", SineValues[8*i + j]);
+      }
+      SWD_printf("\n");
+    }
+    SWD_printf("-------------------\n");
+
+    xSemaphoreGive(params->xPrintMutex);
+  }
+
+  HAL_GPIO_WritePin(HAL_GPIOC, PC2_PIN, HAL_GPIO_PIN_RESET);
+
+  return HAL_OK;
+}
+
+/*
  * @brief:  The CORDIC task function
  *
  * @param pvParameters Task parameters
@@ -67,27 +108,19 @@ static void vCORDICTaskFunction(void *pvParameters) {
   // CORDIC input must be written in Q1.31 format
   arm_float_to_q31(AnglesDivPi, Q1_31, ARRAY_SIZE);
 
-  // Start CORDIC calculations
-  hal_cordic_handle_t *pCORDIC = mx_cordic_gethandle();
-  hal_cordic_buffer_desc_t SourceBuffer = {Q1_31, ARRAY_SIZE};
-  hal_cordic_buffer_desc_t DestBuffer = {SineValues, ARRAY_SIZE};
-  if (HAL_CORDIC_Calculate(pCORDIC, &SourceBuffer, &DestBuffer, 1000)
-      != HAL_OK) {
-    exitCORDICTask("HAL_CORDIC_Calculate failed\n");
-    return;
-  }
-
   CORDIC_PARAMETERS * params = (CORDIC_PARAMETERS *)pvParameters;
-  if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
-    // Critical section — exclusive access
-    SWD_printf("CORDIC calculations completed\n");
-
-    // Release the mutex when done
-    xSemaphoreGive(params->xPrintMutex);
+  EventBits_t uxBits;
+  while (1) {
+    // Clear the bit on exit. Do not wait for all bits.
+    uxBits = xEventGroupWaitBits(params->xTasksEventGroup, CORDIC_EV_GROUP_BIT,
+        pdTRUE, pdFALSE, portMAX_DELAY);
+    if ((uxBits & CORDIC_EV_GROUP_BIT) != 0) {
+      if (performCORDIC(params) != HAL_OK) {
+        exitCORDICTask("performCORDIC failed\n");
+        return;
+      }
+    }
   }
-
-  // Exit the task
-  vTaskDelete(NULL);
 }
 
 /*

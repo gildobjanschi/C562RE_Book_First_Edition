@@ -7,14 +7,18 @@
 #include "middleware/freertos/include/FreeRTOS.h"
 #include "middleware/freertos/include/task.h"
 #include "middleware/freertos/include/semphr.h"
+#include "middleware/freertos/include/event_groups.h"
 #include "../../Shared/Debug/swd_printf.h"
 #include "../../Shared/Utils/error_handler.h"
 #include "../../Shared/Faults/m33_it.h"
 #include "rng_task.h"
 #include "cordic_task.h"
+#include "crc_task.h"
 
+static EventGroupHandle_t xTasksEventGroup;
 static RNG_PARAMETERS rngParams;
 static CORDIC_PARAMETERS cordicParams;
+static CRC_PARAMETERS crcParams;
 
 /*
  * brief:  The application entry point.
@@ -55,7 +59,15 @@ int main(void) {
     return (-1);
   }
 
+  // Create the event group
+  xTasksEventGroup = xEventGroupCreate();
+  if (xTasksEventGroup == NULL) {
+    ErrorHandler("Cannot create event group.\n");
+    return (-1);
+  }
+
   // Initialize the RNG task
+  rngParams.xTasksEventGroup = xTasksEventGroup;
   rngParams.xPrintMutex = xPrintMutex;
   if (RNG_Init(&rngParams) != HAL_OK) {
     ErrorHandler("RNG_Init failed.");
@@ -63,11 +75,24 @@ int main(void) {
   }
 
   // Initialize the CORDIC task
+  cordicParams.xTasksEventGroup = xTasksEventGroup;
   cordicParams.xPrintMutex = xPrintMutex;
   if (CORDIC_Init(&cordicParams) != HAL_OK) {
     ErrorHandler("CORDIC_Init failed.");
     return (-1);
   }
+
+  // Initialize the CRC task
+  crcParams.xTasksEventGroup = xTasksEventGroup;
+  crcParams.xPrintMutex = xPrintMutex;
+  if (CRC_Init(&crcParams) != HAL_OK) {
+    ErrorHandler("CRC_Init failed.");
+    return (-1);
+  }
+
+  // Set the event bits for all tasks
+  xEventGroupSetBits(xTasksEventGroup,
+      RNG_EV_GROUP_BIT | CORDIC_EV_GROUP_BIT | CRC_EV_GROUP_BIT);
 
   // Start the scheduler
   vTaskStartScheduler();

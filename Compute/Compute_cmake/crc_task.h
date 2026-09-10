@@ -1,25 +1,25 @@
 /*******************************************************************************
- * file           : cordic_task.h
- * brief          : CORDIC task definitions.
+ * file           : crc_task.h
+ * brief          : CRC task definitions.
  ******************************************************************************/
-#ifndef CORDIC_TASK_H
-#define CORDIC_TASK_H
+#ifndef CRC_TASK_H
+#define CRC_TASK_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-#define CORDIC_EV_GROUP_BIT (1 << 1)
+#define CRC_EV_GROUP_BIT (1 << 2)
 
 typedef struct {
   EventGroupHandle_t xTasksEventGroup;
   SemaphoreHandle_t xPrintMutex;
-} CORDIC_PARAMETERS;
+} CRC_PARAMETERS;
 
-hal_status_t CORDIC_Init(CORDIC_PARAMETERS *params);
+hal_status_t CRC_Init(CRC_PARAMETERS *params);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* CORDIC_TASK_H */
+#endif /* CRC_TASK_H */

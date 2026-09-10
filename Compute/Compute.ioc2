@@ -1242,6 +1242,25 @@
           "type": "user_gpio"
         },
         "pinned": true
+      },
+      {
+        "pin": {
+          "name": "PC7",
+          "position": "38",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 7,
+          "port": "C"
+        },
+        "signal": {
+          "instance": "GPIOC",
+          "name": "GPIO",
+          "type": "user_gpio"
+        },
+        "pinned": true
       }
     ],
     "needConfigurations": [
@@ -1817,6 +1836,17 @@
           "ioType": "I/O",
           "ioStructure": "FT",
           "index": 3,
+          "port": "C"
+        },
+        {
+          "name": "PC7",
+          "position": "38",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 7,
           "port": "C"
         }
       ]
@@ -4198,6 +4228,19 @@ solution:
                 },
                 {
                   "_foreignKey": "PC3",
+                  "basic": {
+                    "mode": "OUTPUT",
+                    "pull": "NO",
+                    "enable_exti": false,
+                    "output_active_state": "SET",
+                    "output_init_state": "RESET",
+                    "output_type": "PUSHPULL",
+                    "speed": "LOW"
+                  },
+                  "label_name": []
+                },
+                {
+                  "_foreignKey": "PC7",
                   "basic": {
                     "mode": "OUTPUT",
                     "pull": "NO",

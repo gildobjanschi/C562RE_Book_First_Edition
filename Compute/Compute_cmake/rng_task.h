@@ -9,8 +9,11 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define RNG_EV_GROUP_BIT (1 << 0)
+
 typedef struct {
-  xSemaphoreHandle xPrintMutex;
+  EventGroupHandle_t xTasksEventGroup;
+  SemaphoreHandle_t xPrintMutex;
 } RNG_PARAMETERS;
 
 hal_status_t RNG_Init(RNG_PARAMETERS *params);
