@@ -65,12 +65,14 @@ static hal_status_t performCRC(CRC_PARAMETERS * params) {
     return hal_status;
   }
 
-  // Print the CRC
-  if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
-    SWD_printf("CRC: %08x\n", ulCrcValue);
-    SWD_printf("-------------------\n");
+  if (params->xPrintMutex != NULL) {
+    // Print the CRC
+    if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
+      SWD_printf("CRC: %08x\n", ulCrcValue);
+      SWD_printf("-------------------\n");
 
-    xSemaphoreGive(params->xPrintMutex);
+      xSemaphoreGive(params->xPrintMutex);
+    }
   }
 
   HAL_GPIO_WritePin(HAL_GPIOC, PC3_PIN, HAL_GPIO_PIN_RESET);

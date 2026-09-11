@@ -12,6 +12,7 @@
 #include "../../Shared/Utils/error_handler.h"
 #include "aes_cbc_enc_task.h"
 
+// Buffer to be encrypted
 static const uint32_t plainText[16] =
 {
   0x6bc1bee2, 0x2e409f96, 0xe93d7e11, 0x7393172a,
@@ -52,18 +53,20 @@ static hal_status_t performAESCBCEnc(AES_CBC_ENC_PARAMETERS * params) {
     return hal_status;
   }
 
-  // Print the encrypted buffer
-  if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
-    SWD_printf("AES CBC encrypted:\n");
-    for (uint32_t i = 0; i < 2; i++) {
-      for (uint32_t j = 0; j < 8; j++) {
-        SWD_printf("%08x ", computedCiphertext[8*i + j]);
+  if (params->xPrintMutex != NULL) {
+    // Print the encrypted buffer
+    if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
+      SWD_printf("AES CBC encrypted:\n");
+      for (uint32_t i = 0; i < 2; i++) {
+        for (uint32_t j = 0; j < 8; j++) {
+          SWD_printf("%08x ", computedCiphertext[8*i + j]);
+        }
+        SWD_printf("\n");
       }
-      SWD_printf("\n");
-    }
-    SWD_printf("-------------------\n");
+      SWD_printf("-------------------\n");
 
-    xSemaphoreGive(params->xPrintMutex);
+      xSemaphoreGive(params->xPrintMutex);
+    }
   }
 
   HAL_GPIO_WritePin(HAL_GPIOC, PC8_PIN, HAL_GPIO_PIN_RESET);

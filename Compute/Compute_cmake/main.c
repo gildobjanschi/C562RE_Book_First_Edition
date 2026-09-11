@@ -20,9 +20,11 @@
 #include "aes_cbc_enc_task.h"
 #include "aes_cbc_dec_task.h"
 
+// FreeRTOS handles used by tasks
 static EventGroupHandle_t xTasksEventGroup;
 static SemaphoreHandle_t xPrintMutex;
 static StreamBufferHandle_t xAESStreamBuffer;
+// Parameter structures used by tasks
 static RNG_PARAMETERS rngParams;
 static CORDIC_PARAMETERS cordicParams;
 static CRC_PARAMETERS crcParams;
@@ -62,12 +64,17 @@ int main(void) {
 
   SWD_printf("---- MCU configured at %lu[Hz] ----\n", HAL_RCC_GetHCLKFreq());
 
+
   // Create the print mutex
   xPrintMutex = xSemaphoreCreateMutex();
   if (xPrintMutex == NULL) {
     ErrorHandler("Cannot create mutex.\n");
     return (-1);
   }
+
+  // Uncomment the line below and comment out the mutex creation above,
+  // to turn off debug output in all the tasks
+  //xPrintMutex = NULL;
 
   // Create the event group
   xTasksEventGroup = xEventGroupCreate();
@@ -76,11 +83,11 @@ int main(void) {
     return (-1);
   }
 
-  // Initialize the RNG task
-  rngParams.xTasksEventGroup = xTasksEventGroup;
-  rngParams.xPrintMutex = xPrintMutex;
-  if (RNG_Init(&rngParams) != HAL_OK) {
-    ErrorHandler("RNG_Init failed.");
+  // Initialize the CRC task
+  crcParams.xTasksEventGroup = xTasksEventGroup;
+  crcParams.xPrintMutex = xPrintMutex;
+  if (CRC_Init(&crcParams) != HAL_OK) {
+    ErrorHandler("CRC_Init failed.");
     return (-1);
   }
 
@@ -92,11 +99,11 @@ int main(void) {
     return (-1);
   }
 
-  // Initialize the CRC task
-  crcParams.xTasksEventGroup = xTasksEventGroup;
-  crcParams.xPrintMutex = xPrintMutex;
-  if (CRC_Init(&crcParams) != HAL_OK) {
-    ErrorHandler("CRC_Init failed.");
+  // Initialize the RNG task
+  rngParams.xTasksEventGroup = xTasksEventGroup;
+  rngParams.xPrintMutex = xPrintMutex;
+  if (RNG_Init(&rngParams) != HAL_OK) {
+    ErrorHandler("RNG_Init failed.");
     return (-1);
   }
 

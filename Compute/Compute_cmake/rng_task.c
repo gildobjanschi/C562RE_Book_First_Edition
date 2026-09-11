@@ -52,17 +52,28 @@ static hal_status_t performRNG(RNG_PARAMETERS * params) {
       SWD_printf("HAL_RNG_RecoverSeedError failed\n");
       return hal_status;
     }
+
+    // Retry the RNG
+    hal_status_t hal_status = HAL_RNG_GenerateRandomNumber(pRNG, RandomNumbers,
+        RNG_NUMBERS, 10);
+    if (hal_status != HAL_OK) {
+      HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_RESET);
+      SWD_printf("HAL_RNG_GenerateRandomNumber second attempt failed\n");
+      return hal_status;
+    }
   }
 
-  // Print the random numbers
-  if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
-    SWD_printf("Random numbers:\n");
-    for (uint32_t i = 0; i < RNG_NUMBERS; i++) {
-      SWD_printf("%08x ", RandomNumbers[i]);
-    }
-    SWD_printf("\n-------------------\n");
+  if (params->xPrintMutex != NULL) {
+    // Print the random numbers
+    if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
+      SWD_printf("Random numbers:\n");
+      for (uint32_t i = 0; i < RNG_NUMBERS; i++) {
+        SWD_printf("%08x ", RandomNumbers[i]);
+      }
+      SWD_printf("\n-------------------\n");
 
-    xSemaphoreGive(params->xPrintMutex);
+      xSemaphoreGive(params->xPrintMutex);
+    }
   }
 
   HAL_GPIO_WritePin(HAL_GPIOC, PC0_PIN, HAL_GPIO_PIN_RESET);

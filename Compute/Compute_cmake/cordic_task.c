@@ -43,6 +43,10 @@ static q31_t Q1_31[ARRAY_SIZE];
 
 /* Output array of the CORDIC calculated sines in Q1.31 format, used by CPU */
 static int32_t SineValues[ARRAY_SIZE];
+
+/* Indicates if the Angles q31 computation was performed */
+static uint8_t ucComputedAngles = 0;
+
 /*
  * @brief:  Exit the CORDIC task when there is an error
  *
@@ -62,6 +66,19 @@ static void exitCORDICTask(char *error) {
  * @return HAL status
  */
 static hal_status_t performCORDIC(CORDIC_PARAMETERS * params) {
+  if (ucComputedAngles == 0) {
+    // CORDIC input must be angles in radians divided by pi (range [-1, 1])
+    for (uint32_t i = 0 ; i < ARRAY_SIZE; i++) {
+      AnglesDivPi[i] = Angles[i] / PI;
+    }
+
+    // CORDIC input must be written in Q1.31 format
+    arm_float_to_q31(AnglesDivPi, Q1_31, ARRAY_SIZE);
+
+    // Angles computation performed.
+    ucComputedAngles = 1;
+  }
+
   HAL_GPIO_WritePin(HAL_GPIOC, PC2_PIN, HAL_GPIO_PIN_SET);
 
   hal_cordic_handle_t *pCORDIC = mx_cordic_gethandle();
@@ -75,18 +92,20 @@ static hal_status_t performCORDIC(CORDIC_PARAMETERS * params) {
     return hal_status;
   }
 
-  if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
-    // Print the CORDIC sine values
-    SWD_printf("CORDIC Sine values:\n");
-    for (uint32_t i = 0; i < ARRAY_SIZE/8; i++) {
-      for (uint32_t j = 0; j < 8; j++) {
-        SWD_printf("%08x ", SineValues[8*i + j]);
+  if (params->xPrintMutex != NULL) {
+    if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
+      // Print the CORDIC sine values
+      SWD_printf("CORDIC Sine values:\n");
+      for (uint32_t i = 0; i < ARRAY_SIZE/8; i++) {
+        for (uint32_t j = 0; j < 8; j++) {
+          SWD_printf("%08x ", SineValues[8*i + j]);
+        }
+        SWD_printf("\n");
       }
-      SWD_printf("\n");
-    }
-    SWD_printf("-------------------\n");
+      SWD_printf("-------------------\n");
 
-    xSemaphoreGive(params->xPrintMutex);
+      xSemaphoreGive(params->xPrintMutex);
+    }
   }
 
   HAL_GPIO_WritePin(HAL_GPIOC, PC2_PIN, HAL_GPIO_PIN_RESET);
@@ -100,14 +119,6 @@ static hal_status_t performCORDIC(CORDIC_PARAMETERS * params) {
  * @param pvParameters Task parameters
  */
 static void vCORDICTaskFunction(void *pvParameters) {
-  // CORDIC input must be angles in radians divided by pi (range [-1, 1])
-  for (uint32_t i = 0 ; i < ARRAY_SIZE; i++) {
-    AnglesDivPi[i] = Angles[i] / PI;
-  }
-
-  // CORDIC input must be written in Q1.31 format
-  arm_float_to_q31(AnglesDivPi, Q1_31, ARRAY_SIZE);
-
   CORDIC_PARAMETERS * params = (CORDIC_PARAMETERS *)pvParameters;
   EventBits_t uxBits;
   while (1) {

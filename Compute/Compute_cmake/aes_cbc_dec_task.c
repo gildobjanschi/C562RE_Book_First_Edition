@@ -43,12 +43,19 @@ static void exitAESCBCDecTask(char *error) {
 static hal_status_t performAESCBCDec(AES_CBC_DEC_PARAMETERS * params) {
   HAL_GPIO_WritePin(HAL_GPIOC, PC5_PIN, HAL_GPIO_PIN_SET);
 
-  SWD_printf("Received AES CBC encrypted:\n");
-  for (uint32_t i = 0; i < 2; i++) {
-    for (uint32_t j = 0; j < 8; j++) {
-      SWD_printf("%08x ", decComputedCiphertext[8*i + j]);
+  if (params->xPrintMutex != NULL) {
+    // Print the encrypted buffer
+    if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
+      SWD_printf("Received AES CBC encrypted:\n");
+      for (uint32_t i = 0; i < 2; i++) {
+        for (uint32_t j = 0; j < 8; j++) {
+          SWD_printf("%08x ", decComputedCiphertext[8*i + j]);
+        }
+        SWD_printf("\n");
+      }
+
+      xSemaphoreGive(params->xPrintMutex);
     }
-    SWD_printf("\n");
   }
 
   hal_aes_handle_t * pAES = mx_aes_gethandle();
@@ -63,18 +70,20 @@ static hal_status_t performAESCBCDec(AES_CBC_DEC_PARAMETERS * params) {
     return hal_status;
   }
 
-  // Print the decrypted buffer
-  if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
-    SWD_printf("AES CBC decrypted:\n");
-    for (uint32_t i = 0; i < 2; i++) {
-      for (uint32_t j = 0; j < 8; j++) {
-        SWD_printf("%08x ", decComputedPlaintext[8*i + j]);
+  if (params->xPrintMutex != NULL) {
+    // Print the decrypted buffer
+    if (xSemaphoreTake(params->xPrintMutex, portMAX_DELAY) == pdPASS) {
+      SWD_printf("AES CBC decrypted:\n");
+      for (uint32_t i = 0; i < 2; i++) {
+        for (uint32_t j = 0; j < 8; j++) {
+          SWD_printf("%08x ", decComputedPlaintext[8*i + j]);
+        }
+        SWD_printf("\n");
       }
-      SWD_printf("\n");
-    }
-    SWD_printf("-------------------\n");
+      SWD_printf("-------------------\n");
 
-    xSemaphoreGive(params->xPrintMutex);
+      xSemaphoreGive(params->xPrintMutex);
+    }
   }
 
   HAL_GPIO_WritePin(HAL_GPIOC, PC5_PIN, HAL_GPIO_PIN_RESET);
