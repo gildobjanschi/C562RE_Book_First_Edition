@@ -12,3 +12,4 @@ int
 init
 decrypt
 decrypted
+mutex

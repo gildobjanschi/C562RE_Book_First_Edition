@@ -64,6 +64,13 @@ int main(void) {
 
   SWD_printf("---- MCU configured at %lu[Hz] ----\n", HAL_RCC_GetHCLKFreq());
 
+  // Print the 96-bit UID of the MCU
+  hal_device_uid_t deviceUID;
+  if (HAL_GetDeviceUniqueID(&deviceUID) == HAL_OK) {
+    SWD_printf("MCU UID:  %08x-%08x-%08x\n",
+        deviceUID.uid_0, deviceUID.uid_1, deviceUID.uid_2);
+    SWD_printf("-------------------\n");
+  }
 
   // Create the print mutex
   xPrintMutex = xSemaphoreCreateMutex();
