@@ -10,6 +10,7 @@ Each folder is a self-contained example project demonstrating a specific periphe
 |---|---|
 | `ADC_DMA` | Analog-to-digital conversion using DMA transfers |
 | `Blink_LED` | Minimal GPIO example — blinking an LED |
+| `Compute` | Compute (CORDIC, CRC) and Security (RNG, AES, SHA) |
 | `DAC_DMA` | Digital-to-analog conversion using DMA transfers |
 | `FDCAN` | FDCAN (Flexible Data-rate CAN) peripheral example |
 | `Flash_EDATA` | Flash memory emulated data / EEPROM emulation |
