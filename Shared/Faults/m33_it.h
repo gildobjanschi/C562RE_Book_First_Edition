@@ -10,6 +10,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 void Fault_Config();
+void Fault_Config_Packed();
 
 #ifdef __cplusplus
 }

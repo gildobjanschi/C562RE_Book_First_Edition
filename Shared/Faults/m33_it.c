@@ -16,6 +16,13 @@ void Fault_Config() {
 }
 
 /*
+ * @brief This function enable specific faults.
+ */
+void Fault_Config_Packed() {
+  SCB->CCR |= SCB_CCR_DIV_0_TRP_Msk;
+}
+
+/*
  * @brief This function blinks an LED a specified number of times followed
  *   by a longer pause.
  *
