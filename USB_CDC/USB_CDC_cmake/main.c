@@ -4,9 +4,12 @@
  ******************************************************************************/
 #include "mx_hal_def.h"
 #include "mx_system.h"
+#include "middleware/freertos/include/FreeRTOS.h"
+#include "middleware/freertos/include/task.h"
 #include "../../Shared/Debug/swd_printf.h"
 #include "../../Shared/Utils/error_handler.h"
 #include "../../Shared/Faults/m33_it.h"
+#include "app_task.h"
 #include "tusb.h"
 
 /*
@@ -41,22 +44,12 @@ int main(void) {
 
   SWD_printf("---- MCU configured at %lu[Hz] ----\n", HAL_RCC_GetHCLKFreq());
 
-  // Initialize TinyUSB
-  tusb_rhport_init_t dev_init = {
-      .role = TUSB_ROLE_DEVICE,
-      .speed = TUSB_SPEED_AUTO};
-  tusb_init(BOARD_TUD_RHPORT, &dev_init);
-
-  uint8_t buf[64];
-  while (1) {
-    tud_task();
-
-    if (tud_cdc_available()) {
-      uint32_t count = tud_cdc_read(buf, sizeof(buf));
-
-      // Echo back
-      tud_cdc_write(buf, count);
-      tud_cdc_write_flush();
-    }
+  // Initialize the application
+  if (App_Init() != HAL_OK) {
+    ErrorHandler("App_Init failed.");
+    return (-1);
   }
+
+  // Start the scheduler
+  vTaskStartScheduler();
 }

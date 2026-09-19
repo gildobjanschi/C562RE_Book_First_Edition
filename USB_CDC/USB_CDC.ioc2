@@ -3934,7 +3934,7 @@ solution:
                     "tickless_mode": false,
                     "scheduling_mode": "PREEMPTIVE",
                     "use_time_slicing": true,
-                    "minimum_stack_size": 2048,
+                    "minimum_stack_size": 128,
                     "max_priorities": 32,
                     "mutexes": true,
                     "recursive_mutexes": true,

@@ -36,7 +36,7 @@
 #define configUSE_TICKLESS_IDLE                       0U
 #define configUSE_PREEMPTION                          1U
 #define configUSE_TIME_SLICING                        1U
-#define configMINIMAL_STACK_SIZE                      2048U
+#define configMINIMAL_STACK_SIZE                      128U
 #define configMAX_PRIORITIES                          32U
 #define configUSE_MUTEXES                             1U
 #define configUSE_RECURSIVE_MUTEXES                   1U
