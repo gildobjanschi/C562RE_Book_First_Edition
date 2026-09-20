@@ -62,8 +62,6 @@ extern "C" {
     #include "timers.h"
   #endif
 #endif
-/*
-##### GIL #####
 // Define the default baudrate
 #ifndef CFG_BOARD_UART_BAUDRATE
 #define CFG_BOARD_UART_BAUDRATE 115200   ///< Default baud rate
@@ -93,11 +91,10 @@ void board_led_write(bool state);
 // Get the current state of button
 // a '1' means active (pressed), a '0' means inactive.
 uint32_t board_button_read(void);
-*/
+
 // Get board unique ID for USB serial number. Return number of bytes. Note max_len is typically 16
 size_t board_get_unique_id(uint8_t id[], size_t max_len);
-/*
-##### GIL #####
+
 // Get characters from UART (non-blocking). Return number of read bytes.
 int board_uart_read(uint8_t *buf, int len);
 
@@ -114,7 +111,7 @@ static inline void board_led_on(void) {
 static inline void board_led_off(void) {
   board_led_write(false);
 }
-*/
+
 // Get USB Serial number string from unique ID if available. Return number of character.
 // Input is string descriptor from index 1 (index 0 is type + len)
 static inline size_t board_usb_get_serial(uint16_t desc_str1[], size_t max_chars) {
@@ -141,8 +138,7 @@ static inline size_t board_usb_get_serial(uint16_t desc_str1[], size_t max_chars
 
   return 2 * uid_len;
 }
-/*
-##### GIL #####
+
 // TODO remove
 static inline void board_delay(uint32_t ms) {
   uint32_t start_ms = tusb_time_millis_api();
@@ -161,7 +157,6 @@ static inline void board_delay(uint32_t ms) {
 // stdio getchar() is blocking, this is non-blocking version
 int board_getchar(void);
 int board_putchar(int c);
-*/
 
 #ifdef __cplusplus
 }

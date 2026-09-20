@@ -50,7 +50,8 @@
 
 // defined by compiler flags for flexibility
 //##### GIL #####
-#define CFG_TUD_LOG_LEVEL   3
+#define CFG_TUD_LOG_LEVEL     3
+#define CFG_TUSB_DEBUG        3
 #define CFG_TUSB_MCU OPT_MCU_STM32C5
 //##########
 
@@ -63,9 +64,7 @@
 #endif
 
 #ifndef CFG_TUSB_DEBUG
-//##### GIL #####
-#define CFG_TUSB_DEBUG        3
-//##########
+#define CFG_TUSB_DEBUG        0
 #endif
 
 // Enable Device stack
