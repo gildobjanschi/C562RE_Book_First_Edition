@@ -31,8 +31,9 @@
 /*
  * @brief: Called by board_usb_get_serial in board_api.h
  *
- * @param id The UID
- * @param max_len The maximum length of the if
+ * @param id The output buffer that receives the UID bytes
+ * @param max_len The maximum number of bytes that can be written to the
+ *  id buffer
  */
 size_t board_get_unique_id(uint8_t id[], size_t max_len) {
   if (max_len < 12) {
