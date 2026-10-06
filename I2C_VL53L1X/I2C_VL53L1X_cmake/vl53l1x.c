@@ -118,6 +118,8 @@ const uint8_t VL53L1X_DEFAULT_CONFIGURATION[] = {
 
 typedef enum {
   SM_INIT,
+  SM_GET_MODEL_ID,
+  SM_CONFIG,
   SM_INIT_START_RANGING_CLEAR_INT,
   SM_INIT_START_RANGING_START,
   SM_INIT_CHECK_DATA_READY_INT_POLARITY,
@@ -126,7 +128,6 @@ typedef enum {
   SM_INIT_STOP_RANGING,
   SM_INIT_CONFIG_TIMEOUT,
   SM_INIT_COMPLETE,
-  SM_GET_MODEL_ID,
   SM_GET_DISTANCE
 } I2C_SM;
 
@@ -154,9 +155,6 @@ hal_status_t VL53L1X_Init(QueueHandle_t I2CQueue) {
  * @retval HAL_OK if it succeeds
  */
 hal_status_t VL53L1X_Start() {
-  // Initialize the registers where we write the initialization bytes
-  uwInitRegisterAddr = 0x2D;
-
   // Start the state machine
   VL53L1X_State = SM_INIT;
   VL53L1X_StateMachine(NULL, 0, NULL);
@@ -169,7 +167,7 @@ hal_status_t VL53L1X_Start() {
  *
  * @param pRxBuffer The pointer to the receive buffer (NULL if Tx completed)
  * @param ulRxBytes The number of bytes received (0 if Tx completed)
- * @param puwDistance The returned distance when return value is
+ * @param puwDistance The returned distance when the return value is
  *      HAL_DISTANCE_AVAIL
  *
  * @retval HAL_OK if the function succeeds, HAL_DISTANCE_AVAIL when
@@ -181,7 +179,39 @@ hal_status_t VL53L1X_StateMachine(uint8_t *pRxBuffer, uint32_t ulRxBytes,
 
   uint8_t ucData;
   switch (VL53L1X_State) {
+
   case SM_INIT: {
+    // Get the sensor model
+    status = I2C1_Recv(VL53L1_IDENTIFICATION__MODEL_ID, 2);
+    if (status != HAL_OK) {
+      return status;
+    }
+
+    SWD_printf("SM_INIT_COMPLETE -> SM_GET_MODEL_ID.\n");
+
+    VL53L1X_State = SM_GET_MODEL_ID;
+    break;
+  }
+
+  case SM_GET_MODEL_ID: {
+    uint16_t uwModelId = pRxBuffer[1] | (pRxBuffer[0] << 8);
+    SWD_printf("VL53L1X_StateMachine: Model id: %x\n", uwModelId);
+
+    VL53L1X_State = SM_CONFIG;
+
+    // Start the configuration
+    uwInitRegisterAddr = 0x2D;
+    ucData = VL53L1X_DEFAULT_CONFIGURATION[uwInitRegisterAddr - 0x2D];
+    status = I2C1_Send(uwInitRegisterAddr, &ucData, 1);
+    if (status != HAL_OK) {
+      return status;
+    }
+
+    uwInitRegisterAddr++;
+    break;
+  }
+
+  case SM_CONFIG: {
     if (uwInitRegisterAddr > 0x87) {
       // Clear the interrupt
       ucData = 1;
@@ -194,6 +224,7 @@ hal_status_t VL53L1X_StateMachine(uint8_t *pRxBuffer, uint32_t ulRxBytes,
 
       VL53L1X_State = SM_INIT_START_RANGING_CLEAR_INT;
     } else {
+      // Continue the configuration
       ucData = VL53L1X_DEFAULT_CONFIGURATION[uwInitRegisterAddr - 0x2D];
       status = I2C1_Send(uwInitRegisterAddr, &ucData, 1);
       if (status != HAL_OK) {
@@ -201,7 +232,7 @@ hal_status_t VL53L1X_StateMachine(uint8_t *pRxBuffer, uint32_t ulRxBytes,
       }
 
       uwInitRegisterAddr++;
-      // Stay in SM_INIT state machine until all registers are initialized.
+      // Stay in SM_CONFIG state machine until all registers are initialized.
     }
 
     break;
@@ -331,22 +362,6 @@ hal_status_t VL53L1X_StateMachine(uint8_t *pRxBuffer, uint32_t ulRxBytes,
   }
 
   case SM_INIT_COMPLETE: {
-    // Get the sensor model
-    status = I2C1_Recv(VL53L1_IDENTIFICATION__MODEL_ID, 2);
-    if (status != HAL_OK) {
-      return status;
-    }
-
-    SWD_printf("SM_INIT_COMPLETE -> SM_GET_MODEL_ID.\n");
-
-    VL53L1X_State = SM_GET_MODEL_ID;
-    break;
-  }
-
-  case SM_GET_MODEL_ID: {
-    uint16_t uwModelId = pRxBuffer[1] | (pRxBuffer[0] << 8);
-    SWD_printf("VL53L1X_StateMachine: Model id: %x\n", uwModelId);
-
     // Read the distance
     status = I2C1_Recv(VL53L1_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0,
         2);
