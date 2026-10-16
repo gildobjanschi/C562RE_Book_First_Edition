@@ -115,15 +115,15 @@
     },
     {
       "id": "DAC1SH_Clock_Source",
-      "value": "LSE_inputid",
+      "value": "LSI_inputid",
       "isLocked": false,
-      "outFrequency": 32768
+      "outFrequency": 32000
     },
     {
       "id": "DAC1SH_Input_Clock",
-      "value": "32768",
+      "value": 32000,
       "isLocked": false,
-      "outFrequency": 32768
+      "outFrequency": 32000
     },
     {
       "id": "SPI1_Clock_Source",
@@ -1198,27 +1198,6 @@
           "ioStructure": "FT",
           "index": 5,
           "port": "A"
-        }
-      },
-      {
-        "signal": {
-          "instance": "GPIOC",
-          "name": "GPIO",
-          "type": "user_gpio"
-        },
-        "pinned": true,
-        "pin": {
-          "name": "PC13",
-          "position": "2",
-          "type": "gpio",
-          "powerSource": "VDD",
-          "ioStructureOptions": [
-            "t"
-          ],
-          "ioType": "I/O",
-          "ioStructure": "FT",
-          "index": 13,
-          "port": "C"
         }
       }
     ],
@@ -4542,4 +4521,4 @@ project:
 ["Project Description"]
 workingAreaId = "4fd495bc-4f46-4b65-b3d6-bd9615f9eb92"
 version = "1"
-mx2Version = "1.1.1"
+mx2Version = "1.1.2"
