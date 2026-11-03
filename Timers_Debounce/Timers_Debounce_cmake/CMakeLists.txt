@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(Timers_Debounce)
 add_executable(Timers_Debounce)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)
