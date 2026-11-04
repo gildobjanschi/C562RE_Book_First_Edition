@@ -14,6 +14,14 @@
                 "TOOLCHAIN_FILE": "GCC.14.3.1.cmake"
             },
             "inherits": "default"
+        },
+        {
+            "name": "release_GCC_NUCLEO-C562RE",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "${presetName}",
+                "TOOLCHAIN_FILE": "GCC.14.3.1.cmake"
+            },
+            "inherits": "default"
         }
     ],
     "buildPresets": [
@@ -25,6 +33,10 @@
         {
             "name": "debug_GCC_NUCLEO-C562RE",
             "configurePreset": "debug_GCC_NUCLEO-C562RE"
+        },
+        {
+            "name": "release_GCC_NUCLEO-C562RE",
+            "configurePreset": "release_GCC_NUCLEO-C562RE"
         }
     ]
 }
