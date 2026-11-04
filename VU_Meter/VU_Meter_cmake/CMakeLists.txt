@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(VU_Meter)
 add_executable(VU_Meter)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)

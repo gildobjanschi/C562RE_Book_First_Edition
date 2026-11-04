@@ -87,6 +87,7 @@ hal_dac_handle_t *mx_dac1_init(void)
        PA4     ------>   DAC1_OUT1   ------>  PA4
     **/
   gpio_config.mode        = HAL_GPIO_MODE_ANALOG;
+  gpio_config.pull        = HAL_GPIO_PULL_NO;
   HAL_GPIO_Init(PA4_PORT, PA4_PIN, &gpio_config);
 
   /* Enable the interruption for DAC */

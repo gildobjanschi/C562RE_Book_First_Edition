@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(ADC_DMA)
 add_executable(ADC_DMA)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)
