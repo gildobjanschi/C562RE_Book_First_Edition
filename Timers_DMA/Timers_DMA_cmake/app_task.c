@@ -58,7 +58,7 @@ static void vAppTaskFunction(void *pvParameters) {
     return exitAppTask("Start_Input_Capture_DMA failed.\n", xInterruptQueue);
   }
 
-  SWD_printf("Generating PMW pulses on PA0.\n");
+  SWD_printf("Generating PWM pulses on PA0.\n");
   if (Start_PWM_DMA() != HAL_OK) {
     return exitAppTask("Start_PWM_DMA failed.\n", xInterruptQueue);
   }
