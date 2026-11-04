@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(Low_Power)
 add_executable(Low_Power)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)

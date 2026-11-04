@@ -48,6 +48,7 @@ system_status_t mx_pwr_init(void)
     **/
   gpio_config.mode        = HAL_GPIO_MODE_ALTERNATE;
   gpio_config.output_type = HAL_GPIO_OUTPUT_PUSHPULL;
+  gpio_config.pull        = HAL_GPIO_PULL_NO;
   gpio_config.speed       = HAL_GPIO_SPEED_FREQ_VERY_HIGH;
   gpio_config.alternate   = HAL_GPIO_AF_0;
   HAL_GPIO_Init(HAL_GPIOC, PC2_PIN | PC3_PIN, &gpio_config);

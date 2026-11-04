@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(PWR_Standby)
 add_executable(PWR_Standby)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)
