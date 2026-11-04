@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(FDCAN)
 add_executable(FDCAN)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)
