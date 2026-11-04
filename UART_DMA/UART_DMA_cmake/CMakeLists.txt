@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(UART_DMA)
 add_executable(UART_DMA)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)
