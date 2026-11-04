@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(SPI_FRAM)
 add_executable(SPI_FRAM)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)

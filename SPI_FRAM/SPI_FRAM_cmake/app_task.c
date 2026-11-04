@@ -12,6 +12,7 @@
 #include "app_input.h"
 #include "app_task.h"
 #include "spi2_dma.h"
+#include <stdlib.h>
 
 // The FRAM write buffer
 static uint8_t *pWrBuffer;
