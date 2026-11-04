@@ -509,7 +509,7 @@
     },
     "HAL_CORTEX_PROJECT_USE_HAL": {
       "name": "HAL_CORTEX_PROJECT_USE_HAL",
-      "value": 5,
+      "value": 3,
       "originator": "sw-config-semaphore"
     },
     "HAL_ICACHE_CORE_ENABLED": {
@@ -606,16 +606,16 @@
     "useCustomInstallPaths": true,
     "customPackPaths": [
       {
-        "packName": "STMicroelectronics.button_hw-part.2.1.0",
-        "folder": "misc/STMicroelectronics.button_hw-part.2.1.0"
+        "packName": "STMicroelectronics.button_hw-part.2.2.0",
+        "folder": "misc/STMicroelectronics.button_hw-part.2.2.0"
       },
       {
         "packName": "STMicroelectronics.CMSIS.6.3.0",
         "folder": "arch/cmsis"
       },
       {
-        "packName": "STMicroelectronics.crystal_hw-part.2.2.0",
-        "folder": "misc/STMicroelectronics.crystal_hw-part.2.2.0"
+        "packName": "STMicroelectronics.crystal_hw-part.2.3.1",
+        "folder": "misc/STMicroelectronics.crystal_hw-part.2.3.1"
       },
       {
         "packName": "STMicroelectronics.esd_hw-part.2.2.0",
@@ -1756,9 +1756,9 @@ solution:
   projects:
     - project: project/Blink_LED.cproject.yml
   packs:
-    - pack: STMicroelectronics::button_hw-part@2.1.0
+    - pack: STMicroelectronics::button_hw-part@2.2.0
     - pack: STMicroelectronics::CMSIS@6.3.0
-    - pack: STMicroelectronics::crystal_hw-part@2.2.0
+    - pack: STMicroelectronics::crystal_hw-part@2.3.1
     - pack: STMicroelectronics::esd_hw-part@2.2.0
     - pack: STMicroelectronics::freertos@2.2.0
     - pack: STMicroelectronics::led_hw-part@2.5.0
