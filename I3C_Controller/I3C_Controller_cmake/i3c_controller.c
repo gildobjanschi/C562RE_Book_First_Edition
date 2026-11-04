@@ -209,8 +209,10 @@ hal_status_t I3C_StartDAA() {
  */
 static void I3C_DynAddrRequestCallback(hal_i3c_handle_t *hi3c,
     uint64_t ullTargetPayload) {
+#ifdef DEBUG
   uint32_t tpl = ullTargetPayload >> 32;
   uint32_t tph = (uint32_t)ullTargetPayload;
+#endif
   SWD_printf("-- Target requested DA; payload: %X%X\n", tpl, tph);
   ullTargetProvisionedID_BCR_DCR = ullTargetPayload;
   // Start the I3C transaction that assigns the address to the target.
@@ -519,7 +521,7 @@ hal_status_t I3C_TransferComplete(uint8_t** ppRxBuffer,
 
   if ((I3C_State & CCC_PENDING) == CCC_PENDING) {
     I3C_State &= ~CCC_PENDING;
-
+#ifdef DEBUG
     /* CCC names used by PrintCCCResults. */
     char *CommandCode[] = {
       "GETMWL",
@@ -547,6 +549,7 @@ hal_status_t I3C_TransferComplete(uint8_t** ppRxBuffer,
     }
 
     SWD_printf(".\n");
+#endif
   } else if ((I3C_State & STORE_CMD_PENDING) == STORE_CMD_PENDING) {
     I3C_State &= ~STORE_CMD_PENDING;
 

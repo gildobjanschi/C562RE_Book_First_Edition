@@ -1,13 +1,13 @@
 {
   "disclaimer": "Do not modify this file as it is used by STM32CubeMX2 to determine what and how to update your project with new configuration",
   "version": "1.0.0",
-  "timestamp": "2026-08-12T18:20:46.504Z",
+  "timestamp": "2026-11-04T13:12:31.950Z",
   "files": [
     {
       "fileGroup": "project_file",
       "checksum": {
         "algo": "sha256",
-        "digest": "13be9a462bee5711301146a99d1cd202ceac309fcce7bd3c81cb0d7f7b63515c"
+        "digest": "250f9fa96cd2eb8e5aa7dd35a9ac23458d038a9f6aefe7d1a9c4b879288cfceb"
       },
       "file": "CMakeLists.txt"
     },
@@ -15,7 +15,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "cb198a61aedead7e684cd6dc955a04acbdccaa407f10355bea19aad425d66d21"
+        "digest": "0e2ee90253306da068d1d6e19de5a6565bef695ab5ef14f5b4d6a066e8848131"
       },
       "file": "CMakePresets.json"
     },
@@ -47,7 +47,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "648764aa764e8f9194c303cd8ccade0c42f07ccf3fc8a119e72a520653cec089"
+        "digest": "105eed1d7a352ae721c4f6af4913bab089c0f4e7a2e65af128f5bb2edaa0da5e"
       },
       "file": "cmake/components.cmake"
     },
@@ -55,7 +55,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "3a0bd7efefe7776676eb9362e9c4d1189541f9bb117b620baeaa25618c391d6e"
+        "digest": "38e107fda6d680104d90a9b034c1e2f97f187f525006d03d416a99c7dad83e87"
       },
       "file": "cmake/files.cmake"
     },
@@ -63,7 +63,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "46c8e85b2c7551f9a01d6caa9173bce8f39cf6a87274659714b73d3e946c9186"
+        "digest": "4357d8510c0d59569ef458ff3d9f5bc8c15d1520d2a7fdea76e0c3a4711b4861"
       },
       "file": "cmake/flags.cmake"
     },
@@ -71,7 +71,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "b3848bea1c3a02c4d6a6fa608107519391fcb2e02b82a1f325ec6d25efa05266"
+        "digest": "0d20bbd10fcc6587878e553a3ae902e42e62f362ae14b9e8a6b9ecb817189efc"
       },
       "file": "cmake/target.cmake"
     },
@@ -79,7 +79,7 @@
       "fileGroup": "project_file",
       "checksum": {
         "algo": "sha256",
-        "digest": "8edd503c731e0b2b457699d746ac15e516122a465625296e60702b394d2071b7"
+        "digest": "9f0e52c4c9ab1ca9398bc16133e16f76e0f2337583897526e59de3202ece08cc"
       },
       "file": "stm32c5xx_dfp/CMakeLists.txt"
     },
@@ -103,7 +103,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "23a6cd6dec61f4feca7b05a8851aea7f6c0a3a530c6c872b95767ac8f0fc3901"
+        "digest": "253316e5a48335df29db61a884d2a49834d74784130e486bbb7bc0b5f3152dd1"
       },
       "file": "stm32c5xx_dfp/RTE_Components.h"
     },
@@ -423,7 +423,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "29657b98361b0f0c29f9e8efc3ca4192d0241048b9727ed811917b469c017c5b"
+        "digest": "e2a776a9598e373632da1b2657c519815aeeb86097a51777abef8a9f6961fdb8"
       },
       "file": "generated/middleware/FreeRTOSConfig.h"
     },
@@ -431,7 +431,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "ad7635e591b171bc49d458a5978b87c082bd3104f145e19279a0f7cf21bc35d5"
+        "digest": "db19109a9f286a82adcdf46494254174b801a1948ac27c7ea3a5dcb6b906e0db"
       },
       "file": "generated/middleware/STMicroelectronics.freertos.cmake"
     },
@@ -439,7 +439,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "da781b4bfa7833f5d33635d4668180580319a63ab430d617cd8b406cd56e6bf9"
+        "digest": "06623c1c3e11ee6eb24c521be87c18276342d6c808d730b4315c56d07f2678b1"
       },
       "file": "generated/middleware/STMicroelectronics.freertos.gpdsc"
     },
@@ -503,7 +503,7 @@
       "fileGroup": "project_file",
       "checksum": {
         "algo": "sha256",
-        "digest": "c83f4f8f71eb1d673557af1c1e6c15d8e2b3b3310e7399b43891931b79784298"
+        "digest": "ee77e43435f4b17ca22176d4cbd9e6cb5aa6ba95d9dfe81e59c5af32338f51f0"
       },
       "file": "middleware/freertos/CMakeLists.txt"
     },
@@ -511,7 +511,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "d1f4579f853dfa4bcb23cf77225fb1ee7c9f8ce40b0a84291cb93901a53f074a"
+        "digest": "609ba692cb0b55b61431e7c75bb615a616c7934d9ef8954cdbc797a600ab58b9"
       },
       "file": "middleware/freertos/History.txt"
     },
@@ -519,7 +519,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "f0c1af7db60f7c2dfcb26271e85ed20016fab9b04ed03c09622eaa0db4e924ce"
+        "digest": "318d3691f065b2c594e825a00b04a03cac2e0ae0df8e371e80d0cb939e5457ba"
       },
       "file": "middleware/freertos/LICENSE.md"
     },
@@ -527,7 +527,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "c427f65abfc400cbb5f305685006e4cee05a195f709c10cb0c4ebca813186ad4"
+        "digest": "343f07facc543d2547fe3fc12ea7f63397ed0be7f3e30c0cf70a2b3a7cdd13d2"
       },
       "file": "middleware/freertos/README.md"
     },
@@ -535,7 +535,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "2bd0244f5691d45610e54d563e477766f65ce7b6090db812e6ab65dc8fc31850"
+        "digest": "265a8f1da8e516f8c6e9f8f1f7f0e5fd9e5ee3cf3bc7354fa20db1a71c5c5b79"
       },
       "file": "middleware/freertos/ST_Release_Notes.md"
     },
@@ -551,7 +551,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "5dad16637ad74547b08a379eccebfb88d8bb892eead623d18843499a953cf07a"
+        "digest": "96b4ddef11d52a72b1e57ea1142f1a08a90173fe3e780314e4704c8ec0a40fd4"
       },
       "file": "middleware/freertos/croutine.c"
     },
@@ -559,7 +559,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "09ea06076a2718d94e4b88d570c9581d38f2b65d14c6c004a417f369186a2b86"
+        "digest": "f2a65c7dc41fd090138bed3b32b4df03e194d4ce21805825286f7f5abe1ad3e9"
       },
       "file": "middleware/freertos/event_groups.c"
     },
@@ -567,7 +567,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "cdb65571d63cc6d1900c2d7a305f0d0a1ca8c41e1e82bf967ff6ee61b9af50f4"
+        "digest": "182fefbf019d8d804ba287dc6a2ee4755b9895898ea7aae7fa41f0154c83c677"
       },
       "file": "middleware/freertos/list.c"
     },
@@ -575,7 +575,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "e1272abca8262bd3d845c3619c80d2d9f4fbeadf093305ad20b5fb8ff9acbf74"
+        "digest": "31e5ce0890906b7eaac466007c8810fbfe248d22f667a3c620c3f18e9fc0fcc3"
       },
       "file": "middleware/freertos/queue.c"
     },
@@ -583,7 +583,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "7378f20a825cf45903743d235f8d8f4bc11bb8fee7d14be53ca3f646e9f26e76"
+        "digest": "cd848b8216a56fcda19f2f8c45c767b707408052f08c95b85974dd5e4f44c2be"
       },
       "file": "middleware/freertos/stream_buffer.c"
     },
@@ -591,7 +591,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "11f05459fd6bf793b1c143ddd31dd5715ba16a3d6ecd32e334bc04dca07bfce1"
+        "digest": "ae8bcc9dd0b30d39bf37eb36f1ef3067d086906b2f92ca2aea1acc0f0ad31645"
       },
       "file": "middleware/freertos/tasks.c"
     },
@@ -599,7 +599,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "d6dc2764d1c80b5ffdd6b6cd6387e481f6ab80a38493b8a34c577019cfb77dce"
+        "digest": "28b533ac647428f4e92560d39f66b75384cf8dd8c3b18dd81471c423ce702243"
       },
       "file": "middleware/freertos/timers.c"
     },
@@ -1852,10 +1852,26 @@
       "file": "user_modifiable/_debug_GCC_STM32C542CCT6/RTE_Components.h"
     },
     {
+      "fileGroup": "RTE",
+      "checksum": {
+        "algo": "sha256",
+        "digest": "9f6ff976fe090233bfedcbbe9985d85ac8fc1a0f4163efaffbc6c655118b9e82"
+      },
+      "file": "user_modifiable/_release_GCC_STM32C542CCT6/Pre_Include_Global.h"
+    },
+    {
+      "fileGroup": "RTE",
+      "checksum": {
+        "algo": "sha256",
+        "digest": "4757a51640fb5bf734e1a5b2912d09d87b3269e1d62722364a63050a8ad3cbd9"
+      },
+      "file": "user_modifiable/_release_GCC_STM32C542CCT6/RTE_Components.h"
+    },
+    {
       "fileGroup": "project_file",
       "checksum": {
         "algo": "sha256",
-        "digest": "19c0b9bafe82d6bdee83f0f135c191fb23fcd66b457b885d63cae505fc8ed60f"
+        "digest": "24c09ffa5c6f4890f9c96e53203955c92aab3645ee41fe61e84c05d48c5579c4"
       },
       "file": "utilities/syscalls/CMakeLists.txt"
     },
@@ -1871,7 +1887,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "bdfa99c5f9272cbd6064b3d4af644c96151e5423e854b46c8cc9b0194ce8a832"
+        "digest": "aafca9b6e12d5e60b4bd20de5333756975e72e8b032cb3a75068bf6d0c32a65d"
       },
       "file": "utilities/syscalls/README.md"
     },
@@ -1879,7 +1895,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "86dad8652fa8741ca08b9d11d8a72467e8f2e46a73461d5b9a79ab84fcd7e19f"
+        "digest": "004124b1e9bc7d5198d338dea8767b000a1e7abb5c4f9a71e84d445d4e2292e9"
       },
       "file": "utilities/syscalls/Release_Notes.md"
     },
@@ -1911,7 +1927,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "7631c6e921ddbc3595f70d28480fe2de810578e99da8b05ee6257b608db57366"
+        "digest": "c8e1cec639a7e8aa115ec5a1d19ab5c06cc06ab84f5c7fedefeba410a09cad55"
       },
       "file": "middleware/freertos/include/FreeRTOS.h"
     },
@@ -1919,7 +1935,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "bd6109676965a55ea30dd159627b1af10fa3d0fa88edfd7fa739d09bd21b87cc"
+        "digest": "74ec543ebd05d7349d81423f639c9f1fe293a2546dffa8fd45ff5ace18df34bc"
       },
       "file": "middleware/freertos/include/StackMacros.h"
     },
@@ -1927,7 +1943,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "d3e8e3251ebda406d07715bcc50d33b904d9c6428703a2bd24730e610561deb7"
+        "digest": "3c67fad07a479a52ef100867361fd558ae57366bc49dee7430dc6f81c513fea4"
       },
       "file": "middleware/freertos/include/atomic.h"
     },
@@ -1935,7 +1951,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "d84a710642e8d53b62a59ff7fd3b59135f7d5bb558bec3f2b43577a070313861"
+        "digest": "3f29e3f57a9b7ed5b20d9587493eecdab9721691b33e5f73a1f9c88e538aa773"
       },
       "file": "middleware/freertos/include/croutine.h"
     },
@@ -1943,7 +1959,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "bba9ff7cca4ad1e454f975354e4b1d5cde5dc71e0ced38dc1a6c8de04075da09"
+        "digest": "0f178c08d7c3beeebdeaf80f8a2f95a414cca365e541afd571191f41d727829b"
       },
       "file": "middleware/freertos/include/deprecated_definitions.h"
     },
@@ -1951,7 +1967,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "50afa22b9e12ebff864239405c9a222dec27423252065e57ca04d0a9d693650e"
+        "digest": "601e20f83bf25037b11fb1a4d73e2ee5f473fa16ea4a819b8e48fc615a3a1d8d"
       },
       "file": "middleware/freertos/include/event_groups.h"
     },
@@ -1959,7 +1975,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "062336e2ef7cb4d30ae3801df1838f32a091ef9ff43111abb6d6239c5fc131e9"
+        "digest": "3d609251d8844eb0739b87e8a73e22c8a5e87e732818225de50ac9e6e2570d91"
       },
       "file": "middleware/freertos/include/list.h"
     },
@@ -1967,7 +1983,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "08275aa76bd39a827451fcb46b04ee6db85fa0d3096217d2eb34942983f391eb"
+        "digest": "440c9396c36796834c28c53ab2618318081d2131b7424626be2d3e5b9c094537"
       },
       "file": "middleware/freertos/include/message_buffer.h"
     },
@@ -1975,7 +1991,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "d8f2075f58745a90903099ca813d11c06f96066de740a1c640c57073229f522e"
+        "digest": "3c8a2a4830669a75d30d44743705fdfe5e652ff7fa418e6e1e9a8ff0599b88ba"
       },
       "file": "middleware/freertos/include/mpu_prototypes.h"
     },
@@ -1983,7 +1999,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "bb696190d5d8e0a95ab02204a5759837cee3bdf9d40b17da8e3d6e8de88bd539"
+        "digest": "c59cd2441cf7b77abcb1f80fa4c2a6e8dc46c889697952e41ae75ad9113cb5df"
       },
       "file": "middleware/freertos/include/mpu_syscall_numbers.h"
     },
@@ -1991,7 +2007,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "ac2e3830b97303a8572e9b9d16ff3499453a1cf0356b35244ca3fb73af4a91a4"
+        "digest": "cd7039238054231580972711aa2e721c92af84f48d41bc547421beef62d94359"
       },
       "file": "middleware/freertos/include/mpu_wrappers.h"
     },
@@ -1999,7 +2015,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "031a7f4d2d2f3a198fc38a645700d24c5b90e9b97f04df2c8f23cc382ceadfff"
+        "digest": "36f01b774f38c7428174bf1e2d1fe254c6c121c9425e5a6ecc63b719f4c6f07c"
       },
       "file": "middleware/freertos/include/newlib-freertos.h"
     },
@@ -2007,7 +2023,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "e17a64cb00ae4cf94d678078508da86b7a747e75d6fa2f36ebe27422a50d7a17"
+        "digest": "0f9872dc834793f07a8e26002dfd2555a8fc2e4b517334e33b413cbcae33fa98"
       },
       "file": "middleware/freertos/include/picolibc-freertos.h"
     },
@@ -2015,7 +2031,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "70ff0f2b9a8c5146d7c954522390b28c1cf9c71345f7f343e45eadbeed5e28ad"
+        "digest": "9e7eadda8b37e2ef9144a65adc3cd924609ac1260afbbfd38229eb249d541de3"
       },
       "file": "middleware/freertos/include/portable.h"
     },
@@ -2023,7 +2039,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "ae8e8b773f8548560036b51d4283b7607580785b89bfc9e523a32e5418978152"
+        "digest": "b87e7b478bf43b00f4d6b5a95b88f6274f2d6904e3c3b7d87661819f772b2a56"
       },
       "file": "middleware/freertos/include/projdefs.h"
     },
@@ -2031,7 +2047,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "13cae36d2cb7da1d81a0f05930dde98293a51453ee77fdb9665ad27031537bbb"
+        "digest": "b37adb121ccda80426d6c838badda077543181e8cf86c187a7a6dc079713413c"
       },
       "file": "middleware/freertos/include/queue.h"
     },
@@ -2039,7 +2055,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "a7442e31ecb5072889427ed4d88f404bcfebea7e508a649bd9e155f2211cd761"
+        "digest": "4c0cdbc7a795b1d0ce60e72e6e5cde88e31a415c77d58796dea82a362cec9dbf"
       },
       "file": "middleware/freertos/include/semphr.h"
     },
@@ -2047,7 +2063,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "563605d0520637fabdb7609374df30722d1a23ffa3aaa9c3f28ad6d43b30de38"
+        "digest": "64d48c4a8c633f7585d0ecb98d37be3cd1535b5c97e670f0b71e68edefc27f53"
       },
       "file": "middleware/freertos/include/stack_macros.h"
     },
@@ -2055,7 +2071,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "9ae09f43d56075d05a9550919c1c50704294d7b8297d3bfce4d5369be1dc3458"
+        "digest": "7572e8af72b78e9928f6b6f4dc56baa5c100cee11dde69e97823a86a3ac5471b"
       },
       "file": "middleware/freertos/include/stream_buffer.h"
     },
@@ -2063,7 +2079,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "53861447873ce7425d971dc90b722467c43c34afedee48a1455d29723a2330f4"
+        "digest": "805ba117c8e9a3ad3bc6cceadb8c70de584c1389947477b6c203aab524302158"
       },
       "file": "middleware/freertos/include/task.h"
     },
@@ -2071,17 +2087,9 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "1c1ffeef19ce77cbafb80d4c9bd59978e5dd75202a29598c5c5ac659f0eb3df7"
+        "digest": "3c1447bd41a4e718afcd77e2bdd6fea47f4a828b0b4631e755902912bf2157d1"
       },
       "file": "middleware/freertos/include/timers.h"
-    },
-    {
-      "fileGroup": "pack",
-      "checksum": {
-        "algo": "sha256",
-        "digest": "0967a1b83383c77bd9df73b3e2941d32b80f8fdb0e11a029a7a1849ea5e4295a"
-      },
-      "file": "stm32c5xx_dfp/IDEs_patches/EWARM/README.md"
     },
     {
       "fileGroup": "pack",
@@ -2303,7 +2311,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "ad0debf1370166ab15f123adf31549d83c8bd7792f7351029c568cd91eeaf0df"
+        "digest": "a639103fbc54ce7541ed980c0435a76c6d2ae0753c6d247a4306c9c0e6e16b9a"
       },
       "file": "middleware/freertos/portable/Common/mpu_wrappers.c"
     },
@@ -2311,7 +2319,15 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "95e92b8cfb240b59e03f5a5ac97bcbb2fd8d3175376c84e07fdf2321d3fdf779"
+        "digest": "9f2ea55e19e378f59347a261d8f9109eece53782a21a665ccac0da82d887aa54"
+      },
+      "file": "middleware/freertos/portable/Common/mpu_wrappers_v2.c"
+    },
+    {
+      "fileGroup": "pack",
+      "checksum": {
+        "algo": "sha256",
+        "digest": "f48047f092b7675788bcd2a0ef76a848137f81d06e8b803e82d9a6a2e08583ea"
       },
       "file": "middleware/freertos/portable/MemMang/heap_1.c"
     },
@@ -2319,7 +2335,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "ae5ee3ac30c95b93f3eb8c1926b02d8178ae62e3a36603f31f341e914dfbcda1"
+        "digest": "a1a5362ff7e0f3f32fa196d5f021c9469f7358f5ba96f45354d8fa2f6b6179ac"
       },
       "file": "middleware/freertos/portable/MemMang/heap_2.c"
     },
@@ -2327,7 +2343,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "aaa10f824fba6d6488d86d15fb4724e9051ed1a1b7695766e989c0e6e27229a0"
+        "digest": "9580f008287b3627391bf94b760fcc0820e76bca47386a7b23432997dfea9fdc"
       },
       "file": "middleware/freertos/portable/MemMang/heap_3.c"
     },
@@ -2335,7 +2351,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "f707e82261e7c108fbafab7daa9626ea39566f8d6e33f4f504cb83c8ec993b48"
+        "digest": "a2cf4719a352fad3b41cc554eaf2487174d230d66a492952500bf0e06cd374a2"
       },
       "file": "middleware/freertos/portable/MemMang/heap_4.c"
     },
@@ -2343,7 +2359,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "fa969654d6110fa592c2acb3e6f786d4bfdda615b6396c652c47e6717b6aec53"
+        "digest": "506fa1e21d639744aa2a0b6e590adbc037062554695af4eccd05eb365bf3ddae"
       },
       "file": "middleware/freertos/portable/MemMang/heap_5.c"
     },
@@ -2871,7 +2887,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "f886378c4159f8502242b5bca2f39a64d9b4784109600ae6d2a13015b30afb87"
+        "digest": "63ee4e6989abf44acc9c6c532887a8a6eef3445c8b97e907ba08172efa566aa3"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM0/mpu_wrappers_v2_asm.c"
     },
@@ -2879,7 +2895,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "c27ffc16f66392efd5873be69732878b7b22f72d41d8daf817b6f8d99461eb30"
+        "digest": "715a209f0fe976f51a3efb9aa4d075721dc1453cd69dda1c96a2e2ac2315f3e0"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM0/port.c"
     },
@@ -2887,7 +2903,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "7f39c63e8ec678a48013dee7881f2feb88b70fb795b6f4822f8d4665edb0a84e"
+        "digest": "122ce59bb4e9a14dfb2cc642bc9661e2b2e3bb3b86c4097303709a3a1ad01f83"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM0/portasm.c"
     },
@@ -2895,7 +2911,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "fd0006314dde8594376e51f0380bd8a5ac422c0d13960c0d6f537914dc856381"
+        "digest": "25edeec1898f35edc92a0b72eb063f5f2fbdc9fa1c73146d19c3c799492df2db"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM0/portasm.h"
     },
@@ -2903,7 +2919,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "d2b4b28d401978ab4e0b7bd11296ad03d47f419180646600a5f512fc68d5dba4"
+        "digest": "3227c4bf3d9a39164ecf0f209905c61f7045edd15367c947b4df82ac3a2c0774"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM0/portmacro.h"
     },
@@ -2911,7 +2927,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "1e7e155953ba7689af5244547438c76916f5973f103b5c09f3b75dee83e2146f"
+        "digest": "8c26f3c99838f5242b925f9ddaba3a74b45ecf4866b812fb2235674a5248565a"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM4F/port.c"
     },
@@ -2919,7 +2935,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "d572c37c0cf64ad8be77f0c7162e4a1bee89048c77c4327b62b9b62c37ce7b1d"
+        "digest": "628fa2eb5b207f61feee62ca84f9cee32dccc81c03230dd41e406710897c7724"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM4F/portmacro.h"
     },
@@ -2927,7 +2943,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "5f71782aaf32606009a235b82be1546a1090da5c71eaa224a3c98da06b7f460b"
+        "digest": "6caa4bc3e44da99f5be8840f62f26215d2f1754dc36f45fb07d3e7af4cd76a31"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM0/port.c"
     },
@@ -2935,7 +2951,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "c04932c112d5963f91c21ff34c673c4f22399e146372360a11cd5767d70b7b91"
+        "digest": "4860e47fd9465dbde61049a9dfb8131a72e500bb29dd4b844860db1de7c5da1b"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM0/portasm.s"
     },
@@ -2943,7 +2959,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "4b4571c95abffe66cd7f93e9d9b0f40ab81e9a2b71c68df3e0113ca23afccd34"
+        "digest": "8a45125b428ebecf0879123aa8dad6921b3cf436d18ecd0d73be6123b0ca6908"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM0/portmacro.h"
     },
@@ -2951,7 +2967,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "8d0b0b877a26bc942b6dc515cd64d17cd17a5a51663fcda95bb96d10f17efc1b"
+        "digest": "01e6d850ef49d5113508c123c94715ce1fc7e6e04e84e358962ce868dd5cac1c"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM4F/port.c"
     },
@@ -2959,7 +2975,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "98d8ed8f0e99e84ef3d371851e420f00c5e44a54dafb24408c3cd0d343371f83"
+        "digest": "48faf0981ddac551acf95bbd29939188b57c455b98601e337165477c5af5f18c"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM4F/portasm.s"
     },
@@ -2967,7 +2983,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "767f5c9bee34d29b99878b8eb4de039d382a7e6b837393013fad836ec43a8904"
+        "digest": "92ccd6e073859d0c54ebe2707fb4ce6e1f4f977f0e062d0b213ac27a0a8ab10a"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM4F/portmacro.h"
     },
@@ -4375,7 +4391,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "bd47a6758ddd3cd10f5a39105dd7983bcf0e1a8e977bdc9314bfc5b14f209f3e"
+        "digest": "dd6739f80293f6a9b76a82fa6821d5eeea88f4ae124d14364702ef8227d7e2d7"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM33_NTZ/non_secure/mpu_wrappers_v2_asm.c"
     },
@@ -4383,7 +4399,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "ab8b921d50680355f2d8b4c32014891516e260e01d88c55d84b4a247a8701e99"
+        "digest": "95bd6ffe64c2b6285e596e68c0d1aa96c603f4f40a75a3338c3ae7e15164ad23"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM33_NTZ/non_secure/port.c"
     },
@@ -4391,7 +4407,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "b3b28026fab9264dc8ffc54790692bda32e60999fd6525fb6a2112f9722aa7a2"
+        "digest": "b983fca38b540489afbafbd089c1190263cd50f3e6cfae0a3e804344c4d2810f"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM33_NTZ/non_secure/portasm.c"
     },
@@ -4399,7 +4415,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "1ecce92b9aa4f323113c658d0f52d6ed25cded84a981cc23473ef90dadedd500"
+        "digest": "e330d8b1978c1927077c98a3f25be0c7dcac38b0d74a5148264f49796432e47d"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM33_NTZ/non_secure/portasm.h"
     },
@@ -4407,7 +4423,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "0422ace59c54b311601419c363ec0923f00725f50cffb7293caf4d0ad4b6d973"
+        "digest": "4da8f14959e21db7ca65e8a74df79a8ea7ecf3f74e93e309be8a3ff7aabb2361"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM33_NTZ/non_secure/portmacro.h"
     },
@@ -4415,7 +4431,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "d386c263b69bd089b2e9ec4689dda9136aff89e60abc2622fc5d6e592b8ddb37"
+        "digest": "a7924b3ed54c810defcb2588b65ed7ea89bb396ae4dafb33ade0f0afe531d7de"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM33_NTZ/non_secure/portmacrocommon.h"
     },
@@ -4423,7 +4439,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "bd47a6758ddd3cd10f5a39105dd7983bcf0e1a8e977bdc9314bfc5b14f209f3e"
+        "digest": "dd6739f80293f6a9b76a82fa6821d5eeea88f4ae124d14364702ef8227d7e2d7"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM85_NTZ/non_secure/mpu_wrappers_v2_asm.c"
     },
@@ -4431,7 +4447,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "ab8b921d50680355f2d8b4c32014891516e260e01d88c55d84b4a247a8701e99"
+        "digest": "95bd6ffe64c2b6285e596e68c0d1aa96c603f4f40a75a3338c3ae7e15164ad23"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM85_NTZ/non_secure/port.c"
     },
@@ -4439,7 +4455,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "b3b28026fab9264dc8ffc54790692bda32e60999fd6525fb6a2112f9722aa7a2"
+        "digest": "b983fca38b540489afbafbd089c1190263cd50f3e6cfae0a3e804344c4d2810f"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM85_NTZ/non_secure/portasm.c"
     },
@@ -4447,7 +4463,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "1ecce92b9aa4f323113c658d0f52d6ed25cded84a981cc23473ef90dadedd500"
+        "digest": "e330d8b1978c1927077c98a3f25be0c7dcac38b0d74a5148264f49796432e47d"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM85_NTZ/non_secure/portasm.h"
     },
@@ -4455,7 +4471,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "2e5e7852e9a0470668107bf64817a271ff14e42ff89f509a06cf977c1849af0b"
+        "digest": "8c5cc4d7b0f524af7185c0a2c4593b4a383a05cee354192308f997f0bb5ed0aa"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM85_NTZ/non_secure/portmacro.h"
     },
@@ -4463,7 +4479,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "d386c263b69bd089b2e9ec4689dda9136aff89e60abc2622fc5d6e592b8ddb37"
+        "digest": "a7924b3ed54c810defcb2588b65ed7ea89bb396ae4dafb33ade0f0afe531d7de"
       },
       "file": "middleware/freertos/portable/GCC/ARM_CM85_NTZ/non_secure/portmacrocommon.h"
     },
@@ -4471,7 +4487,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "b29afd992644b333e528218cfc2316d4bab0d6077fcd09cce865a28b3f180610"
+        "digest": "20d4327318aa56907349316f6d0681522ed285ea34e706bf0648f126129ba50b"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM33_NTZ/non_secure/mpu_wrappers_v2_asm.S"
     },
@@ -4479,7 +4495,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "ab8b921d50680355f2d8b4c32014891516e260e01d88c55d84b4a247a8701e99"
+        "digest": "95bd6ffe64c2b6285e596e68c0d1aa96c603f4f40a75a3338c3ae7e15164ad23"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM33_NTZ/non_secure/port.c"
     },
@@ -4487,7 +4503,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "1ecce92b9aa4f323113c658d0f52d6ed25cded84a981cc23473ef90dadedd500"
+        "digest": "e330d8b1978c1927077c98a3f25be0c7dcac38b0d74a5148264f49796432e47d"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM33_NTZ/non_secure/portasm.h"
     },
@@ -4495,7 +4511,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "fc1a25a472573d10a64f7814d4783e8b80ad3383808cd00a1e9cb7eae981328a"
+        "digest": "e430579cbd05ed507e7e28ff34b40d83211415416d5ad3fdc48a9db723b3289e"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM33_NTZ/non_secure/portasm.s"
     },
@@ -4503,7 +4519,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "c219bdda31c07bbbaa971078849ca4268864d0893e109d13b1ff3c2f17e47255"
+        "digest": "ae8cb832807150408157c363a1d782f1505a881f7b3dfcd09331743ecfbfff21"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM33_NTZ/non_secure/portmacro.h"
     },
@@ -4511,7 +4527,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "d386c263b69bd089b2e9ec4689dda9136aff89e60abc2622fc5d6e592b8ddb37"
+        "digest": "a7924b3ed54c810defcb2588b65ed7ea89bb396ae4dafb33ade0f0afe531d7de"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM33_NTZ/non_secure/portmacrocommon.h"
     },
@@ -4519,7 +4535,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "b29afd992644b333e528218cfc2316d4bab0d6077fcd09cce865a28b3f180610"
+        "digest": "20d4327318aa56907349316f6d0681522ed285ea34e706bf0648f126129ba50b"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM85_NTZ/non_secure/mpu_wrappers_v2_asm.S"
     },
@@ -4527,7 +4543,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "ab8b921d50680355f2d8b4c32014891516e260e01d88c55d84b4a247a8701e99"
+        "digest": "95bd6ffe64c2b6285e596e68c0d1aa96c603f4f40a75a3338c3ae7e15164ad23"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM85_NTZ/non_secure/port.c"
     },
@@ -4535,7 +4551,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "1ecce92b9aa4f323113c658d0f52d6ed25cded84a981cc23473ef90dadedd500"
+        "digest": "e330d8b1978c1927077c98a3f25be0c7dcac38b0d74a5148264f49796432e47d"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM85_NTZ/non_secure/portasm.h"
     },
@@ -4543,7 +4559,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "fc1a25a472573d10a64f7814d4783e8b80ad3383808cd00a1e9cb7eae981328a"
+        "digest": "e430579cbd05ed507e7e28ff34b40d83211415416d5ad3fdc48a9db723b3289e"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM85_NTZ/non_secure/portasm.s"
     },
@@ -4551,7 +4567,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "19579a4f278e90136cceac70b3bd41d1845a49101c60d3cdce26816d8ecec6d5"
+        "digest": "07c0f36fbe22288b7c9070b442831b82f7745283dc41cbef5b17fb5a89bc1f4f"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM85_NTZ/non_secure/portmacro.h"
     },
@@ -4559,7 +4575,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "d386c263b69bd089b2e9ec4689dda9136aff89e60abc2622fc5d6e592b8ddb37"
+        "digest": "a7924b3ed54c810defcb2588b65ed7ea89bb396ae4dafb33ade0f0afe531d7de"
       },
       "file": "middleware/freertos/portable/IAR/ARM_CM85_NTZ/non_secure/portmacrocommon.h"
     },

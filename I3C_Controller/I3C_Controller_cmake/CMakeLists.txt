@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(I3C_Controller)
 add_executable(I3C_Controller)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)
