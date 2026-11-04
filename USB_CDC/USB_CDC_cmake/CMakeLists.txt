@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(USB_CDC)
 add_executable(USB_CDC)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)
