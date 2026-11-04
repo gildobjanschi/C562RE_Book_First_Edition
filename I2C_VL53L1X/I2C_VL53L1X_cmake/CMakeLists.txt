@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(I2C_VL53L1X)
 add_executable(I2C_VL53L1X)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)

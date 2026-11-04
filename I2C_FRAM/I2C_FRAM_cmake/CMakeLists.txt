@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(I2C_FRAM)
 add_executable(I2C_FRAM)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)
