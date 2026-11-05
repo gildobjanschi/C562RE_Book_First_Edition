@@ -23,7 +23,102 @@ More documentation is available at [Syscalls SW Pack online documentation](https
 # Update history
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section-2.0.0" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section-2.0.2" checked aria-hidden="true">
+<label for="collapse-section-2.0.2" aria-hidden="true">__2.0.2 / 27-August-2026__</label>
+<div>
+
+## Main changes
+
+- Add the supported devices to the release notes.
+\
+
+## Contents
+
+- Software package
+  - Core source code
+  - STM32CubeMX2 configuration and code generation assets
+\
+
+## Supported devices and boards
+
+- STM32C5 series.
+- STM32G5 series.
+- STM32H7P series.
+- STM32V8 series.
+\
+
+## Development Toolchains and Compilers
+
+- STM32CubeIDE for Visual Studio Code (GCC13 compiler)
+- STM32CubeMX2 version 1.1.1
+\
+
+## Known Limitations
+
+None.
+\
+
+## Backward compatibility
+
+None.
+\
+
+## Dependencies
+
+None.
+\
+
+</div>
+:::
+
+::: {.collapse}
+<input type="checkbox" id="collapse-section-2.0.1" aria-hidden="true">
+<label for="collapse-section-2.0.1" aria-hidden="true">__2.0.1 / 02-July-2026__</label>
+<div>
+
+## Main changes
+
+
+- Update the PDSC file with the CubeMX APIs used by the JSON and JS files.
+\
+
+## Contents
+
+- Software package
+  - Core source code
+\
+
+## Supported devices and boards
+
+- STM32C5 series.
+\
+
+## Development Toolchains and Compilers
+
+- STM32CubeIDE for Visual Studio Code (GCC13 compiler)
+- STM32CubeMX2 version 1.1.0
+\
+
+## Known Limitations
+
+None.
+\
+
+## Backward compatibility
+
+None.
+\
+
+## Dependencies
+
+None.
+\
+
+</div>
+:::
+
+::: {.collapse}
+<input type="checkbox" id="collapse-section-2.0.0" aria-hidden="true">
 <label for="collapse-section-2.0.0" aria-hidden="true">__2.0.0 / 13-March-2026__</label>
 <div>
 
