@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(WDG)
 add_executable(WDG)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)
