@@ -10,6 +10,7 @@
 #include "../../Shared/Utils/error_handler.h"
 #include "../../Shared/Faults/m33_it.h"
 #include "app_task.h"
+#include <stdlib.h>
 
 static uint8_t *pHeap1;
 static uint8_t *pHeap2;
@@ -176,7 +177,6 @@ int main(void) {
   Fault_Config();
 
   SWD_printf("---- MCU configured at %lu[Hz] ----\n", HAL_RCC_GetHCLKFreq());
-
   PrintMemoryMap();
 
   PrintFreeRTOSMemoryStats();
