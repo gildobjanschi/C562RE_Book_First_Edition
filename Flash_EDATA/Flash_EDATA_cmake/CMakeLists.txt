@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(Flash_EDATA)
 add_executable(Flash_EDATA)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)

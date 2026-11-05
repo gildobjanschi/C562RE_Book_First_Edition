@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(RAM_WP)
 add_executable(RAM_WP)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)

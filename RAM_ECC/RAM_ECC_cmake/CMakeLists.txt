@@ -10,6 +10,7 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(RAM_ECC)
 add_executable(RAM_ECC)
+enable_language(C CXX ASM)
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)
