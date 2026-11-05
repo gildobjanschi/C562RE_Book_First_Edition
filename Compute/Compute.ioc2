@@ -509,7 +509,7 @@
     },
     "HAL_CORTEX_PROJECT_USE_HAL": {
       "name": "HAL_CORTEX_PROJECT_USE_HAL",
-      "value": 5,
+      "value": 3,
       "originator": "sw-config-semaphore"
     },
     "HAL_ICACHE_CORE_ENABLED": {
@@ -631,11 +631,11 @@
     "useCustomInstallPaths": true,
     "customPackPaths": [
       {
-        "packName": "STMicroelectronics.button_hw-part.2.1.0",
-        "folder": "misc/STMicroelectronics.button_hw-part.2.1.0"
+        "packName": "STMicroelectronics.button_hw-part.2.2.0",
+        "folder": "misc/STMicroelectronics.button_hw-part.2.2.0"
       },
       {
-        "packName": "STMicroelectronics.CMSIS-DSP.1.17.0",
+        "packName": "STMicroelectronics.CMSIS-DSP.1.17.1",
         "folder": "arch/cmsis_dsp"
       },
       {
@@ -643,15 +643,15 @@
         "folder": "arch/cmsis"
       },
       {
-        "packName": "STMicroelectronics.crystal_hw-part.2.2.0",
-        "folder": "misc/STMicroelectronics.crystal_hw-part.2.2.0"
+        "packName": "STMicroelectronics.crystal_hw-part.2.3.1",
+        "folder": "misc/STMicroelectronics.crystal_hw-part.2.3.1"
       },
       {
         "packName": "STMicroelectronics.esd_hw-part.2.2.0",
         "folder": "misc/STMicroelectronics.esd_hw-part.2.2.0"
       },
       {
-        "packName": "STMicroelectronics.freertos.2.1.0",
+        "packName": "STMicroelectronics.freertos.2.2.0",
         "folder": "middleware/freertos"
       },
       {
@@ -683,7 +683,7 @@
         "folder": "misc/STMicroelectronics.stm32cubemx2_templates_no_os_stm32c5.2.1.0"
       },
       {
-        "packName": "STMicroelectronics.syscalls.2.0.0",
+        "packName": "STMicroelectronics.syscalls.2.0.2",
         "folder": "utilities/syscalls"
       }
     ]
@@ -701,12 +701,14 @@
       "CMake": {
         "outputPath": "Compute_cmake",
         "toolchain": "GCC",
+        "buildProfile": "Debug & Release",
         "exportSource": "include-packs-from-local",
         "removeBoard": true
       }
     },
     "lastUsedFormat": "CMake"
-  }
+  },
+  "version": 2
 }"""
 "File: .settings/exti.store.json" = """
 {
@@ -2003,12 +2005,12 @@ solution:
   projects:
     - project: project/Compute.cproject.yml
   packs:
-    - pack: STMicroelectronics::button_hw-part@2.1.0
+    - pack: STMicroelectronics::button_hw-part@2.2.0
     - pack: STMicroelectronics::CMSIS@6.3.0
-    - pack: STMicroelectronics::CMSIS-DSP@1.17.0
-    - pack: STMicroelectronics::crystal_hw-part@2.2.0
+    - pack: STMicroelectronics::CMSIS-DSP@1.17.1
+    - pack: STMicroelectronics::crystal_hw-part@2.3.1
     - pack: STMicroelectronics::esd_hw-part@2.2.0
-    - pack: STMicroelectronics::freertos@2.1.0
+    - pack: STMicroelectronics::freertos@2.2.0
     - pack: STMicroelectronics::led_hw-part@2.5.0
     - pack: STMicroelectronics::mcp2562fd_hw-part@2.1.0
     - pack: STMicroelectronics::nucleo-c562re_hw-board@2.1.0
@@ -2016,7 +2018,7 @@ solution:
     - pack: STMicroelectronics::stm32c5xx_dfp@2.1.0
     - pack: STMicroelectronics::stm32c5xx_hal_drivers@2.1.0
     - pack: STMicroelectronics::stm32cubemx2_templates_no_os_stm32c5@2.1.0
-    - pack: STMicroelectronics::syscalls@2.0.0
+    - pack: STMicroelectronics::syscalls@2.0.2
 """
 "File: NUCLEO-C562RE_project/.settings/hw-composition.store.json" = """
 {
@@ -2515,7 +2517,7 @@ solution:
       {
         "$type": "http://st.com/schema/sw-composer#//SingleInstanceSWComponent",
         "id": "d0ecf6f0-da02-49da-87a6-0caa77aee0e4",
-        "componentDescriptionId": "STMicroelectronics.syscalls.2.0.0$STMicroelectronics::Utility:STM32CubeMX2 Config:syscalls@1.0.0#Syscalls Config",
+        "componentDescriptionId": "STMicroelectronics.syscalls.2.0.2$STMicroelectronics::Utility:STM32CubeMX2 Config:syscalls@1.0.0#Syscalls Config",
         "label": "STM32CubeMX2 Config:syscalls",
         "expanded": true,
         "userAdded": true
@@ -2547,7 +2549,7 @@ solution:
       {
         "$type": "http://st.com/schema/sw-composer#//SingleInstanceSWComponent",
         "id": "e871f69d-80a0-48fc-a391-b7ca0aae75a2",
-        "componentDescriptionId": "STMicroelectronics.freertos.2.1.0$STMicroelectronics::RTOS:STM32CubeMX2 Config:FreeRTOS@2.1.0#FreeRTOS Init condition",
+        "componentDescriptionId": "STMicroelectronics.freertos.2.2.0$STMicroelectronics::RTOS:STM32CubeMX2 Config:FreeRTOS@2.2.0#FreeRTOS Init condition",
         "label": "STM32CubeMX2 Config:FreeRTOS",
         "expanded": true,
         "userAdded": true
@@ -2555,7 +2557,7 @@ solution:
       {
         "$type": "http://st.com/schema/sw-composer#//SWComponent",
         "id": "719a44e2-9a65-4450-8e52-1a7d7c63a3b0",
-        "componentDescriptionId": "STMicroelectronics.freertos.2.1.0$STMicroelectronics::RTOS:FreeRTOS:Core@11.2.0#FreeRTOS Memory Heap condition",
+        "componentDescriptionId": "STMicroelectronics.freertos.2.2.0$STMicroelectronics::RTOS:FreeRTOS:Core@11.3.1#FreeRTOS Memory Heap condition",
         "label": "FreeRTOS:Core",
         "expanded": true,
         "userAdded": false
@@ -2755,7 +2757,7 @@ solution:
       {
         "$type": "http://st.com/schema/sw-composer#//SWComponent",
         "id": "b9f7446b-72cc-4e9d-9a6c-1e3612910855",
-        "componentDescriptionId": "STMicroelectronics.freertos.2.1.0$STMicroelectronics::RTOS:FreeRTOS:MemMang&Heap_4@11.2.0#FreeRTOS Memory Heap condition",
+        "componentDescriptionId": "STMicroelectronics.freertos.2.2.0$STMicroelectronics::RTOS:FreeRTOS:MemMang&Heap_4@11.3.1#FreeRTOS Memory Heap condition",
         "label": "FreeRTOS:Heap_4",
         "expanded": true,
         "userAdded": false
@@ -2763,7 +2765,7 @@ solution:
       {
         "$type": "http://st.com/schema/sw-composer#//SWComponent",
         "id": "b13939a1-ae06-4181-beaf-813c07e548ce",
-        "componentDescriptionId": "STMicroelectronics.syscalls.2.0.0$STMicroelectronics::Utility:syscalls&Standalone syscalls@1.0.0",
+        "componentDescriptionId": "STMicroelectronics.syscalls.2.0.2$STMicroelectronics::Utility:syscalls&Standalone syscalls@1.0.0",
         "label": "syscalls:Standalone syscalls",
         "expanded": true,
         "userAdded": false
@@ -2771,7 +2773,7 @@ solution:
       {
         "$type": "http://st.com/schema/sw-composer#//SWComponent",
         "id": "9a93b004-560a-4256-8e0b-fd4c7be85d16",
-        "componentDescriptionId": "STMicroelectronics.syscalls.2.0.0$STMicroelectronics::Utility:sysmem&Standalone sysmem@1.0.0",
+        "componentDescriptionId": "STMicroelectronics.syscalls.2.0.2$STMicroelectronics::Utility:sysmem&Standalone sysmem@1.0.0",
         "label": "sysmem:Standalone sysmem",
         "expanded": true,
         "userAdded": false
@@ -2915,7 +2917,7 @@ solution:
       {
         "$type": "http://st.com/schema/sw-composer#//SWComponent",
         "id": "87bf5c19-0ca1-4e8d-a060-06e4e763d56c",
-        "componentDescriptionId": "STMicroelectronics.CMSIS-DSP.1.17.0$STMicroelectronics::CMSIS:DSP&Source@1.17.0#CMSISCORE",
+        "componentDescriptionId": "STMicroelectronics.CMSIS-DSP.1.17.1$STMicroelectronics::CMSIS:DSP&Source@1.17.1#CMSISCORE",
         "label": "DSP:Source",
         "expanded": true,
         "userAdded": true
@@ -2923,7 +2925,7 @@ solution:
       {
         "$type": "http://st.com/schema/sw-composer#//SWComponent",
         "id": "51748323-99c7-49a2-bca6-ed008c0c7766",
-        "componentDescriptionId": "STMicroelectronics.freertos.2.1.0$STMicroelectronics::RTOS:FreeRTOS:Stream Buffer@11.2.0#Stream Buffers condition",
+        "componentDescriptionId": "STMicroelectronics.freertos.2.2.0$STMicroelectronics::RTOS:FreeRTOS:Stream Buffer@11.3.1#Stream Buffers condition",
         "label": "FreeRTOS:Stream Buffer",
         "expanded": true,
         "userAdded": false
@@ -3870,11 +3872,10 @@ solution:
           }
         }
       ],
-      "STMicroelectronics.syscalls.2.0.0$STMicroelectronics::Utility:STM32CubeMX2 Config:syscalls@1.0.0#Syscalls Config": [
+      "STMicroelectronics.syscalls.2.0.2$STMicroelectronics::Utility:STM32CubeMX2 Config:syscalls@1.0.0#Syscalls Config": [
         {
           "index": 6,
           "instanceId": "cd1fff3d-bd3b-4bc5-a0a5-0adc2c7dd704",
-          "name": "Mysyscalls_1",
           "entity": "unknown",
           "settings": {
             "parameters": {
@@ -3924,7 +3925,7 @@ solution:
           }
         }
       ],
-      "STMicroelectronics.freertos.2.1.0$STMicroelectronics::RTOS:STM32CubeMX2 Config:FreeRTOS@2.1.0#FreeRTOS Init condition": [
+      "STMicroelectronics.freertos.2.2.0$STMicroelectronics::RTOS:STM32CubeMX2 Config:FreeRTOS@2.2.0#FreeRTOS Init condition": [
         {
           "index": 8,
           "instanceId": "d48cd726-00ab-4a1c-abbd-0e3c1a9e7f74",
@@ -4005,6 +4006,7 @@ solution:
                       "xTaskResumeFromISR": true,
                       "uxTaskGetStackHighWaterMark": true,
                       "uxTaskGetStackHighWaterMark2": false,
+                      "xTaskGetIdleTaskHandle": false,
                       "xTaskGetCurrentTaskHandle": true,
                       "eTaskGetState": true,
                       "xTaskAbortDelay": false,
@@ -4810,7 +4812,7 @@ project:
   components:
     - component: STMicroelectronics::Application:stm32cubemx2_templates&no os@2.1.0
     - component: STMicroelectronics::CMSIS:CORE@6.2.0
-    - component: STMicroelectronics::CMSIS:DSP&Source@1.17.0
+    - component: STMicroelectronics::CMSIS:DSP&Source@1.17.1
     - component: STMicroelectronics::Device:Startup@2.1.0
     - component: STMicroelectronics::Device:STM32 HAL:AES@2.0.1
     - component: STMicroelectronics::Device:STM32 HAL:ASSERT@2.1.0
@@ -4862,10 +4864,10 @@ project:
     - component: STMicroelectronics::Device:STM32CubeMX2 Config:RNG@2.1.0
     - component: STMicroelectronics::Device:STM32CubeMX2 Config:System@2.1.0
     - component: STMicroelectronics::Device:STM32CubeMX2 Config:TIM@2.1.0
-    - component: STMicroelectronics::RTOS:FreeRTOS:Core@11.2.0
-    - component: STMicroelectronics::RTOS:FreeRTOS:MemMang&Heap_4@11.2.0
-    - component: STMicroelectronics::RTOS:FreeRTOS:Stream Buffer@11.2.0
-    - component: STMicroelectronics::RTOS:STM32CubeMX2 Config:FreeRTOS@2.1.0
+    - component: STMicroelectronics::RTOS:FreeRTOS:Core@11.3.1
+    - component: STMicroelectronics::RTOS:FreeRTOS:MemMang&Heap_4@11.3.1
+    - component: STMicroelectronics::RTOS:FreeRTOS:Stream Buffer@11.3.1
+    - component: STMicroelectronics::RTOS:STM32CubeMX2 Config:FreeRTOS@2.2.0
     - component: STMicroelectronics::Utility:STM32CubeMX2 Config:syscalls@1.0.0
     - component: STMicroelectronics::Utility:syscalls&Standalone syscalls@1.0.0
     - component: STMicroelectronics::Utility:sysmem&Standalone sysmem@1.0.0
@@ -4887,4 +4889,4 @@ project:
 ["Project Description"]
 workingAreaId = "9b4df78e-59f9-434c-8c21-83706c414f78"
 version = "1"
-mx2Version = "1.1.1"
+mx2Version = "1.2.0"

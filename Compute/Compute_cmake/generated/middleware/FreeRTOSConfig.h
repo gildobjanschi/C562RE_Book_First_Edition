@@ -1,5 +1,5 @@
 /*
- * FreeRTOS Kernel V11.2.0
+ * FreeRTOS Kernel V11.3.1
  * Copyright (C) 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * SPDX-License-Identifier: MIT
@@ -31,7 +31,14 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
+/* MPU specific related definitions */
 #define configENABLE_MPU                              0U
+#define configUSE_MPU_WRAPPERS_V1                     0U
+#define configTOTAL_MPU_REGIONS                       8U
+#define configENABLE_ACCESS_CONTROL_LIST              0U
+#define configPROTECTED_KERNEL_OBJECT_POOL_SIZE       10U
+#define configSYSTEM_CALL_STACK_SIZE                  128U
+
 #define configENABLE_FPU                              0U
 #define configUSE_TICKLESS_IDLE                       0U
 #define configUSE_PREEMPTION                          1U
@@ -101,6 +108,7 @@ PRIORITY THAN THIS! (higher priorities are lower numeric values). */
 #define INCLUDE_xTaskResumeFromISR                    1U
 #define INCLUDE_uxTaskGetStackHighWaterMark           1U
 #define INCLUDE_uxTaskGetStackHighWaterMark2          0U
+#define INCLUDE_xTaskGetIdleTaskHandle                0U
 #define INCLUDE_xTaskGetCurrentTaskHandle             1U
 #define INCLUDE_eTaskGetState                         1U
 #define INCLUDE_xTaskAbortDelay                       0U

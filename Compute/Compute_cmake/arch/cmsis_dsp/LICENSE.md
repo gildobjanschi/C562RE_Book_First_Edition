@@ -1,4 +1,4 @@
-<!-- License terms for [Apache-2.0]-->
+<!-- License terms for [Apache-2.0] -->
 Apache-2.0
 
 Version 2.0, February 2004
@@ -81,34 +81,65 @@ To apply the Apache License to your work, attach the following boilerplate notic
 ---
 
 <!-- End of License terms -->
+
 <BR>
 <BR>
 
-<!-- Copyrights statements for [ARM-software/CMSIS-DSP]-->
+<!-- Copyrights statements for [ARM-software/CMSIS-DSP] [Apache-2.0] -->
 Copyrights statements for [ARM-software/CMSIS-DSP]
 
-	Copyright (C) 1997-2020 by Dimitri van Heesch
-	
-	Copyright (c) 2007 Ariel Flesler - aflesler
-	
+	Copyright (c) 2009-2018 Arm Limited. All rights reserved
+
+	Copyright (c) 2009-2019 Arm Limited. All rights reserved
+
+	Copyright (c) 2009-2020 Arm Limited. All rights reserved
+
+	Copyright (c) 2009-2022 Arm Limited. All rights reserved
+
+	Copyright (C) 2010-2012 ARM Limited. All rights reserved
+
+	Copyright (C) 2010-2013 ARM Limited. All rights reserved
+
 	Copyright (c) 2010-2019 Arm Limited or its affiliates. All rights reserved
-	
+
 	Copyright (c) 2010-2020 Arm Limited or its affiliates. All rights reserved
-	
+
+	Copyright (C) 2010-2020 ARM Limited. All rights reserved
+
 	Copyright (c) 2010-2021 Arm Limited or its affiliates. All rights reserved
-	
-	Copyright (C) 2010-2022 ARM Limited or its affiliates. All rights reserved
-	
-	Copyright (c) 2018 Steven Benner (http://stevenbenner.com/).
-	
+
+	Copyright (c) 2010-2022 Arm Limited or its affiliates. All rights reserved
+
+	Copyright (C) 2010-2023 ARM Limited or its affiliates. All rights reserved
+
+	Copyright (C) 2010-2024 ARM Limited or its affiliates. All rights reserved
+
+	Copyright (c) 2016-2022 Arm Limited
+
+	Copyright (c) 2018-2022 Arm Limited
+
+	Copyright (C) 2019 ARM Limited or its affiliates. All rights reserved
+
+	Copyright (C) 2019-2020 ARM Limited or its affiliates. All rights reserved
+
 	Copyright (C) 2019-2020 ARM Limited. All rights reserved
-	
-	Copyright (c) 2021 - 2022 jothepro
-	
-	Copyright jQuery Foundation and other contributors; Licensed MIT
-	
-	Copyright Vasil Dinkov, Vadikom Web Ltd. http://vadikom.com; Licensed MIT
-	
-	copyright</span></div>
-	
-<!-- End of Copyrights statements for [ARM-software/CMSIS-DSP]-->
+
+	Copyright (C) 2019-2021 ARM Limited or its affiliates. All rights reserved
+
+	Copyright (C) 2019-2022 ARM Limited or its affiliates. All rights reserved
+
+	Copyright (c) 2019-2022 Arm Limited. All rights reserved
+
+	Copyright (C) 2020 ARM Limited or its affiliates. All rights reserved
+
+	Copyright (c) 2020 Arm Limited. All rights reserved
+
+	Copyright (c) 2020-2022 Arm Limited. All rights reserved
+
+	Copyright (c) 2022-2023 Arm Limited. All rights reserved
+
+	Copyright (C) 2024 ARM Limited or its affiliates. All rights reserved
+
+	Copyright (c) 2025 Arm Limited or its affiliates. All rights reserved
+
+<!-- End of Copyrights statements for [ARM-software/CMSIS-DSP] -->
