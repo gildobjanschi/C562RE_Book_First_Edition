@@ -1,6 +1,6 @@
 # STM32 Projects with FreeRTOS — First Edition Source Code
 
-This repository contains the source code accompanying the first edition of the **STM32 Projects with FreeRTOS/Practical STM32C5 Projects with STM32CubeMX2** book (soon to be published on Amazon) — a collection of hands-on peripheral examples for the **STM32C562RE** microcontroller (STM32C5 series, Arm® Cortex®-M33 core), targeting the **NUCLEO-C562RE** development board.
+This repository contains the source code accompanying the first edition of the **STM32 Projects with FreeRTOS/Practical STM32C562 Projects with STM32CubeMX2** book (soon to be published on Amazon) — a collection of hands-on peripheral examples for the **STM32C562RE** microcontroller (STM32C5 series, Arm® Cortex®-M33 core), targeting the **NUCLEO-C562RE** development board.
 
 Each folder is a self-contained example project demonstrating a specific peripheral or feature of the STM32C562RE, built with STM32CubeIDE and debugged/flashed via SEGGER J-Link.
 
@@ -33,6 +33,7 @@ Each folder is a self-contained example project demonstrating a specific periphe
 | `Timers_IR_TX` | Infrared signal transmission using timers |
 | `Timers_PWM` | PWM generation using timers |
 | `UART_DMA` | UART communication using DMA transfers |
+| `USB_CDC` | USB Communication device |
 | `VU_Meter` | VU meter application example |
 | `WDG` | Watchdog (WDG) configuration and usage |
 
