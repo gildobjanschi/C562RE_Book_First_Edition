@@ -1,6 +1,7 @@
 # STM32 Projects with FreeRTOS — First Edition Source Code
 
 This repository contains the source code accompanying the first edition of the **STM32 Projects with FreeRTOS/Practical STM32C562 Projects with STM32CubeMX2** book (soon to be published on Amazon) — a collection of hands-on peripheral examples for the **STM32C562RE** microcontroller (STM32C5 series, Arm® Cortex®-M33 core), targeting the **NUCLEO-C562RE** development board.
+![Book front cover]([https://github.com/gildobjanschi/[reponame]/blob/[branch]/image.jpg?raw=true](https://github.com/gildobjanschi/C562RE_Book_First_Edition/blob/main/images/book-cover-front.jpg))
 
 Each folder is a self-contained example project demonstrating a specific peripheral or feature of the STM32C562RE, built with STM32CubeIDE and debugged/flashed via SEGGER J-Link.
 
