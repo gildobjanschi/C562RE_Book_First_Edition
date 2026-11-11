@@ -1,7 +1,7 @@
 {
   "disclaimer": "Do not modify this file as it is used by STM32CubeMX2 to determine what and how to update your project with new configuration",
   "version": "1.0.0",
-  "timestamp": "2026-11-04T15:37:41.993Z",
+  "timestamp": "2026-11-11T09:17:38.860Z",
   "files": [
     {
       "fileGroup": "project_file",
@@ -215,7 +215,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "a5aa25997c476f2f720c6f0d4b8a8dfde95d186af45ab9087113ff042ad4511c"
+        "digest": "16cde4fac65150d89ad37518b9dd4b6d32e3c5f39f596dbdd47d06ac4efa47c6"
       },
       "file": "generated/hal/mx_cortex_debug.c"
     },
@@ -223,7 +223,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "ada5b5d44b8aa20fe371760380dfeda26539fcd581dbc387087cb19831b179b7"
+        "digest": "18fe79d87dc8375931d64eab8bc06ce9314c66b0f4b056a4f998d9c20a77c346"
       },
       "file": "generated/hal/mx_cortex_debug.h"
     },
@@ -303,7 +303,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "b147082fa770f8fbf4d5b31971101634905a56b38c67cd6854b114e9a77f3532"
+        "digest": "9aab2ad477b2b4befb07926b5d0287202238e5814e33257266869521de3abe95"
       },
       "file": "generated/hal/mx_gpio_default.c"
     },
@@ -311,7 +311,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "07b0a16cdc8e43ea7550ccd02275483901a815e778e67ba9b4f629b4fec57350"
+        "digest": "d2c2f25a3fbd91fad3ae4980e304eb4bbd81bca54f3e2668d938cf54aaae919e"
       },
       "file": "generated/hal/mx_gpio_default.h"
     },
