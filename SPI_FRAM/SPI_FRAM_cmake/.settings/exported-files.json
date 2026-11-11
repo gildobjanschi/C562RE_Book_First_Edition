@@ -1,7 +1,7 @@
 {
   "disclaimer": "Do not modify this file as it is used by STM32CubeMX2 to determine what and how to update your project with new configuration",
   "version": "1.0.0",
-  "timestamp": "2026-11-04T13:33:42.060Z",
+  "timestamp": "2026-11-11T09:10:48.241Z",
   "files": [
     {
       "fileGroup": "project_file",
@@ -215,7 +215,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "a5aa25997c476f2f720c6f0d4b8a8dfde95d186af45ab9087113ff042ad4511c"
+        "digest": "16cde4fac65150d89ad37518b9dd4b6d32e3c5f39f596dbdd47d06ac4efa47c6"
       },
       "file": "generated/hal/mx_cortex_debug.c"
     },
@@ -223,7 +223,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "ada5b5d44b8aa20fe371760380dfeda26539fcd581dbc387087cb19831b179b7"
+        "digest": "18fe79d87dc8375931d64eab8bc06ce9314c66b0f4b056a4f998d9c20a77c346"
       },
       "file": "generated/hal/mx_cortex_debug.h"
     },
@@ -287,7 +287,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "d01e1ca1312097bef4eb5661306efef0b05f57e52cfca169bf9fd2db34f9de94"
+        "digest": "5c0b44fd3774a54ca518bd6590b21fb393c2c5d652b5bdfbe669e27a0cd2d675"
       },
       "file": "generated/hal/mx_gpio_default.c"
     },
@@ -295,7 +295,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "bf65a1500421d522889cd2227e2320887bb9b7849f536027bec82b3d7b8d7939"
+        "digest": "bd31ea6bfad28fdd6d32439e8897232526b7e4f2cf3cb751cf9d4b0edb33bd1b"
       },
       "file": "generated/hal/mx_gpio_default.h"
     },
@@ -343,7 +343,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "3ecd5e1bf467ff5013029b6f820f31f6301a76b0b4905dedf352c36a5a899164"
+        "digest": "2a38dbb7ae417cec69729bdc59c781e6f908b52e9c8b0f26e2628e7d5696a4c0"
       },
       "file": "generated/hal/mx_spi2.c"
     },
@@ -351,7 +351,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "197b82ba36038156a01af09f8e61ff4ed0522d6a369c9ef6cd82125304378494"
+        "digest": "3f2fe06de1e27f87efd54829ad3ef99c337aa5bb26ac45bd5df4b1344df5cafb"
       },
       "file": "generated/hal/mx_spi2.h"
     },

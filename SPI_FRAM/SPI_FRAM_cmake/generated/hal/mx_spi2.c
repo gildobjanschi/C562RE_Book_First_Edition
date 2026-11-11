@@ -81,28 +81,28 @@ hal_spi_handle_t *mx_spi2_init(void)
   /**
     [GPIO Pin] ------> [Signal Name] ------> [Labels]
 
-       PB10    ------>   SPI2_SCK   ------>  PB10
        PB12    ------>   SPI2_NSS   ------>  PB12
+       PB10    ------>   SPI2_SCK   ------>  PB10
     **/
   gpio_config.mode        = HAL_GPIO_MODE_ALTERNATE;
   gpio_config.output_type = HAL_GPIO_OUTPUT_PUSHPULL;
   gpio_config.pull        = HAL_GPIO_PULL_NO;
   gpio_config.speed       = HAL_GPIO_SPEED_FREQ_HIGH;
   gpio_config.alternate   = HAL_GPIO_AF_5;
-  HAL_GPIO_Init(HAL_GPIOB, PB10_PIN | PB12_PIN, &gpio_config);
+  HAL_GPIO_Init(HAL_GPIOB, PB12_PIN | PB10_PIN, &gpio_config);
 
   /**
     [GPIO Pin] ------> [Signal Name] ------> [Labels]
 
-       PB14    ------>   SPI2_MISO   ------>  PB14
        PB15    ------>   SPI2_MOSI   ------>  PB15
+       PB14    ------>   SPI2_MISO   ------>  PB14
     **/
   gpio_config.mode        = HAL_GPIO_MODE_ALTERNATE;
   gpio_config.output_type = HAL_GPIO_OUTPUT_PUSHPULL;
   gpio_config.pull        = HAL_GPIO_PULL_NO;
   gpio_config.speed       = HAL_GPIO_SPEED_FREQ_VERY_HIGH;
   gpio_config.alternate   = HAL_GPIO_AF_5;
-  HAL_GPIO_Init(HAL_GPIOB, PB14_PIN | PB15_PIN, &gpio_config);
+  HAL_GPIO_Init(HAL_GPIOB, PB15_PIN | PB14_PIN, &gpio_config);
 
   /* Configure the DMA TX */
 

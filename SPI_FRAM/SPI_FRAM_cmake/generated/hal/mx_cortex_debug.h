@@ -31,17 +31,17 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
-/** Primary aliases for DEBUG_SWCLK pin */
-#define DBG_SWCLK_PORT                        HAL_GPIOA
-#define DBG_SWCLK_PIN                         HAL_GPIO_PIN_14
+/** Primary aliases for DEBUG_TRACESWO pin */
+#define DBG_SWO_PORT                          HAL_GPIOB
+#define DBG_SWO_PIN                           HAL_GPIO_PIN_3
 
 /** Primary aliases for DEBUG_SWDIO pin */
 #define DBG_SWDIO_PORT                        HAL_GPIOA
 #define DBG_SWDIO_PIN                         HAL_GPIO_PIN_13
 
-/** Primary aliases for DEBUG_TRACESWO pin */
-#define DBG_SWO_PORT                          HAL_GPIOB
-#define DBG_SWO_PIN                           HAL_GPIO_PIN_3
+/** Primary aliases for DEBUG_SWCLK pin */
+#define DBG_SWCLK_PORT                        HAL_GPIOA
+#define DBG_SWCLK_PIN                         HAL_GPIO_PIN_14
 /* Exported macros -----------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */

@@ -29,21 +29,21 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
-/** Primary aliases for SPI2_SCK pin */
-#define PB10_PORT                             HAL_GPIOB
-#define PB10_PIN                              HAL_GPIO_PIN_10
-
-/** Primary aliases for SPI2_MISO pin */
-#define PB14_PORT                             HAL_GPIOB
-#define PB14_PIN                              HAL_GPIO_PIN_14
+/** Primary aliases for SPI2_NSS pin */
+#define PB12_PORT                             HAL_GPIOB
+#define PB12_PIN                              HAL_GPIO_PIN_12
 
 /** Primary aliases for SPI2_MOSI pin */
 #define PB15_PORT                             HAL_GPIOB
 #define PB15_PIN                              HAL_GPIO_PIN_15
 
-/** Primary aliases for SPI2_NSS pin */
-#define PB12_PORT                             HAL_GPIOB
-#define PB12_PIN                              HAL_GPIO_PIN_12
+/** Primary aliases for SPI2_MISO pin */
+#define PB14_PORT                             HAL_GPIOB
+#define PB14_PIN                              HAL_GPIO_PIN_14
+
+/** Primary aliases for SPI2_SCK pin */
+#define PB10_PORT                             HAL_GPIOB
+#define PB10_PIN                              HAL_GPIO_PIN_10
 
 /* Exported macros -----------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
