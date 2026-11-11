@@ -112,14 +112,14 @@ hal_tim_handle_t *mx_tim5_init(void)
   /**
     [GPIO Pin] ------> [Signal Name] ------> [Labels]
 
-       PA0     ------>   TIM5_CH1   ------>  PA0
+       PA6     ------>   TIM5_CH1   ------>  PA6, IR_TX
     **/
   gpio_config.mode        = HAL_GPIO_MODE_ALTERNATE;
   gpio_config.output_type = HAL_GPIO_OUTPUT_PUSHPULL;
   gpio_config.pull        = HAL_GPIO_PULL_NO;
   gpio_config.speed       = HAL_GPIO_SPEED_FREQ_LOW;
   gpio_config.alternate   = HAL_GPIO_AF_2;
-  HAL_GPIO_Init(PA0_PORT, PA0_PIN, &gpio_config);
+  HAL_GPIO_Init(PA6_PORT, PA6_PIN, &gpio_config);
 
   return &hTIM5;
 }
@@ -133,7 +133,7 @@ void mx_tim5_deinit(void)
   HAL_RCC_TIM5_Reset();
 
   /* De-initialize all GPIOA pins associated with TIM5 */
-  HAL_GPIO_DeInit(PA0_PORT, PA0_PIN);
+  HAL_GPIO_DeInit(PA6_PORT, PA6_PIN);
 }
 
 hal_tim_handle_t *mx_tim5_gethandle(void)

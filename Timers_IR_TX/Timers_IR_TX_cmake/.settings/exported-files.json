@@ -1,7 +1,7 @@
 {
   "disclaimer": "Do not modify this file as it is used by STM32CubeMX2 to determine what and how to update your project with new configuration",
   "version": "1.0.0",
-  "timestamp": "2026-11-04T10:04:32.784Z",
+  "timestamp": "2026-11-11T11:15:42.631Z",
   "files": [
     {
       "fileGroup": "project_file",
@@ -215,7 +215,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "a5aa25997c476f2f720c6f0d4b8a8dfde95d186af45ab9087113ff042ad4511c"
+        "digest": "16cde4fac65150d89ad37518b9dd4b6d32e3c5f39f596dbdd47d06ac4efa47c6"
       },
       "file": "generated/hal/mx_cortex_debug.c"
     },
@@ -223,7 +223,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "ada5b5d44b8aa20fe371760380dfeda26539fcd581dbc387087cb19831b179b7"
+        "digest": "18fe79d87dc8375931d64eab8bc06ce9314c66b0f4b056a4f998d9c20a77c346"
       },
       "file": "generated/hal/mx_cortex_debug.h"
     },
@@ -399,7 +399,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "ba8e281e6c2f81f9177fc46502ff039d59db71b5b97b659a3072dc8927421b02"
+        "digest": "5a22bd8acfb2a268f486e82d34c7458d6a6a40dbbfa5f593f9bd174f9ab10c1b"
       },
       "file": "generated/hal/mx_tim5.c"
     },
@@ -407,7 +407,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "ccde1efa8c9e22cbf8e5b2e1a3a407c70446a6ee955f071d83f0dbd8e70ad830"
+        "digest": "3a2f67ae568400cc8f6847058d4f02e6be08897d508a38d24d17cb52938e96bf"
       },
       "file": "generated/hal/mx_tim5.h"
     },

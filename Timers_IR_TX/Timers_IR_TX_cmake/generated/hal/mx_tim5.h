@@ -30,8 +30,12 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 
 /** Primary aliases for TIM5_CH1 pin */
-#define PA0_PORT                              HAL_GPIOA
-#define PA0_PIN                               HAL_GPIO_PIN_0
+#define PA6_PORT                              HAL_GPIOA
+#define PA6_PIN                               HAL_GPIO_PIN_6
+
+/** Secondary aliases for TIM5_CH1 pin */
+#define IR_TX_PORT                            HAL_GPIOA
+#define IR_TX_PIN                             HAL_GPIO_PIN_6
 
 /* Exported macros -----------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
