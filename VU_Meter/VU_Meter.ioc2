@@ -561,7 +561,7 @@
     },
     "HAL_CORTEX_PROJECT_USE_HAL": {
       "name": "HAL_CORTEX_PROJECT_USE_HAL",
-      "value": 7,
+      "value": 9,
       "originator": "sw-config-semaphore"
     },
     "HAL_ICACHE_CORE_ENABLED": {
@@ -2156,25 +2156,25 @@
         }
       },
       {
+        "pin": {
+          "name": "PC0",
+          "position": "8",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "a"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 0,
+          "port": "C"
+        },
         "signal": {
           "instance": "GPIOC",
           "name": "GPIO",
           "type": "user_gpio"
         },
-        "pinned": true,
-        "pin": {
-          "name": "PC13",
-          "position": "2",
-          "type": "gpio",
-          "powerSource": "VDD",
-          "ioStructureOptions": [
-            "t"
-          ],
-          "ioType": "I/O",
-          "ioStructure": "FT",
-          "index": 13,
-          "port": "C"
-        }
+        "pinned": true
       },
       {
         "pin": {
@@ -2196,28 +2196,51 @@
         "pinned": true
       },
       {
+        "signal": {
+          "instance": "GPIOC",
+          "name": "GPIO",
+          "type": "user_gpio"
+        },
+        "pinned": true,
         "pin": {
-          "name": "PA6",
-          "position": "22",
+          "name": "PC13",
+          "position": "2",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "t"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 13,
+          "port": "C"
+        }
+      }
+    ],
+    "needConfigurations": [
+      {
+        "signal": {
+          "instance": "DAC1",
+          "name": "DAC1_OUT1",
+          "type": "analog"
+        },
+        "pin": {
+          "name": "PA4",
+          "position": "20",
           "type": "gpio",
           "powerSource": "VDD",
           "ioStructureOptions": [
             "a"
           ],
           "ioType": "I/O",
-          "ioStructure": "FT",
-          "index": 6,
+          "ioStructure": "TT",
+          "index": 4,
           "port": "A"
         },
-        "signal": {
-          "instance": "GPIOA",
-          "name": "GPIO",
-          "type": "user_gpio"
-        },
-        "pinned": true
-      }
-    ],
-    "needConfigurations": [
+        "needId": "27d91b12-cd81-4509-8f8c-877adfda064d",
+        "ownedByUser": false,
+        "pinned": false
+      },
       {
         "signal": {
           "instance": "DEBUG",
@@ -2261,29 +2284,6 @@
         "needId": "3c8e6294-51f8-4699-82d2-be518340e263",
         "ownedByUser": true,
         "pinned": true
-      },
-      {
-        "signal": {
-          "instance": "DAC1",
-          "name": "DAC1_OUT1",
-          "type": "analog"
-        },
-        "pin": {
-          "name": "PA4",
-          "position": "20",
-          "type": "gpio",
-          "powerSource": "VDD",
-          "ioStructureOptions": [
-            "a"
-          ],
-          "ioType": "I/O",
-          "ioStructure": "TT",
-          "index": 4,
-          "port": "A"
-        },
-        "needId": "27d91b12-cd81-4509-8f8c-877adfda064d",
-        "ownedByUser": false,
-        "pinned": false
       },
       {
         "signal": {
@@ -2338,358 +2338,9 @@
   "pinout-excluded-pins": [],
   "pinout-labels": [
     {
-      "position": "13",
-      "labels": [
-        "VREFP"
-      ]
-    },
-    {
-      "position": "19",
-      "labels": [
-        "VDD_MCU_19"
-      ]
-    },
-    {
-      "position": "32",
-      "labels": [
-        "VDD_MCU_32"
-      ]
-    },
-    {
-      "position": "48",
-      "labels": [
-        "VDD_MCU_48"
-      ]
-    },
-    {
-      "position": "64",
-      "labels": [
-        "VDD_MCU_64"
-      ]
-    },
-    {
-      "position": "45",
-      "labels": [
-        "USB_FS_P"
-      ]
-    },
-    {
-      "position": "44",
-      "labels": [
-        "USB_FS_N"
-      ]
-    },
-    {
-      "position": "60",
-      "labels": [
-        "PH2_BOOT0"
-      ]
-    },
-    {
       "position": "1",
       "labels": [
         "PE2"
-      ]
-    },
-    {
-      "position": "53",
-      "labels": [
-        "PC12"
-      ]
-    },
-    {
-      "position": "51",
-      "labels": [
-        "PC10"
-      ]
-    },
-    {
-      "position": "40",
-      "labels": [
-        "PC9"
-      ]
-    },
-    {
-      "position": "39",
-      "labels": [
-        "PC8"
-      ]
-    },
-    {
-      "position": "38",
-      "labels": [
-        "PC7"
-      ]
-    },
-    {
-      "position": "37",
-      "labels": [
-        "PC6"
-      ]
-    },
-    {
-      "position": "25",
-      "labels": [
-        "PC5"
-      ]
-    },
-    {
-      "position": "24",
-      "labels": [
-        "PC4"
-      ]
-    },
-    {
-      "position": "11",
-      "labels": [
-        "PC3"
-      ]
-    },
-    {
-      "position": "10",
-      "labels": [
-        "PC2"
-      ]
-    },
-    {
-      "position": "9",
-      "labels": [
-        "PC1"
-      ]
-    },
-    {
-      "position": "8",
-      "labels": [
-        "PC0"
-      ]
-    },
-    {
-      "position": "36",
-      "labels": [
-        "PB15"
-      ]
-    },
-    {
-      "position": "35",
-      "labels": [
-        "PB14"
-      ]
-    },
-    {
-      "position": "34",
-      "labels": [
-        "PB13"
-      ]
-    },
-    {
-      "position": "33",
-      "labels": [
-        "PB12"
-      ]
-    },
-    {
-      "position": "29",
-      "labels": [
-        "PB10"
-      ]
-    },
-    {
-      "position": "62",
-      "labels": [
-        "PB9"
-      ]
-    },
-    {
-      "position": "61",
-      "labels": [
-        "PB8"
-      ]
-    },
-    {
-      "position": "59",
-      "labels": [
-        "PB7"
-      ]
-    },
-    {
-      "position": "58",
-      "labels": [
-        "PB6"
-      ]
-    },
-    {
-      "position": "57",
-      "labels": [
-        "PB5"
-      ]
-    },
-    {
-      "position": "56",
-      "labels": [
-        "PB4"
-      ]
-    },
-    {
-      "position": "28",
-      "labels": [
-        "PB2"
-      ]
-    },
-    {
-      "position": "27",
-      "labels": [
-        "PB1"
-      ]
-    },
-    {
-      "position": "26",
-      "labels": [
-        "PB0"
-      ]
-    },
-    {
-      "position": "43",
-      "labels": [
-        "PA10"
-      ]
-    },
-    {
-      "position": "42",
-      "labels": [
-        "PA9"
-      ]
-    },
-    {
-      "position": "41",
-      "labels": [
-        "PA8"
-      ]
-    },
-    {
-      "position": "20",
-      "labels": [
-        "PA4"
-      ]
-    },
-    {
-      "position": "17",
-      "labels": [
-        "PA3"
-      ]
-    },
-    {
-      "position": "16",
-      "labels": [
-        "PA2"
-      ]
-    },
-    {
-      "position": "15",
-      "labels": [
-        "PA1"
-      ]
-    },
-    {
-      "position": "14",
-      "labels": [
-        "PA0"
-      ]
-    },
-    {
-      "position": "6",
-      "labels": [
-        "OSC_OUT"
-      ]
-    },
-    {
-      "position": "5",
-      "labels": [
-        "OSC_IN"
-      ]
-    },
-    {
-      "position": "4",
-      "labels": [
-        "OSC32_OUT"
-      ]
-    },
-    {
-      "position": "3",
-      "labels": [
-        "OSC32_IN"
-      ]
-    },
-    {
-      "position": "7",
-      "labels": [
-        "NRST"
-      ]
-    },
-    {
-      "position": "50",
-      "labels": [
-        "NetR16_2"
-      ]
-    },
-    {
-      "position": "30",
-      "labels": [
-        "NetC11_1"
-      ]
-    },
-    {
-      "position": "18",
-      "labels": [
-        "GND_18"
-      ]
-    },
-    {
-      "position": "31",
-      "labels": [
-        "GND_31"
-      ]
-    },
-    {
-      "position": "47",
-      "labels": [
-        "GND_47"
-      ]
-    },
-    {
-      "position": "63",
-      "labels": [
-        "GND_63"
-      ]
-    },
-    {
-      "position": "55",
-      "labels": [
-        "DBG_SWO"
-      ]
-    },
-    {
-      "position": "46",
-      "labels": [
-        "DBG_SWDIO"
-      ]
-    },
-    {
-      "position": "49",
-      "labels": [
-        "DBG_SWCLK"
-      ]
-    },
-    {
-      "position": "12",
-      "labels": [
-        "AGND"
-      ]
-    },
-    {
-      "position": "21",
-      "labels": [
-        "PA5",
-        "LD1"
       ]
     },
     {
@@ -2700,17 +2351,125 @@
       ]
     },
     {
-      "position": "52",
+      "position": "3",
       "labels": [
-        "PC11",
-        "RE_A"
+        "OSC32_IN"
       ]
     },
     {
-      "position": "54",
+      "position": "4",
       "labels": [
-        "PD2",
-        "RE_B"
+        "OSC32_OUT"
+      ]
+    },
+    {
+      "position": "5",
+      "labels": [
+        "OSC_IN"
+      ]
+    },
+    {
+      "position": "6",
+      "labels": [
+        "OSC_OUT"
+      ]
+    },
+    {
+      "position": "7",
+      "labels": [
+        "NRST"
+      ]
+    },
+    {
+      "position": "8",
+      "labels": [
+        "PC0",
+        "LD_PEAK"
+      ]
+    },
+    {
+      "position": "9",
+      "labels": [
+        "PC1"
+      ]
+    },
+    {
+      "position": "10",
+      "labels": [
+        "PC2"
+      ]
+    },
+    {
+      "position": "11",
+      "labels": [
+        "PC3"
+      ]
+    },
+    {
+      "position": "12",
+      "labels": [
+        "AGND"
+      ]
+    },
+    {
+      "position": "13",
+      "labels": [
+        "VREFP"
+      ]
+    },
+    {
+      "position": "14",
+      "labels": [
+        "PA0"
+      ]
+    },
+    {
+      "position": "15",
+      "labels": [
+        "PA1"
+      ]
+    },
+    {
+      "position": "16",
+      "labels": [
+        "PA2"
+      ]
+    },
+    {
+      "position": "17",
+      "labels": [
+        "PA3"
+      ]
+    },
+    {
+      "position": "18",
+      "labels": [
+        "GND_18"
+      ]
+    },
+    {
+      "position": "19",
+      "labels": [
+        "VDD_MCU_19"
+      ]
+    },
+    {
+      "position": "20",
+      "labels": [
+        "PA4"
+      ]
+    },
+    {
+      "position": "21",
+      "labels": [
+        "PA5",
+        "LD1"
+      ]
+    },
+    {
+      "position": "22",
+      "labels": [
+        "PA6"
       ]
     },
     {
@@ -2721,10 +2480,251 @@
       ]
     },
     {
-      "position": "22",
+      "position": "24",
       "labels": [
-        "PA6",
-        "LD_PEAK"
+        "PC4"
+      ]
+    },
+    {
+      "position": "25",
+      "labels": [
+        "PC5"
+      ]
+    },
+    {
+      "position": "26",
+      "labels": [
+        "PB0"
+      ]
+    },
+    {
+      "position": "27",
+      "labels": [
+        "PB1"
+      ]
+    },
+    {
+      "position": "28",
+      "labels": [
+        "PB2"
+      ]
+    },
+    {
+      "position": "29",
+      "labels": [
+        "PB10"
+      ]
+    },
+    {
+      "position": "30",
+      "labels": [
+        "NetC11_1"
+      ]
+    },
+    {
+      "position": "31",
+      "labels": [
+        "GND_31"
+      ]
+    },
+    {
+      "position": "32",
+      "labels": [
+        "VDD_MCU_32"
+      ]
+    },
+    {
+      "position": "33",
+      "labels": [
+        "PB12"
+      ]
+    },
+    {
+      "position": "34",
+      "labels": [
+        "PB13"
+      ]
+    },
+    {
+      "position": "35",
+      "labels": [
+        "PB14"
+      ]
+    },
+    {
+      "position": "36",
+      "labels": [
+        "PB15"
+      ]
+    },
+    {
+      "position": "37",
+      "labels": [
+        "PC6"
+      ]
+    },
+    {
+      "position": "38",
+      "labels": [
+        "PC7"
+      ]
+    },
+    {
+      "position": "39",
+      "labels": [
+        "PC8"
+      ]
+    },
+    {
+      "position": "40",
+      "labels": [
+        "PC9"
+      ]
+    },
+    {
+      "position": "41",
+      "labels": [
+        "PA8"
+      ]
+    },
+    {
+      "position": "42",
+      "labels": [
+        "PA9"
+      ]
+    },
+    {
+      "position": "43",
+      "labels": [
+        "PA10"
+      ]
+    },
+    {
+      "position": "44",
+      "labels": [
+        "USB_FS_N"
+      ]
+    },
+    {
+      "position": "45",
+      "labels": [
+        "USB_FS_P"
+      ]
+    },
+    {
+      "position": "46",
+      "labels": [
+        "DBG_SWDIO"
+      ]
+    },
+    {
+      "position": "47",
+      "labels": [
+        "GND_47"
+      ]
+    },
+    {
+      "position": "48",
+      "labels": [
+        "VDD_MCU_48"
+      ]
+    },
+    {
+      "position": "49",
+      "labels": [
+        "DBG_SWCLK"
+      ]
+    },
+    {
+      "position": "50",
+      "labels": [
+        "NetR16_2"
+      ]
+    },
+    {
+      "position": "51",
+      "labels": [
+        "PC10"
+      ]
+    },
+    {
+      "position": "52",
+      "labels": [
+        "PC11",
+        "RE_A"
+      ]
+    },
+    {
+      "position": "53",
+      "labels": [
+        "PC12"
+      ]
+    },
+    {
+      "position": "54",
+      "labels": [
+        "PD2",
+        "RE_B"
+      ]
+    },
+    {
+      "position": "55",
+      "labels": [
+        "DBG_SWO"
+      ]
+    },
+    {
+      "position": "56",
+      "labels": [
+        "PB4"
+      ]
+    },
+    {
+      "position": "57",
+      "labels": [
+        "PB5"
+      ]
+    },
+    {
+      "position": "58",
+      "labels": [
+        "PB6"
+      ]
+    },
+    {
+      "position": "59",
+      "labels": [
+        "PB7"
+      ]
+    },
+    {
+      "position": "60",
+      "labels": [
+        "PH2_BOOT0"
+      ]
+    },
+    {
+      "position": "61",
+      "labels": [
+        "PB8"
+      ]
+    },
+    {
+      "position": "62",
+      "labels": [
+        "PB9"
+      ]
+    },
+    {
+      "position": "63",
+      "labels": [
+        "GND_63"
+      ]
+    },
+    {
+      "position": "64",
+      "labels": [
+        "VDD_MCU_64"
       ]
     }
   ],
@@ -2755,16 +2755,16 @@
           "port": "A"
         },
         {
-          "name": "PC13",
-          "position": "2",
+          "name": "PC0",
+          "position": "8",
           "type": "gpio",
           "powerSource": "VDD",
           "ioStructureOptions": [
-            "t"
+            "a"
           ],
           "ioType": "I/O",
           "ioStructure": "FT",
-          "index": 13,
+          "index": 0,
           "port": "C"
         },
         {
@@ -2779,28 +2779,36 @@
           "port": "C"
         },
         {
-          "name": "PA6",
-          "position": "22",
+          "name": "PC13",
+          "position": "2",
           "type": "gpio",
           "powerSource": "VDD",
           "ioStructureOptions": [
-            "a"
+            "t"
           ],
           "ioType": "I/O",
           "ioStructure": "FT",
-          "index": 6,
-          "port": "A"
+          "index": 13,
+          "port": "C"
         }
       ]
     }
   ],
   "pinout-gpio-needs": [
     {
+      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:ADC@2.1.0#HAL CORE GPIO DMA Init and ADC",
+      "componentInstanceId": "88c84789-6ce1-4198-967c-6f9005017345",
+      "needId": "7a77abdf-3926-4f61-8ca4-e3c4005fd070",
+      "softwareProjectId": "b9b4b340-2033-41d1-84c6-52cf63948801",
+      "signal": "ADC1_IN9",
+      "instanceName": "ADC1"
+    },
+    {
       "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:CORTEX DEBUG@2.1.0#HAL CORE Init GPIO and CORTEX",
       "componentInstanceId": "a1b042a6-c896-49f7-b155-9cc7976eeef9",
-      "needId": "3c8e6294-51f8-4699-82d2-be518340e263",
+      "needId": "3c31826e-ea3b-4a93-9e58-f38748b9033f",
       "softwareProjectId": "b9b4b340-2033-41d1-84c6-52cf63948801",
-      "signal": "DEBUG_SWCLK",
+      "signal": "DEBUG_TRACESWO",
       "instanceName": "CM33"
     },
     {
@@ -2814,18 +2822,10 @@
     {
       "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:CORTEX DEBUG@2.1.0#HAL CORE Init GPIO and CORTEX",
       "componentInstanceId": "a1b042a6-c896-49f7-b155-9cc7976eeef9",
-      "needId": "3c31826e-ea3b-4a93-9e58-f38748b9033f",
+      "needId": "3c8e6294-51f8-4699-82d2-be518340e263",
       "softwareProjectId": "b9b4b340-2033-41d1-84c6-52cf63948801",
-      "signal": "DEBUG_TRACESWO",
+      "signal": "DEBUG_SWCLK",
       "instanceName": "CM33"
-    },
-    {
-      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:ADC@2.1.0#HAL CORE GPIO DMA Init and ADC",
-      "componentInstanceId": "88c84789-6ce1-4198-967c-6f9005017345",
-      "needId": "7a77abdf-3926-4f61-8ca4-e3c4005fd070",
-      "softwareProjectId": "b9b4b340-2033-41d1-84c6-52cf63948801",
-      "signal": "ADC1_IN9",
-      "instanceName": "ADC1"
     },
     {
       "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:DAC@2.1.0#HAL CORE GPIO DMA Init and DAC",
@@ -2840,7 +2840,8 @@
     "table": {
       "pageSize": 100
     }
-  }
+  },
+  "pinout-non-accessible-pins": []
 }"""
 "File: NUCLEO-C562RE_project/.settings/hw-composition.store.json" = """
 {
@@ -5224,7 +5225,8 @@ solution:
                   "label_name": []
                 },
                 {
-                  "_foreignKey": "PA6",
+                  "label_name": [],
+                  "_foreignKey": "PC0",
                   "basic": {
                     "mode": "OUTPUT",
                     "pull": "NO",
@@ -5233,8 +5235,7 @@ solution:
                     "output_init_state": "RESET",
                     "output_type": "PUSHPULL",
                     "speed": "LOW"
-                  },
-                  "label_name": []
+                  }
                 },
                 {
                   "_foreignKey": "PC8",

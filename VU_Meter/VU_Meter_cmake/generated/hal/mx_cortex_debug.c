@@ -33,23 +33,23 @@ system_status_t mx_cortex_debug_init(void)
 {
   /* ### CM33 GPIO Configuration ########################### */
   /* GPIO Clocks activation */
-  HAL_RCC_GPIOA_EnableClock();
-
   HAL_RCC_GPIOB_EnableClock();
+
+  HAL_RCC_GPIOA_EnableClock();
 
   hal_gpio_config_t  gpio_config;
 
   /**
     [GPIO Pin] ------> [Signal Name] ------> [Labels]
 
-       PA14    ------>   DEBUG_SWCLK   ------>  DBG_SWCLK
+       PB3     ------>   DEBUG_TRACESWO   ------>  DBG_SWO
     **/
   gpio_config.mode        = HAL_GPIO_MODE_ALTERNATE;
   gpio_config.output_type = HAL_GPIO_OUTPUT_PUSHPULL;
-  gpio_config.pull        = HAL_GPIO_PULL_DOWN;
-  gpio_config.speed       = HAL_GPIO_SPEED_FREQ_LOW;
+  gpio_config.pull        = HAL_GPIO_PULL_NO;
+  gpio_config.speed       = HAL_GPIO_SPEED_FREQ_VERY_HIGH;
   gpio_config.alternate   = HAL_GPIO_AF_0;
-  HAL_GPIO_Init(DBG_SWCLK_PORT, DBG_SWCLK_PIN, &gpio_config);
+  HAL_GPIO_Init(DBG_SWO_PORT, DBG_SWO_PIN, &gpio_config);
 
   /**
     [GPIO Pin] ------> [Signal Name] ------> [Labels]
@@ -66,23 +66,23 @@ system_status_t mx_cortex_debug_init(void)
   /**
     [GPIO Pin] ------> [Signal Name] ------> [Labels]
 
-       PB3     ------>   DEBUG_TRACESWO   ------>  DBG_SWO
+       PA14    ------>   DEBUG_SWCLK   ------>  DBG_SWCLK
     **/
   gpio_config.mode        = HAL_GPIO_MODE_ALTERNATE;
   gpio_config.output_type = HAL_GPIO_OUTPUT_PUSHPULL;
-  gpio_config.pull        = HAL_GPIO_PULL_NO;
-  gpio_config.speed       = HAL_GPIO_SPEED_FREQ_VERY_HIGH;
+  gpio_config.pull        = HAL_GPIO_PULL_DOWN;
+  gpio_config.speed       = HAL_GPIO_SPEED_FREQ_LOW;
   gpio_config.alternate   = HAL_GPIO_AF_0;
-  HAL_GPIO_Init(DBG_SWO_PORT, DBG_SWO_PIN, &gpio_config);
+  HAL_GPIO_Init(DBG_SWCLK_PORT, DBG_SWCLK_PIN, &gpio_config);
 
   return SYSTEM_OK;
 }
 
 void mx_cortex_debug_deinit(void)
 {
-  /* De-initialize all GPIOA pins associated with CM33 */
-  HAL_GPIO_DeInit(HAL_GPIOA, DBG_SWDIO_PIN | DBG_SWCLK_PIN);
-
   /* De-initialize all GPIOB pins associated with CM33 */
   HAL_GPIO_DeInit(DBG_SWO_PORT, DBG_SWO_PIN);
+
+  /* De-initialize all GPIOA pins associated with CM33 */
+  HAL_GPIO_DeInit(HAL_GPIOA, DBG_SWDIO_PIN | DBG_SWCLK_PIN);
 }
